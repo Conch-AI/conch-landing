@@ -10,7 +10,6 @@ import { Button } from "@/app/ui/button";
 import { cn } from "@/lib/utils";
 import {
   FileText,
-  Home,
   Layers,
   Lightbulb,
   Moon,
@@ -26,7 +25,6 @@ import { useEffect, useState } from "react";
 type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "chat";
 
 const navigation = [
-  { name: "Home", feature: "home" as FeatureType, icon: Home },
   { name: "Simplify", feature: "simplify" as FeatureType, icon: Wand2 },
   { name: "Stealth Mode", feature: "stealth" as FeatureType, icon: Shield },
   { name: "Mindmaps", feature: "mindmaps" as FeatureType, icon: Lightbulb },
@@ -124,7 +122,10 @@ const CheckerPage = () => {
           >
             <div className="p-6 flex items-center justify-between">
               {!isCollapsed && (
-                <div className="flex items-center gap-2 font-bold text-xl text-foreground">
+                <div 
+                  onClick={() => setActiveFeature("home")}
+                  className="flex items-center gap-2 font-bold text-xl text-foreground cursor-pointer hover:opacity-80 transition-opacity"
+                >
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                     <Image
                       alt="Logo"
@@ -139,7 +140,10 @@ const CheckerPage = () => {
                 </div>
               )}
               {isCollapsed && (
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto">
+                <div 
+                  onClick={() => setActiveFeature("home")}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+                >
                   <Image
                     alt="Logo"
                     src={
