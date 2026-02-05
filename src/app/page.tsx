@@ -55,29 +55,20 @@ const CheckerPage = () => {
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
-    const savedTheme = localStorage.getItem("checker-theme");
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === "dark");
-    } else {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setIsDarkMode(prefersDark);
-    }
+    // Force light mode - always set to false
+    setIsDarkMode(false);
   }, []);
 
   // Apply theme to document
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("checker-theme", isDarkMode ? "dark" : "light");
+    // Force light mode - always remove dark class
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("checker-theme", "light");
   }, [isDarkMode]);
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
+    // Force light mode - do nothing (keep button for UI but don't change theme)
+    setIsDarkMode(false);
   };
 
   const renderFeature = () => {
