@@ -1,0 +1,747 @@
+"use client";
+
+import { Badge } from "@/app/ui/badge";
+import { Button } from "@/app/ui/button";
+import {
+  addEdge,
+  Background,
+  BaseEdge,
+  getBezierPath,
+  Handle,
+  Position,
+  ReactFlow,
+  ReactFlowProvider,
+  useEdgesState,
+  useNodesState,
+  type Edge,
+  type Node,
+  type Connection,
+  type BackgroundVariant
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+
+// Type definitions matching backend classes
+export class MindmapNode {
+  constructor(
+    public label: string,
+    public definition: string,
+    public positionX: number,
+    public positionY: number,
+    public id: string,
+    public isHighlyImportant: boolean = false,
+  ) {}
+
+  static fromJSON(json: Record<string, unknown>): MindmapNode {
+    return new MindmapNode(
+      json.label as string,
+      json.definition as string,
+      json.positionX as number,
+      json.positionY as number,
+      json.id as string,
+      "isHighlyImportant" in json ? (json.isHighlyImportant as boolean) : false,
+    );
+  }
+}
+
+export class MindmapEdge {
+  constructor(
+    public source: string,
+    public target: string,
+    public id: string,
+  ) {}
+
+  static fromJSON(json: Record<string, unknown>): MindmapEdge {
+    return new MindmapEdge(
+      json.source as string,
+      json.target as string,
+      json.id as string,
+    );
+  }
+}
+
+// ReactFlow type definitions
+interface CustomNodeData extends Record<string, unknown> {
+  label: string;
+  definition: string;
+  isHighlyImportant?: boolean;
+}
+
+interface CustomEdgeProps {
+  id: string;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+}
+
+interface CustomNodeProps {
+  data: CustomNodeData;
+  id: string;
+}
+import {
+  ArrowRight,
+  BookOpen,
+  ChevronDown,
+  Clipboard as ClipboardIcon,
+  Download,
+  FileText,
+  GitBranch,
+  GraduationCap,
+  Lightbulb,
+  MousePointer2,
+  Network,
+  Palette,
+  PenLine,
+  RefreshCw,
+  Upload
+} from "lucide-react";
+import Image from "next/image";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { RiStarSFill } from "react-icons/ri";
+
+// Custom Edge Component
+const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY }: CustomEdgeProps) => {
+  const [edgePath] = getBezierPath({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+  });
+  return <BaseEdge className="opacity-50" id={id} path={edgePath} />;
+};
+
+// Custom Node Component
+const CustomNode = ({ data }: CustomNodeProps) => {
+  return (
+    <div className="max-w-[300px]">
+      <Handle
+        type="target"
+        style={{
+          background: "purple",
+          border: "0px",
+          opacity: 0,
+        }}
+        position={Position.Top}
+      />
+      <div className="mx-auto w-10/12 text-center text-[13px] text-foreground">
+        {data.definition}
+      </div>
+      <div className="relative mx-auto mt-2 w-fit rounded-md bg-[#8b5cf6] p-1 px-3 text-center text-[11px] text-white">
+        {data.label}
+        {data.isHighlyImportant && (
+          <span className="absolute top-[-5px] right-[-5px] rounded-full border border-purple-300 bg-[#8b5cf6] p-[2px]">
+            <RiStarSFill color="white" size={10} />
+          </span>
+        )}
+      </div>
+      <Handle
+        type="source"
+        style={{
+          opacity: 0,
+        }}
+        position={Position.Bottom}
+      />
+    </div>
+  );
+};
+
+// Main Mindmap Canvas Component
+const MindmapCanvas = ({
+  initialNodes,
+  initialEdges,
+}: {
+  initialNodes: Node<CustomNodeData>[];
+  initialEdges: Edge[];
+}) => {
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
+  const edgeTypes = useMemo(() => ({ customedge: CustomEdge }), []);
+
+  const onConnect = useCallback(
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
+
+  return (
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      fitView
+      proOptions={{ hideAttribution: true }}
+      className="bg-background"
+    >
+      <Background
+        className="opacity-40"
+        variant={"cross" as BackgroundVariant}
+        gap={12}
+        color="currentColor"
+        size={1}
+      />
+    </ReactFlow>
+  );
+};
+
+const MindmapsFeature = () => {
+  const [inputText, setInputText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasGenerated, setHasGenerated] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [mindmapNodes, setMindmapNodes] = useState<Node<CustomNodeData>[]>([]);
+  const [mindmapEdges, setMindmapEdges] = useState<Edge[]>([]);
+
+  const sampleTexts = [
+    "Machine learning is a subset of artificial intelligence that enables computers to learn from data. It includes supervised learning, unsupervised learning, and reinforcement learning approaches.",
+    "The water cycle describes how water moves through Earth's systems. It includes evaporation from oceans, condensation in clouds, precipitation as rain or snow, and collection in bodies of water.",
+    "Photosynthesis is the process plants use to convert light energy into chemical energy. It involves capturing sunlight, absorbing carbon dioxide, and producing glucose and oxygen.",
+  ];
+
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      setInputText(text);
+      textareaRef.current?.focus();
+    } catch (error) {
+      console.error("Failed to read clipboard:", error);
+    }
+  };
+
+  const generateMindmap = async () => {
+    if (!inputText.trim()) return;
+
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/ai/generate-mindmap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: inputText }),
+      });
+
+      if (!res.ok) throw new Error(res.statusText);
+
+      const data = await res.json();
+      if (data.nodes && data.edges) {
+        // Convert API response to MindmapNode and MindmapEdge instances
+        const mindmapNodes = data.nodes.map((nodeJson: Record<string, unknown>) => 
+          MindmapNode.fromJSON(nodeJson)
+        );
+        const mindmapEdges = data.edges.map((edgeJson: Record<string, unknown>) => 
+          MindmapEdge.fromJSON(edgeJson)
+        );
+        
+        // Convert to ReactFlow format
+        const nodes = mindmapNodes.map((node: MindmapNode) => ({
+          id: node.id,
+          type: "custom",
+          data: {
+            label: node.label,
+            definition: node.definition,
+            isHighlyImportant: node.isHighlyImportant,
+          },
+          position: { x: node.positionX, y: node.positionY },
+        }));
+        const edges = mindmapEdges.map((edge: MindmapEdge) => ({
+          id: edge.id,
+          type: "customedge",
+          source: edge.source,
+          target: edge.target,
+        }));
+        setMindmapNodes(nodes);
+        setMindmapEdges(edges);
+        setHasGenerated(true);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      generateSampleMindmap();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const generateSampleMindmap = () => {
+    const nodes = [
+      { id: "root", type: "custom", data: { label: "Main Concept", definition: "The central topic of study", isHighlyImportant: true }, position: { x: 250, y: 0 } },
+      { id: "1", type: "custom", data: { label: "Subtopic A", definition: "First key concept branch" }, position: { x: 50, y: 150 } },
+      { id: "2", type: "custom", data: { label: "Subtopic B", definition: "Second key concept branch", isHighlyImportant: true }, position: { x: 250, y: 150 } },
+      { id: "3", type: "custom", data: { label: "Subtopic C", definition: "Third key concept branch" }, position: { x: 450, y: 150 } },
+      { id: "4", type: "custom", data: { label: "Detail 1", definition: "Supporting information" }, position: { x: 0, y: 300 } },
+      { id: "5", type: "custom", data: { label: "Detail 2", definition: "Additional context" }, position: { x: 150, y: 300 } },
+      { id: "6", type: "custom", data: { label: "Detail 3", definition: "More information" }, position: { x: 350, y: 300 } },
+      { id: "7", type: "custom", data: { label: "Detail 4", definition: "Extra details" }, position: { x: 500, y: 300 } },
+    ];
+
+    const edges = [
+      { id: "e-root-1", type: "customedge", source: "root", target: "1" },
+      { id: "e-root-2", type: "customedge", source: "root", target: "2" },
+      { id: "e-root-3", type: "customedge", source: "root", target: "3" },
+      { id: "e-1-4", type: "customedge", source: "1", target: "4" },
+      { id: "e-1-5", type: "customedge", source: "1", target: "5" },
+      { id: "e-3-6", type: "customedge", source: "3", target: "6" },
+      { id: "e-3-7", type: "customedge", source: "3", target: "7" },
+    ];
+
+    setMindmapNodes(nodes);
+    setMindmapEdges(edges);
+    setHasGenerated(true);
+  };
+
+  const handleTrySample = () => {
+    const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+    setInputText(randomText);
+  };
+
+  const SkeletonLoader = () => (
+    <div className="flex flex-col items-center justify-center h-full gap-4">
+      <div className="relative">
+        <div className="w-16 h-16 rounded-full border-4 border-[#8b5cf6]/20 border-t-[#8b5cf6] animate-spin"></div>
+        <Network className="w-6 h-6 text-[#8b5cf6] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      </div>
+      <p className="text-sm text-muted-foreground">Generating your mindmap...</p>
+    </div>
+  );
+
+  return (
+    <div className="min-h-full bg-background text-foreground overflow-y-auto">
+      {/* Hero Section */}
+      <section className="pt-8 pb-4 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <h1 className="text-2xl md:text-[40px] font-medium tracking-tight mb-3 text-foreground leading-tight">
+            Visualize any concept instantly
+          </h1>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Transform complex topics into interactive visual maps with AI-powered concept mapping.
+          </p>
+        </div>
+      </section>
+
+      {/* Main Tool Section */}
+      <section className="px-6 pb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
+            {/* Top Bar */}
+            {hasGenerated && (
+              <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-muted-foreground">{mindmapNodes.length} nodes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="default" size="sm" className="">
+                    <Download className="w-4 h-4" />
+                    Export
+                  </Button>
+                  <Button variant="default" size="sm" className="">
+                    <Lightbulb className="w-4 h-4" />
+                    Flashcards
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Content Area */}
+            {!hasGenerated ? (
+              /* Input View */
+              <div className="p-5 min-h-[400px] flex flex-col">
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".txt,.doc,.docx,.pdf"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const text = event.target?.result as string;
+                        setInputText(text);
+                      };
+                      reader.readAsText(file);
+                    }
+                  }}
+                  className="hidden"
+                />
+
+                {/* Top Section: Instruction + Buttons */}
+                <div className="mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    To generate a mindmap, add text or upload a file (.docx)
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handlePaste}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
+                    >
+                      <ClipboardIcon className="w-3.5 h-3.5" />
+                      Paste text
+                    </button>
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      Upload file
+                    </button>
+                    <button
+                      onClick={handleTrySample}
+                      className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Try sample
+                    </button>
+                  </div>
+                </div>
+
+                {/* Textarea */}
+                <textarea
+                  ref={textareaRef}
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder="Start typing or paste your content here..."
+                  className="flex-1 w-full min-h-[280px] bg-transparent text-foreground placeholder-muted-foreground/50 resize-none focus:outline-none border-0 focus:border-0 focus:ring-0 text-base leading-relaxed"
+                />
+
+                {/* Bottom Bar */}
+                <div className="flex items-center justify-between pt-3 border-t border-border/50 mt-auto">
+                  <span className="text-sm text-muted-foreground">
+                    {inputText.split(/\s+/).filter(Boolean).length}/25000 words
+                  </span>
+                  <Button
+                    onClick={generateMindmap}
+                    disabled={isLoading || !inputText.trim()}
+                    variant={inputText.trim() ? "default" : "outline"}
+                    className=""
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      "Generate mindmap"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              /* Mindmap View */
+              <div className="flex flex-col" style={{ height: "600px" }}>
+                {/* Toolbar */}
+                <div className="flex items-center justify-between px-6 py-3 border-b border-border/50 bg-muted/10">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Network className="w-4 h-4" />
+                    <span>Drag to move • Scroll to zoom</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setHasGenerated(false);
+                        setMindmapNodes([]);
+                        setMindmapEdges([]);
+                        setInputText("");
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      New
+                    </button>
+                  </div>
+                </div>
+
+                {/* Mindmap Canvas */}
+                <div className="flex-1">
+                  {isLoading ? (
+                    <SkeletonLoader />
+                  ) : (
+                    <ReactFlowProvider>
+                      <MindmapCanvas
+                        initialNodes={mindmapNodes}
+                        initialEdges={mindmapEdges}
+                      />
+                    </ReactFlowProvider>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Who Can Use Section */}
+      <section className="py-20 px-6 bg-secondary/30">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-16 leading-tight">
+            Who can use AI Mindmaps?
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-x-12 gap-y-14">
+            {[
+              { icon: GraduationCap, title: "Students", desc: "Visualize complex subjects before exams — break down chapters into concept maps for faster comprehension and recall." },
+              { icon: BookOpen, title: "Educators", desc: "Create visual teaching aids from lesson content to help students grasp relationships between key concepts." },
+              { icon: FileText, title: "Researchers", desc: "Map out literature reviews, research frameworks, and theoretical connections across multiple papers." },
+              { icon: PenLine, title: "Writers", desc: "Plan and organize article outlines, story plots, and content structures visually before writing." },
+              { icon: Palette, title: "Project managers", desc: "Break down projects into visual task flows, dependencies, and milestones for better team alignment." },
+              { icon: Lightbulb, title: "Lifelong learners", desc: "Turn any topic into an interactive visual map — perfect for self-study, courses, and exploring new subjects." },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title}>
+                  <div className="w-11 h-11 rounded-xl  bg-secondary  flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-[#6366f1]" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground mb-1.5">{item.title}</h3>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed">{item.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex justify-center mt-14">
+            <Button variant="default" className="" onClick={() => textareaRef.current?.focus()}>
+              Get Started Free
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Highlights */}
+      <section className="py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-20 leading-tight">
+            See the big picture, instantly
+          </h2>
+
+          {/* Feature 1 — Auto-generated */}
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-8">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-5">
+                <GitBranch className="w-4 h-4 text-[#8b5cf6]" />
+                <span>AI-extracted concepts</span>
+              </div>
+              <div className="space-y-3">
+                {["Main Concept", "Subtopic A", "Subtopic B", "Detail 1", "Detail 2"].map((node, i) => (
+                  <div key={node} className="flex items-center gap-3 py-2 px-3 rounded-lg">
+                    <span className={`w-2 h-2 rounded-full ${i === 0 ? "bg-[#8b5cf6]" : "bg-muted-foreground/40"}`}></span>
+                    <span className={`text-sm ${i === 0 ? "text-foreground font-medium" : "text-muted-foreground"}`}>{node}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+                Auto-generated from<br />any text
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Paste any content and our AI instantly extracts key concepts, identifies relationships, and builds a visual map — no manual work required.
+              </p>
+            </div>
+          </div>
+
+          {/* Feature 2 — Interactive */}
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
+            <div className="order-2 md:order-1">
+              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+                Fully interactive<br />and explorable
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Click nodes to expand details, drag to rearrange, scroll to zoom. Every mindmap is a living document you can explore and customize to your learning style.
+              </p>
+            </div>
+            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-8">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-5">
+                <MousePointer2 className="w-4 h-4 text-[#6366f1]" />
+                <span>Drag to move &middot; Scroll to zoom</span>
+              </div>
+              <div className="flex flex-col items-center gap-3">
+                <div className="px-4 py-2 bg-[#6366f1] text-[#ffffff] text-sm rounded-lg">Main Topic</div>
+                <div className="w-px h-6 bg-border"></div>
+                <div className="flex gap-8">
+                  <div className="px-3 py-1.5 bg-[#6366f1]/20 text-[#6366f1] text-xs rounded-md">Branch A</div>
+                  <div className="px-3 py-1.5 bg-[#6366f1]/20 text-[#6366f1] text-xs rounded-md">Branch B</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature 3 — Study smarter */}
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-8">
+              <div className="space-y-3">
+                {[
+                  { label: "Textbook chapters", color: "bg-blue-500" },
+                  { label: "Research papers", color: "bg-emerald-500" },
+                  { label: "Lecture notes", color: "bg-amber-500" },
+                  { label: "Articles & blogs", color: "bg-violet-500" },
+                  { label: "Technical docs", color: "bg-rose-500" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-3 py-2 px-3 rounded-lg">
+                    <span className={`w-2 h-2 rounded-full ${item.color}`}></span>
+                    <span className="text-sm text-foreground">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+                Boost retention with<br />visual learning
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Studies show visual learners retain 85% more information. Turn any content into an interactive map and master subjects faster than ever.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 px-6 bg-secondary/30">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-16 leading-tight">
+            Create a mindmap in just 3 easy steps:
+          </h2>
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              { step: "1", title: "Paste your text", desc: "Drop in any content — textbook chapters, research papers, lecture notes, or articles." },
+              { step: "2", title: "Generate the map", desc: "Our AI extracts key concepts and builds an interactive visual map with connections automatically." },
+              { step: "3", title: "Explore and study", desc: "Click nodes to expand, drag to rearrange, and export as flashcards or download your map." },
+            ].map((item) => (
+              <div key={item.step}>
+                <div className="w-14 h-14 rounded-lg bg-[#6366f1] flex items-center justify-center mb-5">
+                  <span className="text-xl font-semibold" style={{ color: '#ffffff' }}>{item.step}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center mt-14">
+            <Button variant="default" className="" onClick={() => textareaRef.current?.focus()}>
+              Get Started Free
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-6 bg-background">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="bg-[#f4f3f8] text-muted-foreground border-0 mb-6 px-4 py-1.5 rounded-full font-normal text-sm">
+              <span className="w-2 h-2 rounded-full bg-[#8b5cf6] mr-2 inline-block"></span>
+              FAQ
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-medium text-foreground">
+              Got Questions?
+            </h2>
+          </div>
+
+          <div className="space-y-1">
+            {[
+              { q: "Is there a free plan?", a: "Yes! All users who sign up get access to 10 free credits daily, which can be used across all our tools including Mindmaps." },
+              { q: "What kind of text can I map?", a: "Any text — textbook chapters, research papers, lecture notes, articles, technical documentation, and more. Our AI extracts the key concepts automatically." },
+              { q: "Can I edit the generated mindmap?", a: "Absolutely. You can drag nodes to rearrange them, zoom in and out, and interact with every part of the visual map." },
+              { q: "What are credits?", a: "Credits are the in-app currency for Conch that allows you to generate mindmaps, simplify text, create flashcards, and more. Each action costs 1 to 4 credits." },
+              { q: "Can I export my mindmaps?", a: "Yes! You can export mindmaps as images or convert them directly into flashcards for study sessions." },
+              { q: "How does visual learning help?", a: "Research shows that visual learning improves retention by up to 85%. Mindmaps help you see connections between concepts, making complex topics easier to understand and remember." },
+              { q: "Can I convert mindmaps to flashcards?", a: "Yes! With one click you can turn any mindmap into a set of flashcards, making it easy to switch between visual learning and active recall practice." },
+            ].map((faq, i) => (
+              <div
+                key={i}
+                className={`px-6 py-5 cursor-pointer rounded-2xl transition-all ${
+                  openFaq === i ? "bg-[#f4f3f8] dark:bg-secondary/40" : "hover:bg-[#f4f3f8]/30 dark:hover:bg-secondary/20"
+                }`}
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-[17px] text-foreground">{faq.q}</p>
+                  <ChevronDown className={`w-5 h-5 text-muted-foreground/50 transition-transform duration-200 flex-shrink-0 ml-4 ${openFaq === i ? "rotate-180" : ""}`} />
+                </div>
+                {openFaq === i && (
+                  <p className="text-muted-foreground leading-relaxed mt-4 text-[15px]">
+                    {faq.a}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-6 bg-secondary/30">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-[40px] font-medium text-foreground mb-3 leading-tight">
+            Start mapping your knowledge
+          </h2>
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+            Join students and professionals who learn visually with AI mindmaps.
+          </p>
+          <Button variant="default" className="" onClick={() => textareaRef.current?.focus()}>
+            Create Free Mindmap
+            <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-6 pt-16 pb-8 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Image src="/images/logos/logo.png" width={28} height={28} alt="Conch" />
+                <span className="text-xl font-semibold text-foreground">Conch</span>
+              </div>
+              <p className="text-sm text-muted-foreground mb-6">Work smarter, not harder</p>
+              <div className="flex items-center gap-4">
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></a>
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+              </div>
+            </div>
+            <div className="flex gap-20">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">About</p>
+                <div className="flex flex-col gap-3">
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Blog</a>
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Terms of Service</a>
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Privacy Policy</a>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">Support</p>
+                <div className="flex flex-col gap-3">
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Contact Us</a>
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Help Center</a>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">Tools</p>
+                <div className="flex flex-col gap-3">
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Simplify</a>
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Stealth Mode</a>
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Flashcards</a>
+                  <a href="#" className="text-sm text-foreground hover:text-[#8b5cf6] transition-colors">Notes</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-border pt-6">
+            <p className="text-xs text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default MindmapsFeature;

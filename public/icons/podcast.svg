@@ -1,0 +1,28 @@
+<svg width="139" height="88" viewBox="0 0 139 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="paint0_linear_11644_467" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+<stop stop-color="#F3F3F3"/>
+<stop offset="0.556163" stop-color="#C2BECF" stop-opacity="0.4"/>
+<stop offset="1" stop-color="#746B97" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint1_linear_11644_467" x1="1" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+<stop stop-color="#F3F3F3"/>
+<stop offset="0.556163" stop-color="#C2BECF" stop-opacity="0.4"/>
+<stop offset="1" stop-color="#746B97" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip_left">
+<rect x="0" y="0" width="288" height="512" />
+</clipPath>
+<clipPath id="clip_right">
+<rect x="288" y="0" width="288" height="512" />
+</clipPath>
+</defs>
+<g transform="translate(20, 0) scale(0.171875)">
+<g clip-path="url(#clip_left)">
+<path d="M39.4097 5.26196C48.3843 5.26196 55.6597 12.6306 55.6597 21.7203V34.887C55.6597 43.9766 48.3843 51.3453 39.4097 51.3453C30.435 51.3453 23.1596 43.9766 23.1596 34.887V21.7203C23.1596 12.6306 30.435 5.26196 39.4097 5.26196ZM10.3381 38.1786H16.89C18.467 49.345 27.9486 57.9286 39.4097 57.9286C50.8705 57.9286 60.3521 49.345 61.9293 38.1786H68.481C66.9824 51.9101 56.2174 62.8131 42.6597 64.3313V77.6786H36.1597V64.3313C22.6018 62.8131 11.8369 51.9101 10.3381 38.1786Z" transform="translate(35.2, 0) scale(6.4)" fill="url(#paint0_linear_11644_467)" />
+</g>
+<g clip-path="url(#clip_right)">
+<path d="M39.4097 5.26196C48.3843 5.26196 55.6597 12.6306 55.6597 21.7203V34.887C55.6597 43.9766 48.3843 51.3453 39.4097 51.3453C30.435 51.3453 23.1596 43.9766 23.1596 34.887V21.7203C23.1596 12.6306 30.435 5.26196 39.4097 5.26196ZM10.3381 38.1786H16.89C18.467 49.345 27.9486 57.9286 39.4097 57.9286C50.8705 57.9286 60.3521 49.345 61.9293 38.1786H68.481C66.9824 51.9101 56.2174 62.8131 42.6597 64.3313V77.6786H36.1597V64.3313C22.6018 62.8131 11.8369 51.9101 10.3381 38.1786Z" transform="translate(35.2, 0) scale(6.4)" fill="url(#paint1_linear_11644_467)" />
+</g>
+</g>
+</svg>

@@ -1,0 +1,62 @@
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 90deg;
+  inherits: true;
+}
+
+@property --gradX {
+  syntax: "<percentage>";
+  initial-value: 50%;
+  inherits: true;
+}
+
+@property --gradY {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: true;
+}
+
+:root {
+  --d: 3000ms;
+  --angle: 10deg;
+  --gradX: 100%;
+  --gradY: 50%;
+  --c1: #373530;
+  --c2: #c6c6c6;
+}
+
+:root .dark {
+  --c2: #383838;
+  --c1: #9e9e9e;
+}
+
+.flashcard {
+  position: relative;
+  border-radius: 0.75rem;
+  padding: 1px;
+}
+
+.flashcard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: borderRotate var(--d) linear infinite forwards;
+  right: 0;
+  bottom: 0;
+  background-image: conic-gradient(
+    from var(--angle),
+    var(--c2),
+    var(--c1) 0.1turn,
+    var(--c1) 0.15turn,
+    var(--c2) 0.25turn
+  );
+  background-size: 100% 100%;
+  border-radius: inherit;
+}
+
+@keyframes borderRotate {
+  100% {
+    --angle: 420deg;
+  }
+}
