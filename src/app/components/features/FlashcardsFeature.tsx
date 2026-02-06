@@ -29,7 +29,7 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaRegStar, FaShapes, FaStar } from "react-icons/fa";
 import { RiRestartLine, RiShuffleLine } from "react-icons/ri";
 
@@ -187,25 +187,6 @@ const FlashcardsFeature = () => {
     "Photosynthesis converts light energy to chemical energy. Chlorophyll absorbs light primarily in the blue and red wavelengths. The Calvin cycle produces glucose from carbon dioxide.",
   ];
 
-  // Handle keyboard navigation (matching study component)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!hasGenerated || flashcards.length === 0) return;
-
-      if (e.code === "Space") {
-        e.preventDefault();
-        setIsFlipped(!isFlipped);
-      } else if (e.keyCode === 37 || e.keyCode === 38) {
-        goToPreviousCard();
-      } else if (e.keyCode === 39 || e.keyCode === 40) {
-        goToNextCard();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [hasGenerated, flashcards, isFlipped, currentCardIndex]);
-
   const generateFlashcards = async () => {
     if (!inputText.trim()) return;
 
@@ -255,23 +236,42 @@ const FlashcardsFeature = () => {
     setInputText(randomText);
   };
 
-  const goToPreviousCard = () => {
+  const goToPreviousCard = useCallback(() => {
     if (currentCardIndex === 0) {
       setCurrentCardIndex(flashcards.length - 1);
     } else {
       setCurrentCardIndex(currentCardIndex - 1);
     }
     setIsFlipped(false);
-  };
+  }, [currentCardIndex, flashcards.length]);
 
-  const goToNextCard = () => {
+  const goToNextCard = useCallback(() => {
     if (currentCardIndex < flashcards.length - 1) {
       setCurrentCardIndex(currentCardIndex + 1);
     } else {
       setCurrentCardIndex(0);
     }
     setIsFlipped(false);
-  };
+  }, [currentCardIndex, flashcards.length]);
+
+  // Handle keyboard navigation (matching study component)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!hasGenerated || flashcards.length === 0) return;
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        setIsFlipped((prev) => !prev);
+      } else if (e.keyCode === 37 || e.keyCode === 38) {
+        goToPreviousCard();
+      } else if (e.keyCode === 39 || e.keyCode === 40) {
+        goToNextCard();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [hasGenerated, flashcards.length, goToNextCard, goToPreviousCard]);
 
   const shuffleCards = () => {
     const shuffled = [...flashcards].sort(() => Math.random() - 0.5);
