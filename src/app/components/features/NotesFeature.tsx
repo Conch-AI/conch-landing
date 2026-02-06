@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/app/components/ui/Footer";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -32,7 +33,6 @@ import {
   StickyNote,
   Upload
 } from "lucide-react";
-import Image from "next/image";
 import { useRef, useState } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -288,40 +288,40 @@ const NotesFeature = () => {
   return (
     <div className="min-h-full bg-background text-foreground overflow-y-auto px-4 md:px-6">
       {/* Hero Section */}
-      <section className="pt-7 pb-4 px-6">
+      <section className="pt-4 sm:pt-6 md:pt-7 pb-3 md:pb-4 px-4 md:px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-2xl md:text-[36px] font-medium tracking-tight mb-3 text-foreground leading-tight">
+          <h1 className="text-xl sm:text-2xl md:text-[36px] font-medium tracking-tight mb-2 md:mb-3 text-foreground leading-tight">
             Transform content into organized notes
           </h1>
-          <p className="text-sm md:text-[14px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-[14px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             AI-powered note generation from any source. Create structured, easy-to-review study notes instantly.
           </p>
         </div>
       </section>
 
       {/* Main Tool Section */}
-      <section className="px-8 pb-14">
+      <section className="px-4 md:px-8 pb-10 md:pb-14">
         <div className="max-w-5xl mx-auto">
-          <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
+          <div className="bg-card rounded-xl md:rounded-2xl border border-border shadow-lg overflow-hidden">
             {/* Top Bar - Title & Actions */}
             {hasGenerated && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-                <div className="flex items-center gap-3 flex-1">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-border gap-2">
+                <div className="flex items-center gap-2 md:gap-3 flex-1 w-full sm:w-auto">
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="text-xl font-bold bg-transparent border-none outline-none flex-1 text-foreground"
+                    className="text-base md:text-xl font-bold bg-transparent border-none outline-none flex-1 text-foreground"
                     placeholder="Untitled Notes"
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="default" size="sm" className="">
-                    <Layers className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 md:gap-2">
+                  <Button variant="default" size="sm" className="text-[11px] md:text-sm">
+                    <Layers className="w-3.5 h-3.5 md:w-4 md:h-4" />
                     Flashcards
                   </Button>
-                  <Button variant="default" size="sm" className="">
-                    <Lightbulb className="w-4 h-4" />
+                  <Button variant="default" size="sm" className="text-[11px] md:text-sm">
+                    <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4" />
                     Mindmaps
                   </Button>
                 </div>
@@ -331,7 +331,7 @@ const NotesFeature = () => {
             {/* Content Area */}
             {!hasGenerated ? (
               /* Input View - Clean QuillBot Style */
-              <div className="p-5 min-h-[400px] flex flex-col">
+              <div className="p-4 md:p-5 min-h-[300px] md:min-h-[400px] flex flex-col">
                 {/* Hidden file input */}
                 <input
                   ref={fileInputRef}
@@ -353,27 +353,27 @@ const NotesFeature = () => {
 
                 {/* Top Section: Instruction + Buttons */}
                 <div className="mb-3">
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-[12px] md:text-sm text-muted-foreground mb-2 md:mb-3">
                     To generate notes, add text, or upload a file (.docx)
                   </p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 md:gap-2">
                     <button
                       onClick={handlePaste}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                      className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
                     >
-                      <ClipboardIcon className="w-3.5 h-3.5" />
+                      <ClipboardIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       Paste text
                     </button>
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                      className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
                     >
                       <Upload className="w-3.5 h-3.5" />
                       Upload file
                     </button>
                     <button
                       onClick={handleTrySample}
-                      className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                      className="px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                     >
                       Try sample
                     </button>
@@ -386,23 +386,23 @@ const NotesFeature = () => {
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Start typing or paste your content here..."
-                  className="flex-1 w-full min-h-[280px] bg-transparent text-foreground placeholder-muted-foreground/50 resize-none focus:outline-none border-0 focus:border-0 focus:ring-0 text-base leading-relaxed"
+                  className="flex-1 w-full min-h-[180px] md:min-h-[280px] bg-transparent text-foreground placeholder-muted-foreground/50 resize-none focus:outline-none border-0 focus:border-0 focus:ring-0 text-[13px] md:text-base leading-relaxed"
                 />
 
                 {/* Bottom Bar */}
                 <div className="flex items-center justify-between pt-3 border-t border-border/50 mt-auto">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-[11px] md:text-sm text-muted-foreground">
                     {inputText.split(/\s+/).filter(Boolean).length}/25000 words
                   </span>
                   <Button
                     onClick={generateNotes}
                     disabled={isLoading || !inputText.trim()}
                     variant={inputText.trim() ? "default" : "outline"}
-                    className=""
+                    className="text-[10px] md:text-sm px-2.5 md:px-4 py-1 md:py-2"
                   >
                     {isLoading ? (
                       <>
-                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        <RefreshCw className="w-2.5 h-2.5 md:w-4 md:h-4 mr-0.5 md:mr-2 animate-spin" />
                         Generating...
                       </>
                     ) : (
@@ -413,9 +413,9 @@ const NotesFeature = () => {
               </div>
             ) : (
               /* Notes View - Split Layout with Headings */
-              <div className="flex" style={{ height: "700px" }}>
+              <div className="flex flex-col md:flex-row" style={{ minHeight: "400px" }}>
                 {/* Headings Sidebar */}
-                <div className="w-64 border-r border-border p-4 bg-muted/10 overflow-y-auto h-full">
+                <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-border p-3 md:p-4 bg-muted/10 overflow-y-auto md:h-[700px]">
                   <button
                     onClick={addNewHeading}
                     className="flex items-center gap-2 text-sm text-[#6366f1] hover:text-[#6366f1]/80 mb-4 transition-colors"
@@ -447,9 +447,9 @@ const NotesFeature = () => {
                 </div>
 
                 {/* Editor Content */}
-                <div className="flex-1 flex flex-col h-full overflow-hidden">
+                <div className="flex-1 flex flex-col md:h-[700px] overflow-hidden">
                   {/* Toolbar */}
-                  <div className="flex items-center justify-between px-6 py-3 border-b border-border/50 bg-muted/10 shrink-0">
+                  <div className="flex flex-wrap items-center justify-between px-4 md:px-6 py-2 md:py-3 border-b border-border/50 bg-muted/10 shrink-0 gap-2">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <FileText className="w-4 h-4" />
                       <span>{editor?.storage.characterCount?.words() || 0} words</span>
@@ -484,7 +484,7 @@ const NotesFeature = () => {
                   </div>
 
                   {/* Editor */}
-                  <div className="flex-1 overflow-y-auto p-6 min-h-0">
+                  <div className="flex-1 overflow-y-auto p-4 md:p-6 min-h-[300px] md:min-h-0">
                     {isLoading ? (
                       <SkeletonLoader />
                     ) : (
@@ -552,68 +552,68 @@ const NotesFeature = () => {
       </section>
 
       {/* Feature Highlights */}
-      <section className="py-18 px-6 pt-10">
+      <section className="py-12 md:py-18 px-4 md:px-6 pt-8 md:pt-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-18 leading-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-[36px] font-medium text-center text-foreground mb-12 md:mb-18 leading-tight">
             From raw content to study-ready notes
           </h2>
 
           {/* Feature 1 — Smart formatting */}
-          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
-              <div className="space-y-3">
-                <div className="text-lg font-semibold text-foreground">I. Introduction</div>
-                <div className="ml-4 space-y-2">
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] mt-2 shrink-0"></span>
-                    <span className="text-sm text-muted-foreground">Key concept with <span className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">highlighted terms</span></span>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-14 items-center mb-16 md:mb-24">
+            <div className="rounded-xl md:rounded-2xl bg-secondary/40 border border-border p-5 md:p-7">
+              <div className="space-y-2 md:space-y-3">
+                <div className="text-base md:text-lg font-semibold text-foreground">I. Introduction</div>
+                <div className="ml-3 md:ml-4 space-y-1.5 md:space-y-2">
+                  <div className="flex items-start gap-1.5 md:gap-2">
+                    <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-[#6366f1] mt-1.5 md:mt-2 shrink-0"></span>
+                    <span className="text-[12px] md:text-sm text-muted-foreground">Key concept with <span className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">highlighted terms</span></span>
                   </div>
-                  <div className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] mt-2 shrink-0"></span>
-                    <span className="text-sm text-muted-foreground">Supporting detail with context</span>
+                  <div className="flex items-start gap-1.5 md:gap-2">
+                    <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-[#6366f1] mt-1.5 md:mt-2 shrink-0"></span>
+                    <span className="text-[12px] md:text-sm text-muted-foreground">Supporting detail with context</span>
                   </div>
                 </div>
-                <div className="text-lg font-semibold text-foreground mt-4">II. Key Findings</div>
+                <div className="text-base md:text-lg font-semibold text-foreground mt-3 md:mt-4">II. Key Findings</div>
               </div>
             </div>
             <div>
-              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
+              <h3 className="text-xl md:text-2xl lg:text-[25px] font-medium text-foreground mb-2.5 md:mb-3.5 leading-snug">
                 Smart formatting with<br />key term highlighting
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[13px] md:text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 AI automatically structures content with headings, bullet points, and color-coded highlights for key terms — making review fast and effective.
               </p>
             </div>
           </div>
 
           {/* Feature 2 — Rich text editor */}
-          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-14 items-center mb-16 md:mb-24">
             <div className="order-2 md:order-1">
-              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
+              <h3 className="text-xl md:text-2xl lg:text-[25px] font-medium text-foreground mb-2.5 md:mb-3.5 leading-snug">
                 Full rich text<br />editing power
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[13px] md:text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Edit every detail with a built-in rich text editor. Add headings, format text, create lists, and customize highlights — your notes, your way.
               </p>
             </div>
-            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7">
-              <div className="flex gap-2 mb-6">
+            <div className="order-1 md:order-2 rounded-xl md:rounded-2xl bg-secondary/40 border border-border p-5 md:p-7">
+              <div className="flex gap-1.5 md:gap-2 mb-4 md:mb-6">
                 {["Bold", "Italic", "Highlight", "H1", "H2", "List"].map((t, i) => (
-                  <span key={t} className={`px-2 py-1 rounded text-xs font-medium ${i === 2 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
+                  <span key={t} className={`px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium ${i === 2 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
                     {t}
                   </span>
                 ))}
               </div>
-              <p className="text-[15px] text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[12px] md:text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Full editing toolbar with formatting, headings, lists, and color-coded highlights...
               </p>
             </div>
           </div>
 
           {/* Feature 3 — Export anywhere */}
-          <div className="grid md:grid-cols-2 gap-14 items-center">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
-              <div className="space-y-3">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
+            <div className="rounded-xl md:rounded-2xl bg-secondary/40 border border-border p-5 md:p-7">
+              <div className="space-y-2 md:space-y-3">
                 {[
                   { label: "Copy to clipboard", color: "bg-blue-500" },
                   { label: "Download as HTML", color: "bg-emerald-500" },
@@ -621,18 +621,18 @@ const NotesFeature = () => {
                   { label: "Convert to Flashcards", color: "bg-violet-500" },
                   { label: "Generate Mindmap", color: "bg-rose-500" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-3 py-2 px-3 rounded-lg">
-                    <span className={`w-2 h-2 rounded-full ${item.color}`}></span>
-                    <span className="text-sm text-foreground">{item.label}</span>
+                  <div key={item.label} className="flex items-center gap-2 md:gap-3 py-1.5 md:py-2 px-2 md:px-3 rounded-lg">
+                    <span className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${item.color}`}></span>
+                    <span className="text-[12px] md:text-sm text-foreground">{item.label}</span>
                   </div>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
+              <h3 className="text-xl md:text-2xl lg:text-[25px] font-medium text-foreground mb-2.5 md:mb-3.5 leading-snug">
                 Export anywhere,<br />study everywhere
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[13px] md:text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Copy notes to clipboard, download as HTML, export to PDF, or convert directly into flashcards and mindmaps for a complete study workflow.
               </p>
             </div>
@@ -731,55 +731,7 @@ const NotesFeature = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 pt-14 pb-7 border-t border-border">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between gap-10 mb-14">
-            <div>
-              <div className="flex items-center gap-1.5 mb-2.5">
-                <Image src="/images/logos/logo.png" width={25} height={25} alt="Conch" />
-                <span className="text-lg font-semibold text-foreground">Conch</span>
-              </div>
-              <p className="text-[13px] text-muted-foreground mb-5">Work smarter, not harder</p>
-              <div className="flex items-center gap-3.5">
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
-              </div>
-            </div>
-            <div className="flex gap-12">
-              <div>
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">About</p>
-                <div className="flex flex-col gap-2.5">
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Blog</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Terms of Service</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Privacy Policy</a>
-                </div>
-              </div>
-              <div>
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Support</p>
-                <div className="flex flex-col gap-2.5">
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Contact Us</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Help Center</a>
-                </div>
-              </div>
-              <div>
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Tools</p>
-                <div className="flex flex-col gap-2.5">
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Simplify</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Stealth Mode</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Flashcards</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Mindmaps</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-border pt-5">
-            <p className="text-[11px] text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

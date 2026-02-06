@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/app/components/ui/Footer";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -28,7 +29,6 @@ import {
   Upload,
   Zap,
 } from "lucide-react";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaRegStar, FaShapes, FaStar } from "react-icons/fa";
 import { RiRestartLine, RiShuffleLine } from "react-icons/ri";
@@ -655,21 +655,21 @@ const FlashcardsFeature = () => {
         /* Input View - Clean QuillBot Style */
         <>
           {/* Hero Section */}
-          <section className="pt-7 pb-4 px-6">
+          <section className="pt-4 sm:pt-6 md:pt-7 pb-3 md:pb-4 px-4 md:px-6">
             <div className="max-w-5xl mx-auto text-center">
-              <h1 className="text-2xl md:text-[36px] font-medium tracking-tight mb-3 text-foreground leading-tight">
+              <h1 className="text-xl sm:text-2xl md:text-[36px] font-medium tracking-tight mb-2 md:mb-3 text-foreground leading-tight">
                 Study smarter with AI flashcards
               </h1>
-              <p className="text-sm md:text-[14px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xs sm:text-sm md:text-[14px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 Automatically generate flashcards from any text. Practice, review, and master any subject.
               </p>
             </div>
           </section>
 
-          <section className="px-8 pb-14 flex-1">
+          <section className="px-4 md:px-8 pb-10 md:pb-14 flex-1">
             <div className="max-w-5xl mx-auto">
-              <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
-                <div className="p-5 min-h-[400px] flex flex-col">
+              <div className="bg-card rounded-xl md:rounded-2xl border border-border shadow-lg overflow-hidden">
+                <div className="p-4 md:p-5 min-h-[300px] md:min-h-[400px] flex flex-col">
                   {/* Hidden file input */}
                   <input
                     ref={fileInputRef}
@@ -691,27 +691,27 @@ const FlashcardsFeature = () => {
 
                   {/* Top Section: Instruction + Buttons */}
                   <div className="mb-3">
-                    <p className="text-sm text-muted-foreground mb-3">
+                    <p className="text-[12px] md:text-sm text-muted-foreground mb-2 md:mb-3">
                       To generate flashcards, add text or upload a file (.docx)
                     </p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 md:gap-2">
                       <button
                         onClick={handlePaste}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                        className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
                       >
-                        <ClipboardIcon className="w-3.5 h-3.5" />
+                        <ClipboardIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                         Paste text
                       </button>
                       <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                        className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
                       >
                         <Upload className="w-3.5 h-3.5" />
                         Upload file
                       </button>
                       <button
                         onClick={handleTrySample}
-                        className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        className="px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Try sample
                       </button>
@@ -724,23 +724,23 @@ const FlashcardsFeature = () => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Start typing or paste your content here..."
-                    className="flex-1 w-full min-h-[280px] bg-transparent text-foreground placeholder-muted-foreground/50 resize-none focus:outline-none border-0 focus:border-0 focus:ring-0 text-base leading-relaxed"
+                    className="flex-1 w-full min-h-[180px] md:min-h-[280px] bg-transparent text-foreground placeholder-muted-foreground/50 resize-none focus:outline-none border-0 focus:border-0 focus:ring-0 text-[13px] md:text-base leading-relaxed"
                   />
 
                   {/* Bottom Bar */}
                   <div className="flex items-center justify-between pt-3 border-t border-border/50 mt-auto">
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-[11px] md:text-sm text-muted-foreground">
                       {inputText.split(/\s+/).filter(Boolean).length}/25000 words
                     </span>
                     <Button
                       onClick={generateFlashcards}
                       disabled={isLoading || !inputText.trim()}
                       variant={inputText.trim() ? "default" : "outline"}
-                      className=""
+                      className="text-[10px] md:text-sm px-2.5 md:px-4 py-1 md:py-2"
                     >
                       {isLoading ? (
                         <>
-                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          <RefreshCw className="w-2.5 h-2.5 md:w-4 md:h-4 mr-0.5 md:mr-2 animate-spin" />
                           Generating...
                         </>
                       ) : (
@@ -757,9 +757,9 @@ const FlashcardsFeature = () => {
         /* Flashcards View - Full Width */
         <div className="flex-1 flex flex-col h-full overflow-hidden">
           {/* Top Bar */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-card shrink-0">
-            <div className="flex items-center gap-3.5">
-              <span className="text-lg font-semibold text-foreground">Flashcards</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-border bg-card shrink-0 gap-2 sm:gap-0">
+            <div className="flex items-center gap-2 md:gap-3.5 flex-wrap">
+              <span className="text-base md:text-lg font-semibold text-foreground">Flashcards</span>
               <div className="flex items-center gap-1 bg-secondary/50 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("practice")}
@@ -789,17 +789,17 @@ const FlashcardsFeature = () => {
                   Gallery
                 </button>
               </div>
-              <span className="text-sm text-muted-foreground">{flashcards.length} cards</span>
+              <span className="text-[12px] md:text-sm text-muted-foreground">{flashcards.length} cards</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="default" size="sm" className="">
-                <Download className="w-4 h-4" />
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <Button variant="default" size="sm" className="text-[11px] md:text-sm">
+                <Download className="w-3.5 h-3.5 md:w-4 md:h-4" />
                 Export
               </Button>
               <Button
                 variant="default"
                 size="sm"
-                className=""
+                className="text-[11px] md:text-sm"
                 onClick={() => {
                   setHasGenerated(false);
                   setFlashcards([]);
@@ -1043,55 +1043,7 @@ const FlashcardsFeature = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 pt-14 pb-7 border-t border-border">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between gap-10 mb-14">
-            <div>
-              <div className="flex items-center gap-1.5 mb-2.5">
-                <Image src="/images/logos/logo.png" width={25} height={25} alt="Conch" />
-                <span className="text-lg font-semibold text-foreground">Conch</span>
-              </div>
-              <p className="text-[13px] text-muted-foreground mb-5">Work smarter, not harder</p>
-              <div className="flex items-center gap-3.5">
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
-              </div>
-            </div>
-            <div className="flex gap-12">
-              <div>
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">About</p>
-                <div className="flex flex-col gap-2.5">
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Blog</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Terms of Service</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Privacy Policy</a>
-                </div>
-              </div>
-              <div>
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Support</p>
-                <div className="flex flex-col gap-2.5">
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Contact Us</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Help Center</a>
-                </div>
-              </div>
-              <div>
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Tools</p>
-                <div className="flex flex-col gap-2.5">
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Simplify</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Stealth Mode</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Mindmaps</a>
-                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Notes</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-border pt-5">
-            <p className="text-[11px] text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
