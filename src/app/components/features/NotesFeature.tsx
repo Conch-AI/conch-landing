@@ -195,47 +195,11 @@ const NotesFeature = () => {
       setHasGenerated(true);
     } catch (error) {
       console.error("Error generating notes:", error);
-      generateSampleNotes();
     } finally {
       setIsLoading(false);
     }
   };
 
-  const generateSampleNotes = () => {
-    const sampleContent = `
-      <h1>Solving Equations and Functions: A High School Algebra Primer</h1>
-      <h2>Introduction to Quadratic Equations</h2>
-      <ul class="list-disc">
-        <li>Quadratic equations are second-degree polynomial equations of the form <mark data-color="#fef08a">ax^2 + bx + c = 0</mark>, where <mark data-color="#fef08a">a</mark>, <mark data-color="#bfdbfe">b</mark>, and <mark data-color="#fecaca">c</mark> are constants.</li>
-        <li>There are three main methods to solve quadratic equations: <mark data-color="#fef08a">factoring</mark>, <mark data-color="#fef08a">completing the square</mark>, and using the <mark data-color="#fef08a">quadratic formula</mark>.</li>
-        <li>The <mark data-color="#fef08a">quadratic formula</mark> is <mark data-color="#fef08a">x = (-b ± √(b^2 - 4ac)) / (2a)</mark>, which can be used to find the two solutions (or roots) of a quadratic equation.</li>
-        <li>Quadratic equations can have real, complex, or no solutions depending on the values of <mark data-color="#bfdbfe">a</mark>, <mark data-color="#bfdbfe">b</mark>, and <mark data-color="#fecaca">c</mark>.</li>
-        <li>Graphing quadratic equations reveals their <mark data-color="#fef08a">parabolic</mark> shape and the relationship between their solutions and their graph.</li>
-      </ul>
-      <h2>Solving Linear Equations</h2>
-      <ul class="list-disc">
-        <li>Linear equations are first-degree polynomial equations of the form <mark data-color="#fef08a">ax + b = 0</mark>, where <mark data-color="#bfdbfe">a</mark> and <mark data-color="#bfdbfe">b</mark> are constants.</li>
-        <li>To solve a linear equation, the goal is to isolate the variable <mark data-color="#fef08a">x</mark> by performing inverse operations to both sides of the equation.</li>
-        <li>Common methods for solving linear equations include addition, subtraction, multiplication, and division.</li>
-      </ul>
-      <h2>Introduction to Functions</h2>
-      <ul class="list-disc">
-        <li>A <mark data-color="#fef08a">function</mark> is a relation that assigns exactly one output value to each input value.</li>
-        <li>Functions can be represented as equations, graphs, tables, or verbal descriptions.</li>
-        <li>The <mark data-color="#fef08a">domain</mark> is the set of all possible input values, while the <mark data-color="#fef08a">range</mark> is the set of all possible output values.</li>
-      </ul>
-      <h2>Applications of Quadratic Equations</h2>
-      <ul class="list-disc">
-        <li>Quadratic equations model many real-world phenomena including projectile motion, area optimization, and revenue modeling.</li>
-        <li>The vertex form <mark data-color="#fef08a">y = a(x-h)² + k</mark> is particularly useful for identifying maximum and minimum values.</li>
-      </ul>
-    `;
-
-    setTitle("Solving Equations and Functions: A High School Algebra Primer");
-    editor?.commands.setContent(sampleContent);
-    setHasGenerated(true);
-    extractHeadings(sampleContent);
-  };
 
   const handleTrySample = () => {
     const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
