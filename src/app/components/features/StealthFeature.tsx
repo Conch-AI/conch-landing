@@ -338,34 +338,34 @@ const StealthFeature = () => {
   };
 
   return (
-    <div className="min-h-full bg-background text-foreground overflow-y-auto">
+    <div className="min-h-full bg-background text-foreground overflow-y-auto px-4 md:px-6">
       {/* Hero Section */}
-      <section className="pt-8 pb-4 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-2xl md:text-[40px] font-medium tracking-tight mb-3 text-foreground leading-tight">
+      <section className="pt-7 pb-4 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <h1 className="text-2xl md:text-[36px] font-medium tracking-tight mb-3 text-foreground leading-tight">
             Make AI text undetectable
           </h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-[14px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Transform AI-generated content into natural, human-like text that bypasses all AI detectors.
           </p>
         </div>
       </section>
 
       {/* Main Tool Section */}
-      <section className="px-6 pb-16">
-        <div className="max-w-6xl mx-auto">
+      <section className="px-8 pb-14">
+        <div className="max-w-5xl mx-auto">
           {/* Main Editor Card */}
           <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
             {/* Toolbar - Styles */}
-            <div className="flex items-center justify-between gap-2 border-b border-border py-3 px-4">
+            <div className="flex items-center justify-between gap-1.5 border-b border-border py-2.5 px-5">
               <div className="flex items-center gap-1 overflow-x-auto">
-                <span className="text-sm font-semibold whitespace-nowrap mr-2">Styles:</span>
+                <span className="text-[13px] font-semibold whitespace-nowrap mr-1.5">Styles:</span>
                 {ModeOptions.map((mode, index) => (
                   <button
                     key={mode}
                     onClick={() => setActiveStyle(mode)}
                     title={ModeTooltips[index]}
-                    className={`px-3 py-2 text-sm font-medium whitespace-nowrap transition-all border-b-2 ${
+                    className={`px-2.5 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all border-b-2 ${
                       activeStyle === mode
                         ? "border-[#6366f1] text-[#6366f1]"
                         : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -376,14 +376,14 @@ const StealthFeature = () => {
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 {checkedForAI && (
                   <button
                     onClick={handleReset}
-                    className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                    className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                     title="Try with another text"
                   >
-                    <RefreshCw className="w-5 h-5" />
+                    <RefreshCw className="w-4.5 h-4.5" />
                   </button>
                 )}
 
@@ -392,12 +392,12 @@ const StealthFeature = () => {
                     onClick={handleDetectAI}
                     disabled={isLoading || !hasText}
                     variant="default"
-                    className=""
+                    className="text-[13px] px-4 py-1.5"
                   >
                     {isLoading ? (
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                     ) : (
-                      <Shield className="w-4 h-4 mr-2" />
+                      <Shield className="w-3.5 h-3.5 mr-1.5" />
                     )}
                     Detect AI
                   </Button>
@@ -407,12 +407,12 @@ const StealthFeature = () => {
                       onClick={handleRecheckForAI}
                       disabled={isLoading || isHumanizing}
                       variant="default"
-                      className=""
+                      className="text-[13px] px-4 py-1.5"
                     >
                       {isLoading ? (
-                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                       ) : (
-                        <Check className="w-4 h-4 mr-2" />
+                        <Check className="w-3.5 h-3.5 mr-1.5" />
                       )}
                       Recheck for AI
                     </Button>
@@ -420,16 +420,16 @@ const StealthFeature = () => {
                       onClick={handleHumanize}
                       disabled={isLoading || isHumanizing}
                       variant="default"
-                      className=""
+                      className="text-[13px] px-4 py-1.5"
                     >
                       {isHumanizing ? (
                         <>
-                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin" />
                           Humanizing...
                         </>
                       ) : (
                         <>
-                          <Wand2 className="w-4 h-4 mr-2" />
+                          <Wand2 className="w-3.5 h-3.5 mr-1.5" />
                           Humanize All
                         </>
                       )}
@@ -444,55 +444,55 @@ const StealthFeature = () => {
               {/* Editor Panel */}
               <div className={`flex-1 flex flex-col ${checkedForAI ? "max-w-[70%]" : ""}`}>
                 {/* Top Info Bar */}
-                <div className="flex items-center justify-between px-6 py-3 border-b border-border/50 bg-muted/20">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/50 text-xs">
+                <div className="flex items-center justify-between px-5 py-2.5 border-b border-border/50 bg-muted/20">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-border/50 text-[11px]">
                       {getWordCount()} words
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/50 text-xs">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-border/50 text-[11px]">
                       {getCharacterCount()} characters
                     </div>
                   </div>
 
                   {/* AI Detection Legend */}
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3.5">
                     <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded-full border-2 border-red-500" />
-                      <span className="text-xs text-muted-foreground">0% Human</span>
+                      <div className="w-2.5 h-2.5 rounded-full border-2 border-red-500" />
+                      <span className="text-[11px] text-muted-foreground">0% Human</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded-full border-2 border-yellow-500" />
-                      <span className="text-xs text-muted-foreground">50% Human</span>
+                      <div className="w-2.5 h-2.5 rounded-full border-2 border-yellow-500" />
+                      <span className="text-[11px] text-muted-foreground">50% Human</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded-full border-2 border-green-500" />
-                      <span className="text-xs text-muted-foreground">100% Human</span>
+                      <div className="w-2.5 h-2.5 rounded-full border-2 border-green-500" />
+                      <span className="text-[11px] text-muted-foreground">100% Human</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Editor */}
-                <div className="flex-1 p-6 max-h-[400px] overflow-y-auto relative">
+                <div className="flex-1 p-5 max-h-[360px] overflow-y-auto relative">
                   <EditorContent
                     editor={editor}
-                    className="[&_.ProseMirror]:min-h-[350px] [&_.ProseMirror]:outline-none [&_.ProseMirror_p]:my-2 [&_.ProseMirror_mark[data-color]]:px-0.5 [&_.ProseMirror_mark[data-color]]:rounded"
+                    className="[&_.ProseMirror]:min-h-[310px] [&_.ProseMirror]:outline-none [&_.ProseMirror_p]:my-2 [&_.ProseMirror_mark[data-color]]:px-0.5 [&_.ProseMirror_mark[data-color]]:rounded"
                   />
 
                   {/* Empty State */}
                   {!hasText && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                      <div className="pointer-events-auto flex items-center gap-3 mt-20">
+                      <div className="pointer-events-auto flex items-center gap-2.5 mt-18">
                         <button
                           onClick={handleTrySample}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#6366f1] bg-[#6366f1]/10 hover:bg-[#6366f1]/20 rounded-lg transition-colors"
+                          className="flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium text-[#6366f1] bg-[#6366f1]/10 hover:bg-[#6366f1]/20 rounded-lg transition-colors"
                         >
                           Try Sample Text
                         </button>
                         <button
                           onClick={handlePaste}
-                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-muted-foreground bg-muted/50 hover:bg-muted rounded-lg transition-colors"
+                          className="flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium text-muted-foreground bg-muted/50 hover:bg-muted rounded-lg transition-colors"
                         >
-                          <Clipboard className="w-4 h-4" />
+                          <Clipboard className="w-3.5 h-3.5" />
                           Paste Text
                         </button>
                       </div>
@@ -501,32 +501,32 @@ const StealthFeature = () => {
                 </div>
 
                 {/* Bottom Bar - Detectors */}
-                <div className="flex items-center justify-between px-6 py-3 border-t border-border/50 bg-muted/20">
-                  <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center justify-between px-5 py-2.5 border-t border-border/50 bg-muted/20">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     {Detectors.map((detector) => (
                       <div
                         key={detector.label}
-                        className="flex items-center gap-1.5 px-2 py-1 rounded-md"
+                        className="flex items-center gap-1 px-1.5 py-0.5 rounded-md"
                       >
-                        <div className="w-4 h-4 flex items-center justify-center">
+                        <div className="w-3.5 h-3.5 flex items-center justify-center">
                           {detector.icon}
                         </div>
-                        <span className="text-xs font-medium">{detector.label}</span>
+                        <span className="text-[11px] font-medium">{detector.label}</span>
                         {isLoading ? (
-                          <RefreshCw className="w-3.5 h-3.5 text-[#6366f1] animate-spin" />
+                          <RefreshCw className="w-3 h-3 text-[#6366f1] animate-spin" />
                         ) : checkedForAI ? (
-                          <Check className="w-3.5 h-3.5 text-green-500" />
+                          <Check className="w-3 h-3 text-green-500" />
                         ) : null}
                       </div>
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className="flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <FileUp className="w-4 h-4" />
+                      <FileUp className="w-3.5 h-3.5" />
                       Upload
                     </button>
                     <input
@@ -538,9 +538,9 @@ const StealthFeature = () => {
                     />
                     <button
                       onClick={handleCopy}
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className="flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                      {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
                       {copied ? "Copied" : "Copy"}
                     </button>
                   </div>
@@ -551,9 +551,9 @@ const StealthFeature = () => {
               {checkedForAI && score !== null && (
                 <>
                   <div className="w-px bg-border" />
-                  <div className="w-[30%] min-w-[250px] p-6 flex flex-col items-center justify-start">
+                  <div className="w-[30%] min-w-[225px] p-5 flex flex-col items-center justify-start">
                     {/* Score Circle */}
-                    <div className="w-32 h-32 mb-4">
+                    <div className="w-28 h-28 mb-3.5">
                       <CircularProgressbar
                         value={score}
                         text={`${score}`}
@@ -564,17 +564,17 @@ const StealthFeature = () => {
                     </div>
 
                     {/* Score Message */}
-                    <p className="text-center text-sm text-muted-foreground leading-relaxed mb-6">
+                    <p className="text-center text-[13px] text-muted-foreground leading-relaxed mb-5">
                       {generateMessageFromScore(score)}
                     </p>
 
                     {/* AI Problems Count */}
                     {score < 75 && (
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-500 text-sm font-medium">
+                      <div className="flex items-center gap-1.5 mb-3.5">
+                        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-red-500/20 text-red-500 text-[13px] font-medium">
                           {Math.ceil((100 - score) / 20)}
                         </span>
-                        <span className="text-sm text-red-500">
+                        <span className="text-[13px] text-red-500">
                           AI Problem{Math.ceil((100 - score) / 20) > 1 ? "s" : ""}
                         </span>
                       </div>
@@ -588,13 +588,13 @@ const StealthFeature = () => {
       </section>
 
       {/* Who Can Use Section */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-18 px-6 pt-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-16 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-14 leading-tight">
             Who needs Stealth Mode?
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-x-12 gap-y-14">
+          <div className="grid md:grid-cols-3 gap-x-10 gap-y-12">
             {[
               { icon: GraduationCap, title: "Students", desc: "Submit AI-assisted work confidently by converting it into natural, human-like writing that passes all plagiarism checks." },
               { icon: BookOpen, title: "Educators", desc: "Prepare teaching materials and curriculum drafts with AI assistance while maintaining an authentic writing voice." },
@@ -606,18 +606,18 @@ const StealthFeature = () => {
               const Icon = item.icon;
               return (
                 <div key={item.title}>
-                  <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center mb-4">
-                    <Icon className="w-5 h-5 text-[#6366f1]" />
+                  <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mb-3.5">
+                    <Icon className="w-4.5 h-4.5 text-[#6366f1]" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground mb-1.5">{item.title}</h3>
-                  <p className="text-[14px] text-muted-foreground leading-relaxed">{item.desc}</p>
+                  <h3 className="text-[14px] font-semibold text-foreground mb-1.5">{item.title}</h3>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               );
             })}
           </div>
 
-          <div className="flex justify-center mt-14">
-            <Button variant="default" className="" onClick={() => editor?.commands.focus()}>
+          <div className="flex justify-center mt-12">
+            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
               Get Started Free
             </Button>
           </div>
@@ -625,52 +625,52 @@ const StealthFeature = () => {
       </section>
 
       {/* Feature Highlights */}
-      <section className="py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-20 leading-tight">
+      <section className="py-18 px-6 pt-10">
+        <div className="max-w-5xl mx-auto pl-10">
+          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-18 leading-tight">
             Humanize with confidence
           </h2>
 
           {/* Feature 1 — Bypass detectors */}
-          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <ShieldCheck className="w-5 h-5 text-green-500" />
-                <span className="text-sm font-medium text-green-600">All detectors bypassed</span>
+          <div className="grid md:grid-cols-2 gap-14 items-center mb-24 pt-10">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
+              <div className="flex items-center gap-2.5 mb-5">
+                <ShieldCheck className="w-4.5 h-4.5 text-green-500" />
+                <span className="text-[13px] font-medium text-green-600">All detectors bypassed</span>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {["GPTZero", "Turnitin", "Originality.ai", "Copyleaks", "Sapling"].map((d) => (
-                  <div key={d} className="flex items-center justify-between py-2 px-3 rounded-lg">
-                    <span className="text-sm text-foreground">{d}</span>
-                    <Check className="w-4 h-4 text-green-500" />
+                  <div key={d} className="flex items-center justify-between py-1.5 px-2.5 rounded-lg">
+                    <span className="text-[13px] text-foreground">{d}</span>
+                    <Check className="w-3.5 h-3.5 text-green-500" />
                   </div>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Bypass every AI<br />detector out there
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Our humanization engine rewrites text to pass GPTZero, Turnitin, Originality.ai, and every other major AI detection tool with a 99% success rate.
               </p>
             </div>
           </div>
 
           {/* Feature 2 — Writing styles */}
-          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
+          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
             <div className="order-2 md:order-1">
-              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 9 writing styles to<br />match your voice
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Choose from Standard, Fluency, Natural, Formal, Academic, Simple, Creative, Expand, or Shorten. Each style adapts the output to fit your exact needs.
               </p>
             </div>
-            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-8">
-              <div className="flex flex-wrap gap-2">
+            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7">
+              <div className="flex flex-wrap gap-1.5">
                 {["Standard", "Fluency", "Natural", "Formal", "Academic", "Simple", "Creative", "Expand", "Shorten"].map((s, i) => (
-                  <span key={s} className={`px-3 py-1.5 rounded-full text-sm font-medium ${i === 0 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
+                  <span key={s} className={`px-2.5 py-1 rounded-full text-[13px] font-medium ${i === 0 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
                     {s}
                   </span>
                 ))}
@@ -679,25 +679,25 @@ const StealthFeature = () => {
           </div>
 
           {/* Feature 3 — Meaning preserved */}
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-8">
-              <div className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-14 items-center">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
+              <div className="space-y-3.5">
                 <div>
-                  <p className="text-xs text-muted-foreground mb-2">Original (AI-generated)</p>
-                  <p className="text-sm text-muted-foreground/70 line-through leading-relaxed">The implementation of machine learning algorithms has revolutionized data processing capabilities.</p>
+                  <p className="text-[11px] text-muted-foreground mb-1.5">Original (AI-generated)</p>
+                  <p className="text-[13px] text-muted-foreground/70 line-through leading-relaxed">The implementation of machine learning algorithms has revolutionized data processing capabilities.</p>
                 </div>
                 <div className="h-px bg-border" />
                 <div>
-                  <p className="text-xs text-green-600 mb-2">Humanized</p>
-                  <p className="text-sm text-foreground leading-relaxed">Machine learning has completely changed how we process data, making it faster and smarter than ever before.</p>
+                  <p className="text-[11px] text-green-600 mb-1.5">Humanized</p>
+                  <p className="text-[13px] text-foreground leading-relaxed">Machine learning has completely changed how we process data, making it faster and smarter than ever before.</p>
                 </div>
               </div>
             </div>
             <div>
-              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 100% meaning<br />preserved
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Unlike basic paraphrasers, our AI rewrites content while keeping every key idea, fact, and nuance intact. The meaning stays — only the fingerprint changes.
               </p>
             </div>
@@ -706,44 +706,44 @@ const StealthFeature = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-18 px-6 pt-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-16 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-14 leading-tight">
             Humanize text in just 3 easy steps:
           </h2>
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-3 gap-10">
             {[
               { step: "1", title: "Paste your text", desc: "Drop in any AI-generated content — essays, articles, emails, or research drafts." },
               { step: "2", title: "Pick a style", desc: "Choose from 9 writing styles to match your tone: academic, creative, formal, and more." },
               { step: "3", title: "Get human text", desc: "Receive naturally rewritten text that passes all AI detectors while keeping your meaning intact." },
             ].map((item) => (
               <div key={item.step}>
-                <div className="w-14 h-14 rounded-lg bg-[#6366f1] flex items-center justify-center mb-5">
-                  <span className="text-xl font-semibold" style={{ color: '#ffffff' }}>{item.step}</span>
+                <div className="w-12 h-12 rounded-lg bg-[#6366f1] flex items-center justify-center mb-4">
+                  <span className="text-lg font-semibold" style={{ color: '#ffffff' }}>{item.step}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-1.5">{item.title}</h3>
+                <p className="text-[13px] text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-14">
-            <Button variant="default" className="" onClick={() => editor?.commands.focus()}>
+          <div className="flex justify-center mt-12">
+            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
               Get Started Free
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
             </Button>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-6 bg-background">
+      <section className="py-18 px-6 bg-background pt-10">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="bg-[#f4f3f8] text-muted-foreground border-0 mb-6 px-4 py-1.5 rounded-full font-normal text-sm">
-              <span className="w-2 h-2 rounded-full bg-[#6366f1] mr-2 inline-block"></span>
+          <div className="text-center mb-14">
+            <Badge className="bg-[#f4f3f8] text-muted-foreground border-0 mb-5 px-3.5 py-1.5 rounded-full font-normal text-[13px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] mr-1.5 inline-block"></span>
               FAQ
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-medium text-foreground">
+            <h2 className="text-3xl md:text-[40px] font-medium text-foreground">
               Got Questions?
             </h2>
           </div>
@@ -760,17 +760,17 @@ const StealthFeature = () => {
             ].map((faq, i) => (
               <div
                 key={i}
-                className={`px-6 py-5 cursor-pointer rounded-2xl transition-all ${
+                className={`px-5 py-4 cursor-pointer rounded-2xl transition-all ${
                   openFaq === i ? "bg-[#f4f3f8] dark:bg-secondary/40" : "hover:bg-[#f4f3f8]/30 dark:hover:bg-secondary/20"
                 }`}
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
               >
                 <div className="flex items-center justify-between">
-                  <p className="text-[17px] text-foreground">{faq.q}</p>
-                  <ChevronDown className={`w-5 h-5 text-muted-foreground/50 transition-transform duration-200 flex-shrink-0 ml-4 ${openFaq === i ? "rotate-180" : ""}`} />
+                  <p className="text-[15px] text-foreground">{faq.q}</p>
+                  <ChevronDown className={`w-4.5 h-4.5 text-muted-foreground/50 transition-transform duration-200 flex-shrink-0 ml-3.5 ${openFaq === i ? "rotate-180" : ""}`} />
                 </div>
                 {openFaq === i && (
-                  <p className="text-muted-foreground leading-relaxed mt-4 text-[15px]">
+                  <p className="text-muted-foreground leading-relaxed mt-3.5 text-[13px]">
                     {faq.a}
                   </p>
                 )}
@@ -781,75 +781,75 @@ const StealthFeature = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-18 px-6 pt-10 pb-10">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-[40px] font-medium text-foreground mb-3 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-foreground mb-2.5 leading-tight">
             Ready to go undetectable?
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+          <p className="text-[14px] text-muted-foreground mb-7 max-w-md mx-auto">
             Join millions who trust Conch to make their AI content human-like.
           </p>
-          <Button variant="default" className="" onClick={() => editor?.commands.focus()}>
+          <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
             Start Humanizing Free
-            <ArrowRight className="ml-2 w-4 h-4" />
+            <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
           </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-6 pt-16 pb-8 border-t border-border">
+      <footer className="px-6 pt-14 pb-7 border-t border-border">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+          <div className="flex flex-col md:flex-row justify-between gap-10 mb-14">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Image src="/images/logos/logo.png" width={28} height={28} alt="Conch" />
-                <span className="text-xl font-semibold text-foreground">Conch</span>
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <Image src="/images/logos/logo.png" width={25} height={25} alt="Conch" />
+                <span className="text-lg font-semibold text-foreground">Conch</span>
               </div>
-              <p className="text-sm text-muted-foreground mb-6">Work smarter, not harder</p>
-              <div className="flex items-center gap-4">
+              <p className="text-[13px] text-muted-foreground mb-5">Work smarter, not harder</p>
+              <div className="flex items-center gap-3.5">
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+                  <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
                 </a>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </a>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                  <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
                 </a>
               </div>
             </div>
-            <div className="flex gap-20">
+            <div className="flex gap-12">
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">About</p>
-                <div className="flex flex-col gap-3">
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Blog</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Terms of Service</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Privacy Policy</a>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">About</p>
+                <div className="flex flex-col gap-2.5">
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Blog</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Terms of Service</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Privacy Policy</a>
                 </div>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">Support</p>
-                <div className="flex flex-col gap-3">
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Contact Us</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Help Center</a>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Support</p>
+                <div className="flex flex-col gap-2.5">
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Contact Us</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Help Center</a>
                 </div>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">Tools</p>
-                <div className="flex flex-col gap-3">
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Simplify</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Flashcards</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Mindmaps</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Notes</a>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Tools</p>
+                <div className="flex flex-col gap-2.5">
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Simplify</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Flashcards</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Mindmaps</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Notes</a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="border-t border-border pt-6">
-            <p className="text-xs text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
+          <div className="border-t border-border pt-5">
+            <p className="text-[11px] text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
           </div>
         </div>
       </footer>

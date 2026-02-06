@@ -286,22 +286,22 @@ const NotesFeature = () => {
   );
 
   return (
-    <div className="min-h-full bg-background text-foreground overflow-y-auto">
+    <div className="min-h-full bg-background text-foreground overflow-y-auto px-4 md:px-6">
       {/* Hero Section */}
-      <section className="pt-8 pb-4 px-6">
+      <section className="pt-7 pb-4 px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-2xl md:text-[40px] font-medium tracking-tight mb-3 text-foreground leading-tight">
+          <h1 className="text-2xl md:text-[36px] font-medium tracking-tight mb-3 text-foreground leading-tight">
             Transform content into organized notes
           </h1>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-[14px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             AI-powered note generation from any source. Create structured, easy-to-review study notes instantly.
           </p>
         </div>
       </section>
 
       {/* Main Tool Section */}
-      <section className="px-6 pb-16">
-        <div className="max-w-6xl mx-auto">
+      <section className="px-8 pb-14">
+        <div className="max-w-5xl mx-auto">
           <div className="bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
             {/* Top Bar - Title & Actions */}
             {hasGenerated && (
@@ -515,13 +515,13 @@ const NotesFeature = () => {
       </section>
 
       {/* Who Can Use Section */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-18 px-6 pt-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-16 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-14 leading-tight">
             Who can use AI Notes?
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-x-12 gap-y-14">
+          <div className="grid md:grid-cols-3 gap-x-10 gap-y-12">
             {[
               { icon: GraduationCap, title: "Students", desc: "Turn textbook chapters and lecture recordings into organized, highlighted study notes in seconds." },
               { icon: BookOpen, title: "Educators", desc: "Generate structured lesson summaries and handouts from any source material for your students." },
@@ -533,18 +533,18 @@ const NotesFeature = () => {
               const Icon = item.icon;
               return (
                 <div key={item.title}>
-                  <div className="w-11 h-11 rounded-xl  bg-secondary  flex items-center justify-center mb-4">
-                    <Icon className="w-5 h-5 text-[#6366f1]" />
+                  <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center mb-3.5">
+                    <Icon className="w-4.5 h-4.5 text-[#6366f1]" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground mb-1.5">{item.title}</h3>
-                  <p className="text-[14px] text-muted-foreground leading-relaxed">{item.desc}</p>
+                  <h3 className="text-[14px] font-semibold text-foreground mb-1.5">{item.title}</h3>
+                  <p className="text-[13px] text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
                 </div>
               );
             })}
           </div>
 
-          <div className="flex justify-center mt-14">
-            <Button variant="default" className="" onClick={() => textareaRef.current?.focus()}>
+          <div className="flex justify-center mt-12">
+            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
               Get Started Free
             </Button>
           </div>
@@ -552,15 +552,15 @@ const NotesFeature = () => {
       </section>
 
       {/* Feature Highlights */}
-      <section className="py-20 px-6">
+      <section className="py-18 px-6 pt-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-20 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-18 leading-tight">
             From raw content to study-ready notes
           </h2>
 
           {/* Feature 1 — Smart formatting */}
-          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-8">
+          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
               <div className="space-y-3">
                 <div className="text-lg font-semibold text-foreground">I. Introduction</div>
                 <div className="ml-4 space-y-2">
@@ -577,26 +577,26 @@ const NotesFeature = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Smart formatting with<br />key term highlighting
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 AI automatically structures content with headings, bullet points, and color-coded highlights for key terms — making review fast and effective.
               </p>
             </div>
           </div>
 
           {/* Feature 2 — Rich text editor */}
-          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
+          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
             <div className="order-2 md:order-1">
-              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Full rich text<br />editing power
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Edit every detail with a built-in rich text editor. Add headings, format text, create lists, and customize highlights — your notes, your way.
               </p>
             </div>
-            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-8">
+            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7">
               <div className="flex gap-2 mb-6">
                 {["Bold", "Italic", "Highlight", "H1", "H2", "List"].map((t, i) => (
                   <span key={t} className={`px-2 py-1 rounded text-xs font-medium ${i === 2 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
@@ -604,15 +604,15 @@ const NotesFeature = () => {
                   </span>
                 ))}
               </div>
-              <p className="text-[15px] text-muted-foreground leading-relaxed">
+              <p className="text-[15px] text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Full editing toolbar with formatting, headings, lists, and color-coded highlights...
               </p>
             </div>
           </div>
 
           {/* Feature 3 — Export anywhere */}
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-8">
+          <div className="grid md:grid-cols-2 gap-14 items-center">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
               <div className="space-y-3">
                 {[
                   { label: "Copy to clipboard", color: "bg-blue-500" },
@@ -629,10 +629,10 @@ const NotesFeature = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-2xl md:text-[28px] font-medium text-foreground mb-4 leading-snug">
+              <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Export anywhere,<br />study everywhere
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
                 Copy notes to clipboard, download as HTML, export to PDF, or convert directly into flashcards and mindmaps for a complete study workflow.
               </p>
             </div>
@@ -641,44 +641,44 @@ const NotesFeature = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-18 px-6 pt-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-[40px] font-medium text-center text-foreground mb-16 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-14 leading-tight">
             Generate notes in just 3 easy steps:
           </h2>
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-3 gap-10">
             {[
               { step: "1", title: "Paste your content", desc: "Drop in any source material — textbook chapters, articles, transcripts, or research papers." },
               { step: "2", title: "Generate notes", desc: "Our AI structures the content into organized notes with headings, bullet points, and highlights." },
               { step: "3", title: "Review and export", desc: "Edit the notes to your liking, then copy, download, or convert to flashcards and mindmaps." },
             ].map((item) => (
               <div key={item.step}>
-                <div className="w-14 h-14 rounded-lg bg-[#6366f1] flex items-center justify-center mb-5">
+                <div className="w-12 h-12 rounded-lg bg-[#6366f1] flex items-center justify-center mb-4">
                   <span className="text-xl font-semibold text-[#ffffff]">{item.step}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-1.5">{item.title}</h3>
+                <p className="text-sm text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-14">
-            <Button variant="default" className="" onClick={() => textareaRef.current?.focus()}>
+          <div className="flex justify-center mt-12">
+            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
               Get Started Free
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
             </Button>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-6 bg-background">
+      <section className="py-18 px-6 bg-background pt-10">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="bg-[#f4f3f8] text-muted-foreground border-0 mb-6 px-4 py-1.5 rounded-full font-normal text-sm">
-              <span className="w-2 h-2 rounded-full bg-[#6366f1] mr-2 inline-block"></span>
+          <div className="text-center mb-14">
+            <Badge className="bg-[#f4f3f8] text-muted-foreground border-0 mb-5 px-3.5 py-1.5 rounded-full font-normal text-[13px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] mr-1.5 inline-block"></span>
               FAQ
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-medium text-foreground">
+            <h2 className="text-3xl md:text-[40px] font-medium text-foreground">
               Got Questions?
             </h2>
           </div>
@@ -695,17 +695,17 @@ const NotesFeature = () => {
             ].map((faq, i) => (
               <div
                 key={i}
-                className={`px-6 py-5 cursor-pointer rounded-2xl transition-all ${
+                className={`px-5 py-4 cursor-pointer rounded-2xl transition-all ${
                   openFaq === i ? "bg-[#f4f3f8] dark:bg-secondary/40" : "hover:bg-[#f4f3f8]/30 dark:hover:bg-secondary/20"
                 }`}
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
               >
                 <div className="flex items-center justify-between">
-                  <p className="text-[17px] text-foreground">{faq.q}</p>
-                  <ChevronDown className={`w-5 h-5 text-muted-foreground/50 transition-transform duration-200 flex-shrink-0 ml-4 ${openFaq === i ? "rotate-180" : ""}`} />
+                  <p className="text-[15px] text-foreground">{faq.q}</p>
+                  <ChevronDown className={`w-4.5 h-4.5 text-muted-foreground/50 transition-transform duration-200 flex-shrink-0 ml-3.5 ${openFaq === i ? "rotate-180" : ""}`} />
                 </div>
                 {openFaq === i && (
-                  <p className="text-muted-foreground leading-relaxed mt-4 text-[15px]">
+                  <p className="text-muted-foreground leading-relaxed mt-3.5 text-[13px]">
                     {faq.a}
                   </p>
                 )}
@@ -716,67 +716,67 @@ const NotesFeature = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-18 px-6 pt-10 pb-10">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-[40px] font-medium text-foreground mb-3 leading-tight">
+          <h2 className="text-3xl md:text-[36px] font-medium text-foreground mb-2.5 leading-tight">
             Start taking smarter notes
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+          <p className="text-[14px] text-muted-foreground mb-7 max-w-md mx-auto">
             Join students and professionals who save hours with AI note generation.
           </p>
-          <Button variant="default" className="" onClick={() => textareaRef.current?.focus()}>
+          <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
             Generate Free Notes
-            <ArrowRight className="ml-2 w-4 h-4" />
+            <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
           </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-6 pt-16 pb-8 border-t border-border">
+      <footer className="px-6 pt-14 pb-7 border-t border-border">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+          <div className="flex flex-col md:flex-row justify-between gap-10 mb-14">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Image src="/images/logos/logo.png" width={28} height={28} alt="Conch" />
-                <span className="text-xl font-semibold text-foreground">Conch</span>
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <Image src="/images/logos/logo.png" width={25} height={25} alt="Conch" />
+                <span className="text-lg font-semibold text-foreground">Conch</span>
               </div>
-              <p className="text-sm text-muted-foreground mb-6">Work smarter, not harder</p>
-              <div className="flex items-center gap-4">
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+              <p className="text-[13px] text-muted-foreground mb-5">Work smarter, not harder</p>
+              <div className="flex items-center gap-3.5">
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></a>
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors"><svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
               </div>
             </div>
-            <div className="flex gap-20">
+            <div className="flex gap-12">
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">About</p>
-                <div className="flex flex-col gap-3">
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Blog</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Terms of Service</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Privacy Policy</a>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">About</p>
+                <div className="flex flex-col gap-2.5">
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Blog</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Terms of Service</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Privacy Policy</a>
                 </div>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">Support</p>
-                <div className="flex flex-col gap-3">
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Contact Us</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Help Center</a>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Support</p>
+                <div className="flex flex-col gap-2.5">
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Contact Us</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Help Center</a>
                 </div>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-4 font-medium">Tools</p>
-                <div className="flex flex-col gap-3">
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Simplify</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Stealth Mode</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Flashcards</a>
-                  <a href="#" className="text-sm text-foreground hover:text-[#6366f1] transition-colors">Mindmaps</a>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-3.5 font-medium">Tools</p>
+                <div className="flex flex-col gap-2.5">
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Simplify</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Stealth Mode</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Flashcards</a>
+                  <a href="#" className="text-[13px] text-foreground hover:text-[#6366f1] transition-colors">Mindmaps</a>
                 </div>
               </div>
             </div>
           </div>
-          <div className="border-t border-border pt-6">
-            <p className="text-xs text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
+          <div className="border-t border-border pt-5">
+            <p className="text-[11px] text-muted-foreground">Yofi Tech, LLC &middot; Copyright &copy; 2025</p>
           </div>
         </div>
       </footer>

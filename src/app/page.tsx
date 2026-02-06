@@ -108,47 +108,30 @@ const CheckerPage = () => {
           <div
             className={cn(
               "flex flex-col h-full bg-[#f4f3f8] text-sidebar-foreground transition-all duration-300 rounded-tl-3xl",
-              isCollapsed ? "w-16" : "w-44"
+              isCollapsed ? "w-12" : "w-28"
             )}
           >
-            <div className="p-6 flex items-center justify-between">
-              {!isCollapsed && (
-                <div 
-                  onClick={() => setActiveFeature("home")}
-                  className="flex items-center gap-2 font-bold text-xl text-foreground cursor-pointer hover:opacity-80 transition-opacity"
-                >
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center">
-                    <Image
-                      alt="Logo"
-                      src={
-                        "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
-                      }
-                      width={32}
-                      height={32}
-                    />
-                  </div>
-                  <span className="text-gray-900">Conch</span>
-                </div>
-              )}
-              {isCollapsed && (
-                <div 
-                  onClick={() => setActiveFeature("home")}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center mx-auto cursor-pointer hover:opacity-80 transition-opacity"
-                >
+            <div className="p-4 flex items-center justify-center">
+              <div 
+                onClick={() => setActiveFeature("home")}
+                className="flex items-center gap-1.5 font-bold text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center">
                   <Image
                     alt="Logo"
                     src={
                       "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
                     }
-                    width={32}
-                    height={32}
+                    width={28}
+                    height={28}
                   />
                 </div>
-              )}
+                <span className="text-gray-900">Conch</span>
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto py-2">
-              <nav className="px-3 space-y-3">
+              <nav className="px-1.5 space-y-3">
                 {navigation.map((item) => {
                 const isActive = activeFeature === item.feature;
                 return (
@@ -156,33 +139,28 @@ const CheckerPage = () => {
                     key={item.name}
                     onClick={() => setActiveFeature(item.feature)}
                     className={cn(
-                      "group w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-all text-left relative",
+                      "group w-full flex flex-col items-center gap-1.5 px-2 py-3 text-[11px] rounded-xl transition-all relative",
                       isActive
-                        ? "bg-white text-gray-900 font-semibold"
+                        ? "bg-white text-gray-900 font-medium"
                         : "text-gray-600 hover:bg-white/50 font-normal"
                     )}
                   >
-                      {isActive && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#6366f1] rounded-r-full" />
-                      )}
                       <item.icon
                       className={cn(
-                        "w-5 h-5 shrink-0 transition-colors relative z-10",
+                        "w-5 h-5 shrink-0 transition-colors",
                         isActive
                           ? "text-[#6366f1]"
                           : "text-gray-500 group-hover:text-[#6366f1]"
                       )}
                     />
-                      {!isCollapsed && (
-                        <span className={cn(
-                          "relative z-10 transition-colors",
-                          isActive
-                            ? "text-[#6366f1]"
-                            : "group-hover:text-[#6366f1]"
-                        )}>
-                          {item.name}
-                        </span>
-                      )}
+                      <span className={cn(
+                        "transition-colors text-center leading-tight",
+                        isActive
+                          ? "text-[#6366f1]"
+                          : "group-hover:text-[#6366f1]"
+                      )}>
+                        {item.name}
+                      </span>
                     </button>
                   );
                 })}
@@ -231,40 +209,40 @@ const CheckerPage = () => {
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Top Navigation */}
-            <header className="flex h-16 items-center justify-between bg-[#f4f3f8] px-8 shrink-0">
-              <div className="flex items-center gap-8">
-                <span onClick={() => router.push("/pricing")} className="text-sm text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+            <header className="flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
+              <div className="flex items-center gap-7">
+                <span onClick={() => router.push("/pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Pricing
                 </span>
                 <span
                   onClick={() => router.push("/blog")}
-                  className="text-sm text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
+                  className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
                 >
                   Blog
                 </span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 {/* Theme Toggle */}
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={toggleTheme}
-                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9 w-9"
                 >
                   {isDarkMode ? (
-                    <Sun className="h-5 w-5" />
+                    <Sun className="h-4.5 w-4.5" />
                   ) : (
-                    <Moon className="h-5 w-5" />
+                    <Moon className="h-4.5 w-4.5" />
                   )}
                 </Button>
                 <Button
                   variant="outline"
-                  className=""
+                  className="text-[13px] px-4 py-1.5 h-9"
                 >
                   Sign In
                 </Button>
-                <Button variant="default" className="">
+                <Button variant="default" className="text-[13px] px-4 py-1.5 h-9">
                   Get Started Free
                 </Button>
               </div>
