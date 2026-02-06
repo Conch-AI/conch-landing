@@ -33,6 +33,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FaRegStar, FaShapes, FaStar } from "react-icons/fa";
 import { RiRestartLine, RiShuffleLine } from "react-icons/ri";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 interface Flashcard {
   id: string;
   term: string;
@@ -194,23 +196,39 @@ const FlashcardsFeature = () => {
     setFlashcards([]);
 
     try {
-      const res = await fetch("/api/ai/generate-flashcards", {
+      // Limit text to 10000 characters for guest endpoint
+      const contentToSend = inputText.slice(0, 10000);
+      if (inputText.length > 10000) {
+        console.warn("Text truncated to 10000 characters for flashcard generation");
+      }
+
+      const res = await fetch(`${API_BASE_URL}/guest/generate-flashcards`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: inputText }),
+        body: JSON.stringify({ 
+          content: contentToSend,
+          count: 15 // default count for guests (5-20 range)
+        }),
       });
 
       if (!res.ok) throw new Error(res.statusText);
 
       const data = await res.json();
-      if (data.flashcards) {
-        setFlashcards(data.flashcards);
+      if (data.flashcards && Array.isArray(data.flashcards)) {
+        // Add favorited field to each flashcard (defaults to false)
+        const flashcardsWithFavorites = data.flashcards.map((card: { id: string; term: string; definition: string }) => ({
+          id: card.id,
+          term: card.term,
+          definition: card.definition,
+          favorited: false,
+        }));
+        setFlashcards(flashcardsWithFavorites);
         setHasGenerated(true);
         setCurrentCardIndex(0);
         setIsFlipped(false);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error generating flashcards:", error);
       generateSampleFlashcards();
     } finally {
       setIsLoading(false);

@@ -21,6 +21,8 @@ import {
 import "@xyflow/react/dist/style.css";
 
 // Type definitions matching backend classes
+const POSITION_SCALE = 280; // scale logical coordinates from API into canvas space
+
 export class MindmapNode {
   constructor(
     public label: string,
@@ -32,13 +34,28 @@ export class MindmapNode {
   ) {}
 
   static fromJSON(json: Record<string, unknown>): MindmapNode {
+    // Backend may return numbers/booleans as strings – normalise here
+    const rawX = json.positionX as string | number | undefined;
+    const rawY = json.positionY as string | number | undefined;
+    const rawImportant = json.isHighlyImportant as string | boolean | undefined;
+
+    const positionX =
+      typeof rawX === "number" ? rawX : rawX !== undefined ? parseFloat(rawX) : 0;
+    const positionY =
+      typeof rawY === "number" ? rawY : rawY !== undefined ? parseFloat(rawY) : 0;
+
+    const isHighlyImportant =
+      typeof rawImportant === "boolean"
+        ? rawImportant
+        : rawImportant === "true";
+
     return new MindmapNode(
       json.label as string,
       json.definition as string,
-      json.positionX as number,
-      json.positionY as number,
+      positionX * POSITION_SCALE,
+      positionY * POSITION_SCALE,
       json.id as string,
-      "isHighlyImportant" in json ? (json.isHighlyImportant as boolean) : false,
+      "isHighlyImportant" in json ? isHighlyImportant : false,
     );
   }
 }
@@ -90,6 +107,8 @@ import {
   Lightbulb,
   MousePointer2,
   Network,
+  Maximize2,
+  X,
   Palette,
   PenLine,
   RefreshCw,
@@ -98,6 +117,8 @@ import {
 import Image from "next/image";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { RiStarSFill } from "react-icons/ri";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Custom Edge Component
 const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY }: CustomEdgeProps) => {
@@ -193,6 +214,7 @@ const MindmapsFeature = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [showFullscreen, setShowFullscreen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -221,10 +243,16 @@ const MindmapsFeature = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/ai/generate-mindmap", {
+      // Limit text to 10000 characters for guest endpoint
+      const contentToSend = inputText.slice(0, 10000);
+      if (inputText.length > 10000) {
+        console.warn("Text truncated to 10000 characters for mindmap generation");
+      }
+
+      const res = await fetch(`${API_BASE_URL}/guest/generate-mindmap`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: inputText }),
+        body: JSON.stringify({ content: contentToSend }),
       });
 
       if (!res.ok) throw new Error(res.statusText);
@@ -232,13 +260,16 @@ const MindmapsFeature = () => {
       const data = await res.json();
       if (data.nodes && data.edges) {
         // Convert API response to MindmapNode and MindmapEdge instances
-        const mindmapNodes = data.nodes.map((nodeJson: Record<string, unknown>) => 
+        const mindmapNodes = data.nodes.map((nodeJson: Record<string, unknown>) =>
           MindmapNode.fromJSON(nodeJson)
         );
-        const mindmapEdges = data.edges.map((edgeJson: Record<string, unknown>) => 
+        const mindmapEdges = data.edges.map((edgeJson: Record<string, unknown>) =>
           MindmapEdge.fromJSON(edgeJson)
         );
-        
+
+        console.log(mindmapNodes);
+        console.log(mindmapEdges);
+
         // Convert to ReactFlow format
         const nodes = mindmapNodes.map((node: MindmapNode) => ({
           id: node.id,
@@ -261,38 +292,10 @@ const MindmapsFeature = () => {
         setHasGenerated(true);
       }
     } catch (error) {
-      console.error("Error:", error);
-      generateSampleMindmap();
+      console.error("Error generating mindmap:", error);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const generateSampleMindmap = () => {
-    const nodes = [
-      { id: "root", type: "custom", data: { label: "Main Concept", definition: "The central topic of study", isHighlyImportant: true }, position: { x: 250, y: 0 } },
-      { id: "1", type: "custom", data: { label: "Subtopic A", definition: "First key concept branch" }, position: { x: 50, y: 150 } },
-      { id: "2", type: "custom", data: { label: "Subtopic B", definition: "Second key concept branch", isHighlyImportant: true }, position: { x: 250, y: 150 } },
-      { id: "3", type: "custom", data: { label: "Subtopic C", definition: "Third key concept branch" }, position: { x: 450, y: 150 } },
-      { id: "4", type: "custom", data: { label: "Detail 1", definition: "Supporting information" }, position: { x: 0, y: 300 } },
-      { id: "5", type: "custom", data: { label: "Detail 2", definition: "Additional context" }, position: { x: 150, y: 300 } },
-      { id: "6", type: "custom", data: { label: "Detail 3", definition: "More information" }, position: { x: 350, y: 300 } },
-      { id: "7", type: "custom", data: { label: "Detail 4", definition: "Extra details" }, position: { x: 500, y: 300 } },
-    ];
-
-    const edges = [
-      { id: "e-root-1", type: "customedge", source: "root", target: "1" },
-      { id: "e-root-2", type: "customedge", source: "root", target: "2" },
-      { id: "e-root-3", type: "customedge", source: "root", target: "3" },
-      { id: "e-1-4", type: "customedge", source: "1", target: "4" },
-      { id: "e-1-5", type: "customedge", source: "1", target: "5" },
-      { id: "e-3-6", type: "customedge", source: "3", target: "6" },
-      { id: "e-3-7", type: "customedge", source: "3", target: "7" },
-    ];
-
-    setMindmapNodes(nodes);
-    setMindmapEdges(edges);
-    setHasGenerated(true);
   };
 
   const handleTrySample = () => {
@@ -443,6 +446,7 @@ const MindmapsFeature = () => {
                     <button
                       onClick={() => {
                         setHasGenerated(false);
+                        setShowFullscreen(false);
                         setMindmapNodes([]);
                         setMindmapEdges([]);
                         setInputText("");
@@ -451,6 +455,13 @@ const MindmapsFeature = () => {
                     >
                       <RefreshCw className="h-3.5 w-3.5" />
                       New
+                    </button>
+                    <button
+                      onClick={() => setShowFullscreen(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                    >
+                      <Maximize2 className="h-3.5 w-3.5" />
+                      Fullscreen
                     </button>
                   </div>
                 </div>
@@ -473,6 +484,32 @@ const MindmapsFeature = () => {
           </div>
         </div>
       </section>
+
+      {/* Fullscreen Mindmap Modal */}
+      {showFullscreen && hasGenerated && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="relative w-[95vw] max-w-6xl h-[85vh] bg-card rounded-2xl border border-border shadow-2xl overflow-hidden">
+            <button
+              onClick={() => setShowFullscreen(false)}
+              className="absolute top-3 right-3 z-10 flex items-center justify-center rounded-full bg-background/90 border border-border p-1.5 text-muted-foreground hover:text-foreground hover:bg-background transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="w-full h-full">
+              {isLoading ? (
+                <SkeletonLoader />
+              ) : (
+                <ReactFlowProvider>
+                  <MindmapCanvas
+                    initialNodes={mindmapNodes}
+                    initialEdges={mindmapEdges}
+                  />
+                </ReactFlowProvider>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Who Can Use Section */}
       <section className="py-20 px-6 bg-secondary/30">

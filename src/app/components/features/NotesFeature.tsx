@@ -35,6 +35,8 @@ import {
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const NotesFeature = () => {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -136,10 +138,19 @@ const NotesFeature = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/ai/generate-notes", {
+      // Limit text to 10000 characters for guest endpoint
+      const textToSend = inputText.slice(0, 10000);
+      if (inputText.length > 10000) {
+        console.warn("Text truncated to 10000 characters for notes generation");
+      }
+
+      const res = await fetch(`${API_BASE_URL}/guest/generate-notes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: inputText }),
+        body: JSON.stringify({ 
+          text: textToSend,
+          // Optional: topic and levelOfDetail can be added later if needed
+        }),
       });
 
       if (!res.ok) throw new Error(res.statusText);
@@ -154,42 +165,40 @@ const NotesFeature = () => {
           if (done) break;
           const text = decoder.decode(value);
           fullContent += text;
-          editor?.commands.setContent(convertMarkdownToHTML(fullContent));
         }
       }
-      setHasGenerated(true);
-      // Extract title from first heading
-      const firstHeading = fullContent.match(/^#\s+(.+)$/m);
-      if (firstHeading) {
-        setTitle(firstHeading[1]);
+      
+      // Try to parse as JSON (API might return JSON with title and notes)
+      let notesHtml = fullContent;
+      try {
+        // Try to parse the full content as JSON
+        const jsonData = JSON.parse(fullContent);
+        if (jsonData.title) {
+          setTitle(jsonData.title);
+        }
+        if (jsonData.notes) {
+          notesHtml = jsonData.notes;
+        }
+      } catch {
+        // If not JSON, treat as HTML and extract title from first h1 tag
+        const titleMatch = fullContent.match(/<h1[^>]*>(.*?)<\/h1>/i);
+        if (titleMatch) {
+          const titleText = titleMatch[1].replace(/<[^>]*>/g, "").trim();
+          if (titleText) {
+            setTitle(titleText);
+          }
+        }
       }
+      
+      // Set the notes content in the editor
+      editor?.commands.setContent(notesHtml);
+      setHasGenerated(true);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error generating notes:", error);
       generateSampleNotes();
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Simple markdown to HTML conversion
-  const convertMarkdownToHTML = (markdown: string) => {
-    let html = markdown
-      .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-      .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-      .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-      .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
-      .replace(/\*(.*?)\*/gim, "<em>$1</em>")
-      .replace(/`([^`]+)`/gim, '<mark data-color="#fef08a">$1</mark>')
-      .replace(/^- (.*$)/gim, "<li>$1</li>")
-      .replace(/^---$/gim, "<hr>")
-      .replace(/\n/g, "<br>");
-
-    // Wrap consecutive <li> elements in <ul>
-    html = html.replace(/(<li>.*?<\/li>(<br>)?)+/g, (match) => {
-      return '<ul class="list-disc">' + match.replace(/<br>/g, "") + "</ul>";
-    });
-
-    return html;
   };
 
   const generateSampleNotes = () => {
@@ -440,9 +449,9 @@ const NotesFeature = () => {
               </div>
             ) : (
               /* Notes View - Split Layout with Headings */
-              <div className="flex min-h-[600px]">
+              <div className="flex" style={{ height: "700px" }}>
                 {/* Headings Sidebar */}
-                <div className="w-64 border-r border-border p-4 bg-muted/10 overflow-y-auto">
+                <div className="w-64 border-r border-border p-4 bg-muted/10 overflow-y-auto h-full">
                   <button
                     onClick={addNewHeading}
                     className="flex items-center gap-2 text-sm text-[#6366f1] hover:text-[#6366f1]/80 mb-4 transition-colors"
@@ -474,9 +483,9 @@ const NotesFeature = () => {
                 </div>
 
                 {/* Editor Content */}
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col h-full overflow-hidden">
                   {/* Toolbar */}
-                  <div className="flex items-center justify-between px-6 py-3 border-b border-border/50 bg-muted/10">
+                  <div className="flex items-center justify-between px-6 py-3 border-b border-border/50 bg-muted/10 shrink-0">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <FileText className="w-4 h-4" />
                       <span>{editor?.storage.characterCount?.words() || 0} words</span>
@@ -511,7 +520,7 @@ const NotesFeature = () => {
                   </div>
 
                   {/* Editor */}
-                  <div className="flex-1 overflow-y-auto p-6">
+                  <div className="flex-1 overflow-y-auto p-6 min-h-0">
                     {isLoading ? (
                       <SkeletonLoader />
                     ) : (

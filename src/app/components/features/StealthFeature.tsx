@@ -36,7 +36,7 @@ const RED_HIGHLIGHT_HEX = "#D0615E";
 const YELLOW_HIGHLIGHT_HEX = "#D0B25E";
 const GREEN_HIGHLIGHT_HEX = "#5ED09A";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5002";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const StealthFeature = () => {
   const [isLoading, setIsLoading] = useState(false);
