@@ -118,7 +118,7 @@ const CheckerPage = () => {
           {/* Sidebar */}
           <div
             className={cn(
-              "flex flex-col h-full bg-[#f4f3f8] dark:bg-[#1a1a1a] text-sidebar-foreground transition-all duration-300 rounded-tl-3xl",
+              "flex flex-col h-full bg-[#f4f3f8] text-sidebar-foreground transition-all duration-300 rounded-tl-3xl",
               isCollapsed ? "w-16" : "w-44"
             )}
           >
@@ -135,7 +135,7 @@ const CheckerPage = () => {
                       height={32}
                     />
                   </div>
-                  <span className="text-gray-900 dark:text-white">Conch</span>
+                  <span className="text-gray-900">Conch</span>
                 </div>
               )}
               {isCollapsed && (
@@ -155,34 +155,34 @@ const CheckerPage = () => {
             <div className="flex-1 overflow-y-auto py-2">
               <nav className="px-3 space-y-3">
                 {navigation.map((item) => {
-                  const isActive = activeFeature === item.feature;
-                  return (
-                    <button
-                      key={item.name}
-                      onClick={() => setActiveFeature(item.feature)}
-                      className={cn(
-                        "group w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-all text-left relative",
-                        isActive
-                          ? "bg-white dark:bg-[#2a2a2a] text-gray-900 dark:text-white font-semibold"
-                          : "text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-white/10 font-normal"
-                      )}
-                    >
+                const isActive = activeFeature === item.feature;
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => setActiveFeature(item.feature)}
+                    className={cn(
+                      "group w-full flex items-center gap-3 px-4 py-3 text-sm rounded-xl transition-all text-left relative",
+                      isActive
+                        ? "bg-white text-gray-900 font-semibold"
+                        : "text-gray-600 hover:bg-white/50 font-normal"
+                    )}
+                  >
                       {isActive && (
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#6366f1] rounded-r-full" />
                       )}
                       <item.icon
-                        className={cn(
-                          "w-5 h-5 shrink-0 transition-colors relative z-10",
-                          isActive
-                            ? "text-[#6366f1] dark:text-[#6366f1]"
-                            : "text-gray-500 dark:text-gray-400 group-hover:text-[#6366f1]"
-                        )}
-                      />
+                      className={cn(
+                        "w-5 h-5 shrink-0 transition-colors relative z-10",
+                        isActive
+                          ? "text-[#6366f1]"
+                          : "text-gray-500 group-hover:text-[#6366f1]"
+                      )}
+                    />
                       {!isCollapsed && (
                         <span className={cn(
                           "relative z-10 transition-colors",
                           isActive
-                            ? "text-[#6366f1] dark:text-[#6366f1]"
+                            ? "text-[#6366f1]"
                             : "group-hover:text-[#6366f1]"
                         )}>
                           {item.name}
@@ -196,17 +196,17 @@ const CheckerPage = () => {
 {/* 
             {!isCollapsed && (
               <div className="p-4 pb-6">
-                <div className="bg-white dark:bg-[#2a2a2a] rounded-2xl p-4 shadow-sm">
+                <div className="bg-white rounded-2xl p-4 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <Zap className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                    <p className="text-xs font-medium text-gray-900 dark:text-white">
+                    <Zap className="w-4 h-4 text-purple-600" />
+                    <p className="text-xs font-medium text-gray-900">
                       Free Plan
                     </p>
                   </div>
-                  <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
-                    <div className="h-full w-1/3 bg-purple-600 dark:bg-purple-500 rounded-full"></div>
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
+                    <div className="h-full w-1/3 bg-purple-600 rounded-full"></div>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                  <p className="text-xs text-gray-600 mb-3">
                     167/500 words used today
                   </p>
                   <Button
@@ -236,14 +236,14 @@ const CheckerPage = () => {
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Top Navigation */}
-            <header className="flex h-16 items-center justify-between bg-[#f4f3f8] dark:bg-[#1a1a1a] px-8 shrink-0">
+            <header className="flex h-16 items-center justify-between bg-[#f4f3f8] px-8 shrink-0">
               <div className="flex items-center gap-8">
-                <span onClick={() => router.push("/pricing")} className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#6366f1] cursor-pointer transition-colors">
+                <span onClick={() => router.push("/pricing")} className="text-sm text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Pricing
                 </span>
                 <span
                   onClick={() => router.push("/blog")}
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#6366f1] cursor-pointer transition-colors"
+                  className="text-sm text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
                 >
                   Blog
                 </span>
@@ -255,7 +255,7 @@ const CheckerPage = () => {
                   variant="ghost"
                   size="icon"
                   onClick={toggleTheme}
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 >
                   {isDarkMode ? (
                     <Sun className="h-5 w-5" />
@@ -276,7 +276,7 @@ const CheckerPage = () => {
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-auto dark:bg-[#1a1a1a]  rounded-3xl">
+            <main className="flex-1 overflow-auto rounded-3xl">
               {renderFeature()}
             </main>
           </div>
