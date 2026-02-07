@@ -6,6 +6,9 @@ import MindmapsFeature from "@/app/components/features/MindmapsFeature";
 import NotesFeature from "@/app/components/features/NotesFeature";
 import SimplifyFeature from "@/app/components/features/SimplifyFeature";
 import StealthFeature from "@/app/components/features/StealthFeature";
+import BlogHome from "@/app/components/blogs/BlogHome";
+import BlogPost from "@/app/components/blogs/BlogPost";
+import { BlogSkeletonGrid } from "@/app/components/blogs/components/blog-skeleton";
 import { Button } from "@/app/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -23,8 +26,9 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Post } from "types/Post";
 
-type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "chat";
+type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "blog" | "chat";
 
 const navigation = [
   { name: "Simplify", feature: "simplify" as FeatureType, icon: Wand2 },
@@ -55,6 +59,14 @@ const CheckerPage = () => {
   const [isCollapsed] = useState(false);
   const [activeFeature, setActiveFeature] = useState<FeatureType>("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  interface Category {
+    name: string;
+  }
+  const [blogData, setBlogData] = useState<{ posts: Post[]; categories: Category[] } | null>(null);
+  const [blogLoading, setBlogLoading] = useState(false);
+  const [selectedPostSlug, setSelectedPostSlug] = useState<string | null>(null);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [postLoading, setPostLoading] = useState(false);
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
@@ -72,6 +84,50 @@ const CheckerPage = () => {
   const toggleTheme = () => {
     // Force light mode - do nothing (keep button for UI but don't change theme)
     setIsDarkMode(false);
+  };
+
+  // Fetch blog data when blog feature is selected
+  useEffect(() => {
+    if (activeFeature === "blog" && !blogData) {
+      setBlogLoading(true);
+      fetch("/api/blogs")
+        .then((res) => res.json())
+        .then((data) => {
+          setBlogData(data);
+          setBlogLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching blog data:", error);
+          setBlogLoading(false);
+        });
+    }
+  }, [activeFeature, blogData]);
+
+  // Fetch individual post when slug is selected
+  useEffect(() => {
+    if (selectedPostSlug && blogData) {
+      setPostLoading(true);
+      // Find post in existing data first
+      const post = blogData.posts.find((p) => p.slug === selectedPostSlug);
+      if (post) {
+        setSelectedPost(post);
+        setPostLoading(false);
+      } else {
+        // If not found, could fetch from API
+        setPostLoading(false);
+      }
+    }
+  }, [selectedPostSlug, blogData]);
+
+  // Handle post click
+  const handlePostClick = (slug: string) => {
+    setSelectedPostSlug(slug);
+  };
+
+  // Handle back to blog list
+  const handleBackToBlog = () => {
+    setSelectedPostSlug(null);
+    setSelectedPost(null);
   };
 
   const renderFeature = () => {
@@ -92,6 +148,87 @@ const CheckerPage = () => {
         return <FlashcardsFeature />;
       case "notes":
         return <NotesFeature />;
+      case "blog":
+        if (blogLoading) {
+          return (
+            <div className="flex flex-col items-start justify-start min-h-full bg-white p-4 sm:p-6 lg:p-8 overflow-y-auto">
+              <div className="mx-auto w-full max-w-6xl 2xl:max-w-7xl">
+                {/* Header - matching header.tsx */}
+                <div className="flex w-full flex-col items-start justify-start gap-4 sm:gap-6 md:flex-row md:items-center md:justify-between mb-6 sm:mb-8">
+                  {/* Blog title - actual title with gradient */}
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-3xl sm:text-4xl font-semibold bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">
+                      Blog
+                    </h1>
+                  </div>
+                  {/* Search bar skeleton */}
+                  <div className="relative w-full md:w-72 lg:w-80">
+                    <div className="h-10 sm:h-11 w-full bg-gray-200 rounded-xl animate-pulse"></div>
+                  </div>
+                </div>
+                
+                {/* Categories - hardcoded categories matching the image layout */}
+                <div className="my-6 sm:my-8 w-full">
+                  {/* Mobile dropdown */}
+                  <div className="md:hidden w-full">
+                    <div className="h-11 w-full bg-gray-200 rounded-lg animate-pulse"></div>
+                  </div>
+                  {/* Desktop pills - exact categories from image in two rows */}
+                  <div className="hidden md:flex flex-wrap items-center gap-2 justify-center">
+                    {/* First row categories */}
+                    {["All", "AI Detection", "AI Detection for School", "AI Detection Tools", "AI Writing Detection", "ChatGPT School Detection", "Essay Writing"].map((category, i) => (
+                      <div 
+                        key={i} 
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                          i === 0
+                            ? "bg-[#6366f1] text-white shadow-sm"
+                            : "bg-white text-gray-600 border border-gray-200 hover:border-[#6366f1] hover:text-[#6366f1]"
+                        }`}
+                      >
+                        {category}
+                      </div>
+                    ))}
+                    {/* Second row categories */}
+                    {["Essay Writing: Citations", "Humanize AI Content", "Learning", "Study Techniques"].map((category, i) => (
+                      <div 
+                        key={`row2-${i}`} 
+                        className="px-4 py-2 text-sm font-medium rounded-lg transition-all bg-white text-gray-600 border border-gray-200 hover:border-[#6366f1] hover:text-[#6366f1]"
+                      >
+                        {category}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Blog posts skeleton grid */}
+                <BlogSkeletonGrid count={6} />
+              </div>
+            </div>
+          );
+        }
+        if (postLoading) {
+          return (
+            <div className="flex h-full items-center justify-center">
+              <div className="text-center">
+                <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-[#6366f1] mx-auto"></div>
+                <p className="text-sm text-gray-600">Loading post...</p>
+              </div>
+            </div>
+          );
+        }
+        if (selectedPost) {
+          return <BlogPost post={selectedPost} onBack={handleBackToBlog} />;
+        }
+        if (blogData) {
+          return (
+            <BlogHome
+              incomingPosts={blogData.posts}
+              categories={blogData.categories}
+              onPostClick={handlePostClick}
+            />
+          );
+        }
+        return null;
       case "chat":
         return <ComingSoonFeature featureName="Chat" />;
       default:
@@ -138,7 +275,7 @@ const CheckerPage = () => {
                 <span onClick={() => router.push("/pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Pricing
                 </span>
-                <span onClick={() => router.push("/blog")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                <span onClick={() => setActiveFeature("blog")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Blog
                 </span>
                 <Button
@@ -255,13 +392,13 @@ const CheckerPage = () => {
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Top Navigation — desktop only */}
             <header className="hidden md:flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
-              <div className="flex items-center gap-7">
-                <span onClick={() => router.push("/pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+              <div className="flex items-center gap-7 pl-5 text-[13.5px]">
+                <span onClick={() => router.push("/pricing")} className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Pricing
                 </span>
                 <span
-                  onClick={() => router.push("/blog")}
-                  className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
+                  onClick={() => setActiveFeature("blog")}
+                  className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
                 >
                   Blog
                 </span>

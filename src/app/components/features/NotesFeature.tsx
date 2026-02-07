@@ -537,7 +537,7 @@ const NotesFeature = () => {
                     <Icon className="w-4.5 h-4.5 text-[#6366f1]" />
                   </div>
                   <h3 className="text-[14px] font-semibold text-foreground mb-1.5">{item.title}</h3>
-                  <p className="text-[13px] text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
                 </div>
               );
             })}

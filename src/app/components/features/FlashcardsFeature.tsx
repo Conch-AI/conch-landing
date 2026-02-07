@@ -851,7 +851,7 @@ const FlashcardsFeature = () => {
                     <Icon className="w-4.5 h-4.5 text-[#6366f1]" />
                   </div>
                   <h3 className="text-[14px] font-semibold text-foreground mb-1.5">{item.title}</h3>
-                  <p className="text-[13px] text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
                 </div>
               );
             })}
@@ -873,7 +873,7 @@ const FlashcardsFeature = () => {
           </h2>
 
           {/* Feature 1 — Auto-generated */}
-          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
+          <div className="grid md:grid-cols-2 gap-14 items-center mb-24 md:pt-10">
             <div className="rounded-2xl bg-secondary/40 border border-border p-7">
               <div className="flex items-center gap-2 text-xs text-muted-foreground mb-5">
                 <Zap className="w-4 h-4 text-[#6366f1]" />

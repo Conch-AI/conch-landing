@@ -207,7 +207,7 @@ const HomeFeature = ({ onFeatureSelect }: HomeFeatureProps) => {
        <section className="pb-12 md:pb-20 px-4 md:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-secondary/30 border border-border rounded-2xl md:rounded-3xl py-6 md:py-10 px-5 md:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 md:gap-0 md:divide-x md:divide-border">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6  md:gap-0 md:divide-x md:divide-border">
               <div className="text-center">
                 <p className="text-2xl md:text-3xl lg:text-4xl text-foreground mb-1">150k+</p>
                 <p className="text-[11px] md:text-sm text-muted-foreground">Monthly Active Users</p>
