@@ -1,6 +1,7 @@
 "use client";
 
 import Footer from "@/app/components/ui/Footer";
+import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -160,7 +161,11 @@ const PracticeIconButton = ({
   </button>
 );
 
-const FlashcardsFeature = () => {
+interface FlashcardsFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+}
+
+const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
@@ -1038,7 +1043,7 @@ const FlashcardsFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
     </div>
   );
 };

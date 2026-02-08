@@ -1,6 +1,7 @@
 "use client";
 
 import Footer from "@/app/components/ui/Footer";
+import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import {
@@ -210,7 +211,11 @@ const MindmapCanvas = ({
   );
 };
 
-const MindmapsFeature = () => {
+interface MindmapsFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+}
+
+const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
@@ -725,7 +730,7 @@ const MindmapsFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
     </div>
   );
 };

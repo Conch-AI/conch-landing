@@ -3,6 +3,7 @@
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import Footer from "@/app/components/ui/Footer";
+import { CheckerFeature } from "./CheckerSidebar";
 import { jsPDF } from "jspdf";
 import {
   ArrowRight,
@@ -24,7 +25,11 @@ import {
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-const SimplifyFeature = () => {
+interface SimplifyFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+}
+
+const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
   const [query, setQuery] = useState("");
   const [activeTone, setActiveTone] = useState("Informative");
   const [response, setResponse] = useState("");
@@ -444,7 +449,7 @@ const SimplifyFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
     </div>
   );
 };

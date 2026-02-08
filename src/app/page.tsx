@@ -148,15 +148,15 @@ const CheckerPage = () => {
           />
         );
       case "simplify":
-        return <SimplifyFeature />;
+        return <SimplifyFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "stealth":
-        return <StealthFeature />;
+        return <StealthFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "mindmaps":
-        return <MindmapsFeature />;
+        return <MindmapsFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "flashcards":
-        return <FlashcardsFeature />;
+        return <FlashcardsFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "notes":
-        return <NotesFeature />;
+        return <NotesFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "blog":
         if (blogLoading) {
           return (
@@ -265,7 +265,7 @@ const CheckerPage = () => {
             <div className="p-4 flex items-center justify-center">
               <div 
                 onClick={() => setActiveFeature("home")}
-                className="flex items-center gap-1.5 font-bold text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity pl-4"
+                className="flex items-center gap-1.5 font-bold text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity pl-4 z-50"
               >
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center">
                   <Image

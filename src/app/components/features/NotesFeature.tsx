@@ -1,6 +1,7 @@
 "use client";
 
 import Footer from "@/app/components/ui/Footer";
+import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -38,7 +39,11 @@ import SignupModal from "../SignupModal";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const NotesFeature = () => {
+interface NotesFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+}
+
+const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
@@ -726,7 +731,7 @@ const NotesFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
     </div>
   );
 };

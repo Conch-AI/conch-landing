@@ -2,6 +2,7 @@
 
 import Footer from "@/app/components/ui/Footer";
 import SignupModal from "@/app/components/SignupModal";
+import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import { Detectors, ModeOptions, ModeTooltips, STEALTH_SAMPLE_TEXT } from "@/app/components/stealth/data";
@@ -39,7 +40,11 @@ const GREEN_HIGHLIGHT_HEX = "#5ED09A";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const StealthFeature = () => {
+interface StealthFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+}
+
+const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -832,7 +837,7 @@ const StealthFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
       
       {/* Signup Modal */}
       <SignupModal
