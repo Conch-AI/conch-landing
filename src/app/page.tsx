@@ -255,91 +255,52 @@ const CheckerPage = () => {
     <div className="flex h-screen overflow-hidden bg-background">
         {/* Main Layout */}
         <div className="flex flex-1 flex-col md:flex-row overflow-hidden bg-[#f4f3f8]">
-          {/* Sidebar */}
+          {/* Sidebar - Desktop only, Mobile shows header at top */}
           <div
             className={cn(
-              "flex flex-col h-auto md:h-full bg-[#f4f3f8] text-sidebar-foreground transition-all duration-300 rounded-t-3xl md:rounded-tl-3xl md:rounded-tr-none",
-              isCollapsed ? "w-12" : "w-full md:w-24"
+              "hidden md:flex flex-col h-full bg-[#f4f3f8] text-sidebar-foreground transition-all duration-300 rounded-tl-3xl",
+              isCollapsed ? "w-12" : "w-24"
             )}
           >
-            <div className="p-3 md:p-4 flex items-center justify-between md:justify-center relative">
+            <div className="p-4 flex items-center justify-center">
               <div 
                 onClick={() => setActiveFeature("home")}
-                className="flex items-center gap-1.5 font-bold text-base md:text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity md:pl-4"
+                className="flex items-center gap-1.5 font-bold text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity pl-4"
               >
-                <div className="w-6 h-6 md:w-7 md:h-7 rounded-lg flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center">
                   <Image
                     alt="Logo"
                     src={
                       "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
                     }
-                    width={24}
-                    height={24}
-                    className="md:w-7 md:h-7"
+                    width={28}
+                    height={28}
+                    className="w-7 h-7"
                   />
                 </div>
                 <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
               </div>
-
-              {/* Mobile-only header actions */}
-              <div className="flex md:hidden items-center gap-2">
-                <span onClick={() => setActiveFeature("pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
-                  Pricing
-                </span>
-                <span onClick={() => setActiveFeature("blog")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
-                  Blog
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-8 w-8"
-                >
-                  {mobileMenuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
-                </Button>
-              </div>
-
-              {/* Mobile dropdown menu */}
-              {mobileMenuOpen && (
-                <div className="absolute top-full right-4 mt-1 z-50 md:hidden bg-white rounded-xl border border-border shadow-lg p-3 flex flex-col gap-2 min-w-[180px]">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={toggleTheme}
-                    className="justify-start text-gray-600 hover:text-gray-900 h-8 text-[12px]"
-                  >
-                    {isDarkMode ? <Sun className="h-3.5 w-3.5 mr-2" /> : <Moon className="h-3.5 w-3.5 mr-2" />}
-                    {isDarkMode ? "Light Mode" : "Dark Mode"}
-                  </Button>
-                  <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
-                    Sign In
-                  </Button>
-                  <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
-                    Upgrade Now
-                  </Button>
-                </div>
-              )}
             </div>
 
-            <div className="flex-1 md:flex-none overflow-x-auto md:overflow-y-auto md:overflow-x-hidden py-2">
-              <nav className="px-2 md:px-1.5 flex md:flex-col space-x-2 md:space-x-0 md:space-y-1">
+            <div className="flex-1 md:flex-none overflow-y-auto overflow-x-hidden py-2">
+              <nav className="px-1.5 flex flex-col space-y-1">
                 {navigation.map((item) => {
                 const isActive = activeFeature === item.feature;
                 return (
                   <button
                     key={item.name}
                     onClick={() => setActiveFeature(item.feature)}
-                    className="group w-auto md:w-full min-w-[64px] md:min-w-0 flex flex-col items-center gap-1 px-2 py-2 md:py-3 text-[10px] sm:text-[11px] rounded-xl transition-all relative"
+                    className="group w-full flex flex-col items-center gap-1 px-2 py-3 text-[11px] rounded-xl transition-all relative"
                   >
                       <div className={cn(
-                        "w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center transition-all",
+                        "w-11 h-11 rounded-xl flex items-center justify-center transition-all",
                         isActive
                           ? "bg-white shadow-sm"
                           : "bg-transparent group-hover:bg-white/50"
                       )}>
                         <item.icon
                         className={cn(
-                          "w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-colors",
+                          "w-5 h-5 shrink-0 transition-colors",
                           isActive
                             ? "text-[#6366f1]"
                             : "text-gray-500 group-hover:text-[#6366f1]"
@@ -359,32 +320,6 @@ const CheckerPage = () => {
                 })}
               </nav>
             </div>
-{/* 
-            {!isCollapsed && (
-              <div className="p-4 pb-6">
-                <div className="bg-white rounded-2xl p-4 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Zap className="w-4 h-4 text-purple-600" />
-                    <p className="text-xs font-medium text-gray-900">
-                      Free Plan
-                    </p>
-                  </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
-                    <div className="h-full w-1/3 bg-purple-600 rounded-full"></div>
-                  </div>
-                  <p className="text-xs text-gray-600 mb-3">
-                    167/500 words used today
-                  </p>
-                  <Button
-                    onClick={() => router.push("/pricing")}
-                    className="w-full bg-[#6366f1] hover:bg-[#5558e3] text-white text-xs font-medium h-9 rounded-lg"
-                  >
-                    <Zap className="w-3 h-3 mr-1.5" />
-                    Upgrade to Limitless
-                  </Button>
-                </div>
-              </div>
-            )} */}
 
             {isCollapsed && (
               <div className="p-2 pb-4">
@@ -401,6 +336,65 @@ const CheckerPage = () => {
 
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Top Header - Mobile only */}
+            <header className="md:hidden bg-[#f4f3f8] px-3 py-3 flex items-center justify-between shrink-0 border-b border-gray-200/50">
+              <div 
+                onClick={() => setActiveFeature("home")}
+                className="flex items-center gap-1.5 font-bold text-base text-foreground cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                <div className="w-6 h-6 rounded-lg flex items-center justify-center">
+                  <Image
+                    alt="Logo"
+                    src={
+                      "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
+                    }
+                    width={24}
+                    height={24}
+                    className="w-6 h-6"
+                  />
+                </div>
+                <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span onClick={() => setActiveFeature("pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                  Pricing
+                </span>
+                <span onClick={() => setActiveFeature("blog")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                  Blog
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-8 w-8"
+                >
+                  {mobileMenuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
+                </Button>
+              </div>
+
+              {/* Mobile dropdown menu */}
+              {mobileMenuOpen && (
+                <div className="absolute top-full right-4 mt-1 z-50 bg-white rounded-xl border border-border shadow-lg p-3 flex flex-col gap-2 min-w-[180px]">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleTheme}
+                    className="justify-start text-gray-600 hover:text-gray-900 h-8 text-[12px]"
+                  >
+                    {isDarkMode ? <Sun className="h-3.5 w-3.5 mr-2" /> : <Moon className="h-3.5 w-3.5 mr-2" />}
+                    {isDarkMode ? "Light Mode" : "Dark Mode"}
+                  </Button>
+                  <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
+                    Sign In
+                  </Button>
+                  <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
+                    Upgrade Now
+                  </Button>
+                </div>
+              )}
+            </header>
+
             {/* Top Navigation — desktop only */}
             <header className="hidden md:flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
               <div className="flex items-center gap-7 pl-5 text-[13.5px]">
@@ -441,9 +435,49 @@ const CheckerPage = () => {
             </header>
 
             {/* Main Content */}
-            <main ref={mainContentRef} className="flex-1 overflow-auto rounded-3xl">
+            <main ref={mainContentRef} className="flex-1 overflow-auto rounded-3xl md:rounded-3xl pb-16 md:pb-0">
               {renderFeature()}
             </main>
+
+            {/* Bottom Navigation Bar - Mobile only */}
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-border shadow-[0_-4px_16px_rgba(0,0,0,0.08)] z-40">
+              <div className="flex items-center justify-around px-1 pb-safe pt-1">
+                {navigation.map((item) => {
+                  const isActive = activeFeature === item.feature;
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => setActiveFeature(item.feature)}
+                      className="flex flex-col items-center justify-center gap-1 px-2 py-2.5 min-w-0 flex-1 transition-all relative"
+                    >
+                      <div className={cn(
+                        "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                        isActive
+                          ? "bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] shadow-md"
+                          : "bg-transparent"
+                      )}>
+                        <item.icon
+                          className={cn(
+                            "w-5 h-5 shrink-0 transition-colors",
+                            isActive
+                              ? "text-white"
+                              : "text-gray-500"
+                          )}
+                        />
+                      </div>
+                      <span className={cn(
+                        "text-[10px] transition-colors text-center leading-tight truncate w-full max-w-[60px]",
+                        isActive
+                          ? "font-semibold text-[#6366f1]"
+                          : "font-normal text-gray-500"
+                      )}>
+                        {item.name}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
           </div>
         </div>
       </div>

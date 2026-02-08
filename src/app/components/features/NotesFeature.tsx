@@ -522,7 +522,7 @@ const NotesFeature = () => {
       />
 
       {/* Who Can Use Section */}
-      <section className="py-18 px-6 pt-10">
+      <section className="py-18 px-6 lg:pt-10">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-14 leading-tight">
             Who can use AI Notes?

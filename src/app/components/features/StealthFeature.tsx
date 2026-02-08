@@ -668,14 +668,14 @@ const StealthFeature = () => {
 
       {/* Feature Highlights */}
       <section className="py-18 px-6 pt-10">
-        <div className="max-w-5xl mx-auto pl-10">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-18 leading-tight">
             Humanize with confidence
           </h2>
 
           {/* Feature 1 — Bypass detectors */}
           <div className="grid md:grid-cols-2 gap-14 items-center mb-24 pt-10">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7 max-w-[270px] md:max-w-none mx-auto md:mx-0">
               <div className="flex items-center gap-2.5 mb-5">
                 <ShieldCheck className="w-4.5 h-4.5 text-green-500" />
                 <span className="text-[13px] font-medium text-green-600">All detectors bypassed</span>
@@ -689,11 +689,11 @@ const StealthFeature = () => {
                 ))}
               </div>
             </div>
-            <div>
+            <div className="max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Bypass every AI<br />detector out there
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Our humanization engine rewrites text to pass GPTZero, Turnitin, Originality.ai, and every other major AI detection tool with a 99% success rate.
               </p>
             </div>
@@ -701,15 +701,15 @@ const StealthFeature = () => {
 
           {/* Feature 2 — Writing styles */}
           <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
-            <div className="order-2 md:order-1">
+            <div className="order-2 md:order-1 max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 9 writing styles to<br />match your voice
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Choose from Standard, Fluency, Natural, Formal, Academic, Simple, Creative, Expand, or Shorten. Each style adapts the output to fit your exact needs.
               </p>
             </div>
-            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7">
+            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7 max-w-[270px] md:max-w-none mx-auto md:mx-0">
               <div className="flex flex-wrap gap-1.5">
                 {["Standard", "Fluency", "Natural", "Formal", "Academic", "Simple", "Creative", "Expand", "Shorten"].map((s, i) => (
                   <span key={s} className={`px-2.5 py-1 rounded-full text-[13px] font-medium ${i === 0 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
@@ -722,7 +722,7 @@ const StealthFeature = () => {
 
           {/* Feature 3 — Meaning preserved */}
           <div className="grid md:grid-cols-2 gap-14 items-center">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7 max-w-[270px] md:max-w-none mx-auto md:mx-0">
               <div className="space-y-3.5">
                 <div>
                   <p className="text-[11px] text-muted-foreground mb-1.5">Original (AI-generated)</p>
@@ -735,11 +735,11 @@ const StealthFeature = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 100% meaning<br />preserved
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Unlike basic paraphrasers, our AI rewrites content while keeping every key idea, fact, and nuance intact. The meaning stays — only the fingerprint changes.
               </p>
             </div>

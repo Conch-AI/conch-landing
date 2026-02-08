@@ -280,14 +280,14 @@ const SimplifyFeature = () => {
 
       {/* Feature Highlights */}
       <section className="py-18 px-6">
-        <div className="max-w-5xl mx-auto pl-10">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-18 leading-tight">
             Simplify with confidence
           </h2>
 
           {/* Feature 1 — Tone matching */}
           <div className="grid md:grid-cols-2 gap-14 items-center mb-24 pt-10">
-            <div className="rounded-2xl overflow-hidden max-w-[270px]">
+            <div className="rounded-2xl overflow-hidden max-w-[270px] mx-auto md:mx-0">
               <Image
                 src="/images/tone.png"
                 alt="Match the tone to your audience"
@@ -296,11 +296,11 @@ const SimplifyFeature = () => {
                 className="w-full h-auto object-cover"
               />
             </div>
-            <div>
+            <div className="max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Match the tone to<br />your audience
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Choose from 6 distinct tones — casual, formal, informative, academic, friendly, and confident — to get explanations that fit exactly how you need to communicate.
               </p>
             </div>
@@ -308,15 +308,15 @@ const SimplifyFeature = () => {
 
           {/* Feature 2 — Real-time streaming */}
           <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
-            <div className="order-2 md:order-1">
+            <div className="order-2 md:order-1 max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Real-time answers,<br />no waiting
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed  max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Watch your simplified text stream in word by word. Start reading instantly while our AI crafts the perfect explanation — no loading screens, no delays.
               </p>
             </div>
-            <div className="order-1 md:order-2 rounded-2xl overflow-hidden max-w-[270px]">
+            <div className="order-1 md:order-2 rounded-2xl overflow-hidden max-w-[270px] mx-auto md:mx-0">
               <Image
                 src="/images/fast.png"
                 alt="Real-time answers with AI"
@@ -329,7 +329,7 @@ const SimplifyFeature = () => {
 
           {/* Feature 3 — Works with any content */}
           <div className="grid md:grid-cols-2 gap-14 items-center">
-            <div className="rounded-2xl overflow-hidden max-w-[270px]">
+            <div className="rounded-2xl overflow-hidden max-w-[270px] mx-auto md:mx-0">
               <Image
                 src="/images/content.png"
                 alt="Works with any content type"
@@ -338,11 +338,11 @@ const SimplifyFeature = () => {
                 className="w-full h-auto object-cover"
               />
             </div>
-            <div>
+            <div className="max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Works with any<br />content type
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed  max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 From dense research papers to complex legal contracts, our AI handles it all. Paste any text and get a clear, readable explanation in seconds.
               </p>
             </div>
