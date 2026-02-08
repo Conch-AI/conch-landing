@@ -4,6 +4,11 @@ import "../app/styles/globals.css";
 export const metadata: Metadata = {
   title: "Conch AI - Free AI Tools",
   description: "Free AI tools to help you write, study, and learn. Simplify complex topics, humanize AI text, create flashcards, and more.",
+  icons: {
+    icon: "/images/logos/logo_w_background.png",
+    shortcut: "/images/logos/logo_w_background.png",
+    apple: "/images/logos/logo_w_background.png",
+  },
 };
 
 export default function RootLayout({
