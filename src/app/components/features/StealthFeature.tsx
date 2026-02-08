@@ -1,6 +1,7 @@
 "use client";
 
 import Footer from "@/app/components/ui/Footer";
+import SignupModal from "@/app/components/SignupModal";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import { Detectors, ModeOptions, ModeTooltips, STEALTH_SAMPLE_TEXT } from "@/app/components/stealth/data";
@@ -48,6 +49,7 @@ const StealthFeature = () => {
   const [score, setScore] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [hasText, setHasText] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // TipTap editor
@@ -523,7 +525,7 @@ const StealthFeature = () => {
 
                   <div className="flex items-center gap-1.5 ml-auto">
                     <button
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => setShowSignupModal(true)}
                       className="hidden md:flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                     >
                       <FileUp className="w-3.5 h-3.5" />
@@ -661,12 +663,6 @@ const StealthFeature = () => {
               );
             })}
           </div>
-
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
-              Get Started Free
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -772,12 +768,6 @@ const StealthFeature = () => {
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
-              Get Started Free
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -843,6 +833,19 @@ const StealthFeature = () => {
       </section>
 
       <Footer />
+      
+      {/* Signup Modal */}
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        onSignup={() => {
+          setShowSignupModal(false);
+          // After signup, trigger file upload
+          setTimeout(() => {
+            fileInputRef.current?.click();
+          }, 100);
+        }}
+      />
     </div>
   );
 };

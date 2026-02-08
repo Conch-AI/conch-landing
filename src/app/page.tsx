@@ -6,6 +6,7 @@ import MindmapsFeature from "@/app/components/features/MindmapsFeature";
 import NotesFeature from "@/app/components/features/NotesFeature";
 import SimplifyFeature from "@/app/components/features/SimplifyFeature";
 import StealthFeature from "@/app/components/features/StealthFeature";
+import PricingFeature from "@/app/components/features/PricingFeature";
 import BlogHome from "@/app/components/blogs/BlogHome";
 import BlogPost from "@/app/components/blogs/BlogPost";
 import { BlogSkeletonGrid } from "@/app/components/blogs/components/blog-skeleton";
@@ -25,10 +26,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Post } from "types/Post";
 
-type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "blog" | "chat";
+type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "blog" | "pricing" | "chat";
 
 const navigation = [
   { name: "Simplify", feature: "simplify" as FeatureType, icon: Wand2 },
@@ -55,6 +56,7 @@ const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
 
 const CheckerPage = () => {
   const router = useRouter();
+  const mainContentRef = useRef<HTMLElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isCollapsed] = useState(false);
   const [activeFeature, setActiveFeature] = useState<FeatureType>("home");
@@ -129,6 +131,13 @@ const CheckerPage = () => {
     setSelectedPostSlug(null);
     setSelectedPost(null);
   };
+
+  // Scroll to top when feature changes
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [activeFeature]);
 
   const renderFeature = () => {
     switch (activeFeature) {
@@ -229,6 +238,8 @@ const CheckerPage = () => {
           );
         }
         return null;
+      case "pricing":
+        return <PricingFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "chat":
         return <ComingSoonFeature featureName="Chat" />;
       default:
@@ -272,7 +283,7 @@ const CheckerPage = () => {
 
               {/* Mobile-only header actions */}
               <div className="flex md:hidden items-center gap-2">
-                <span onClick={() => router.push("/pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                <span onClick={() => setActiveFeature("pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Pricing
                 </span>
                 <span onClick={() => setActiveFeature("blog")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
@@ -303,8 +314,8 @@ const CheckerPage = () => {
                   <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
                     Sign In
                   </Button>
-                  <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
-                    Get Started Free
+                  <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
+                    Upgrade Now
                   </Button>
                 </div>
               )}
@@ -393,7 +404,7 @@ const CheckerPage = () => {
             {/* Top Navigation — desktop only */}
             <header className="hidden md:flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
               <div className="flex items-center gap-7 pl-5 text-[13.5px]">
-                <span onClick={() => router.push("/pricing")} className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                <span onClick={() => setActiveFeature("pricing")} className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                   Pricing
                 </span>
                 <span
@@ -423,14 +434,14 @@ const CheckerPage = () => {
                 >
                   Sign In
                 </Button>
-                <Button variant="default" className="text-[13px] px-4 py-1.5 h-9">
-                  Get Started Free
+                <Button onClick={() => setActiveFeature("pricing")} variant="default" className="text-[13px] px-4 py-1.5 h-9">
+                  Upgrade Now
                 </Button>
               </div>
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-auto rounded-3xl">
+            <main ref={mainContentRef} className="flex-1 overflow-auto rounded-3xl">
               {renderFeature()}
             </main>
           </div>

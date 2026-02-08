@@ -34,6 +34,7 @@ import {
   Upload
 } from "lucide-react";
 import { useRef, useState } from "react";
+import SignupModal from "../SignupModal";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -47,7 +48,7 @@ const NotesFeature = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
@@ -359,14 +360,14 @@ const NotesFeature = () => {
                   <div className="flex items-center gap-1.5 md:gap-2">
                     <button
                       onClick={handlePaste}
-                      className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                      className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                     >
                       <ClipboardIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                       Paste text
                     </button>
                     <button
-                      onClick={() => fileInputRef.current?.click()}
-                      className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                      onClick={() => setShowSignupModal(true)}
+                      className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                     >
                       <Upload className="w-3.5 h-3.5" />
                       Upload file
@@ -513,6 +514,12 @@ const NotesFeature = () => {
           </div>
         </div>
       </section>
+      
+        {/* Signup Modal */}
+        <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+      />
 
       {/* Who Can Use Section */}
       <section className="py-18 px-6 pt-10">
@@ -541,12 +548,6 @@ const NotesFeature = () => {
                 </div>
               );
             })}
-          </div>
-
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-            </Button>
           </div>
         </div>
       </section>
@@ -660,12 +661,6 @@ const NotesFeature = () => {
                 <p className="text-sm text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
               </div>
             ))}
-          </div>
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-            </Button>
           </div>
         </div>
       </section>

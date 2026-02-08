@@ -117,6 +117,7 @@ import {
 } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { RiStarSFill } from "react-icons/ri";
+import SignupModal from "../SignupModal";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -215,6 +216,7 @@ const MindmapsFeature = () => {
   const [hasGenerated, setHasGenerated] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showFullscreen, setShowFullscreen] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -387,7 +389,7 @@ const MindmapsFeature = () => {
                       Paste text
                     </button>
                     <button
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => setShowSignupModal(true)}
                       className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                     >
                       <Upload className="w-3.5 h-3.5" />
@@ -485,6 +487,12 @@ const MindmapsFeature = () => {
         </div>
       </section>
 
+      {/* Signup Modal */}
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+      />
+
       {/* Fullscreen Mindmap Modal */}
       {showFullscreen && hasGenerated && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
@@ -540,11 +548,6 @@ const MindmapsFeature = () => {
             })}
           </div>
 
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -657,12 +660,6 @@ const MindmapsFeature = () => {
                 <p className="text-sm text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
               </div>
             ))}
-          </div>
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-            </Button>
           </div>
         </div>
       </section>

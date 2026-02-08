@@ -378,12 +378,6 @@ const SimplifyFeature = () => {
               );
             })}
           </div>
-
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-            </Button>
-          </div>
         </div>
       </section>
 
