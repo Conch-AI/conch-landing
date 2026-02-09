@@ -31,7 +31,7 @@ const BlogCardLarge = ({
   }, [pathname]);
 
   const blogPath = useMemo(() => {
-    return queryLocale ? `/${queryLocale}/blog/${slug}` : `/blog/${slug}`;
+    return queryLocale ? `/${queryLocale}/blogs/${slug}` : `/blogs/${slug}`;
   }, [queryLocale, slug]);
 
   return (

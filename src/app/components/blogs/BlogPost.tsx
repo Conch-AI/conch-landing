@@ -3,6 +3,7 @@
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import moment from "moment";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Post } from "types/Post";
 import DOMPurify from "isomorphic-dompurify";
@@ -17,7 +18,7 @@ const BlogPost = ({ post, onBack }: BlogPostProps) => {
 
   // Extract headings from content for table of contents
   const tableOfContents = useMemo(() => {
-    if (!post.content) return [];
+    if (!post.content || typeof window === 'undefined') return [];
 
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = post.content;
@@ -37,6 +38,8 @@ const BlogPost = ({ post, onBack }: BlogPostProps) => {
 
   // Add IDs to headings for scroll functionality
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const contentDiv = document.getElementById("blog-content");
     if (!contentDiv) return;
 
@@ -48,6 +51,8 @@ const BlogPost = ({ post, onBack }: BlogPostProps) => {
 
   // Handle scroll to update active heading
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const headings = document.querySelectorAll("#blog-content h2, #blog-content h3");
       let currentActive = "";
@@ -71,6 +76,8 @@ const BlogPost = ({ post, onBack }: BlogPostProps) => {
   }, []);
 
   const scrollToHeading = (id: string) => {
+    if (typeof window === 'undefined') return;
+    
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -78,17 +85,35 @@ const BlogPost = ({ post, onBack }: BlogPostProps) => {
   };
 
   return (
-    <div className="flex flex-col min-h-full bg-white overflow-y-auto">
-      <div className="mx-auto w-full max-w-5xl p-4 sm:p-6 lg:p-8 lg:px-12">
-        {/* Back Button */}
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-[#6366f1] transition-colors mb-6 group"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Blog
-        </button>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Header — matches blog listing page */}
+      <header className="border-b border-border bg-background sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-4 md:py-5">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
+                width={28}
+                height={28}
+                alt="Conch AI"
+                className="md:w-8 md:h-8"
+              />
+              <span className="text-lg md:text-xl bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent font-semibold">
+                Conch
+              </span>
+            </Link>
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 text-[13px] md:text-[14px] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Blog
+            </button>
+          </div>
+        </div>
+      </header>
 
+      <div className="mx-auto w-full max-w-5xl p-4 sm:p-6 lg:p-8 lg:px-12">
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Table of Contents - Desktop */}
           {tableOfContents.length > 0 && (
@@ -244,6 +269,37 @@ const BlogPost = ({ post, onBack }: BlogPostProps) => {
           </article>
         </div>
       </div>
+
+      {/* Footer — matches blog listing page */}
+      <footer className="border-t border-border mt-12 md:mt-20">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-[12px] md:text-[13px] text-muted-foreground">
+              &copy; 2026 Yofi Tech, LLC. All rights reserved.
+            </p>
+            <div className="flex items-center gap-4 md:gap-6">
+              <Link
+                href="/blogs"
+                className="text-[12px] md:text-[13px] text-[#6366f1] font-medium"
+              >
+                Blog
+              </Link>
+              <Link
+                href="/privacy"
+                className="text-[12px] md:text-[13px] text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-[12px] md:text-[13px] text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

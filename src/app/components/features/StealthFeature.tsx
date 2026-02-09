@@ -843,6 +843,7 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
       <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
+        content="To upload files, login to Conch and get started."
         onSignup={() => {
           setShowSignupModal(false);
           // After signup, trigger file upload

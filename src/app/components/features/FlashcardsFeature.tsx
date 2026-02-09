@@ -677,6 +677,7 @@ const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => 
   <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
+        content="To upload files, login to Conch and get started."
       />
           <section className="px-4 md:px-8 pb-10 md:pb-14 flex-1">
             <div className="max-w-5xl mx-auto">

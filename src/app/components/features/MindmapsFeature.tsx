@@ -496,6 +496,7 @@ const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
       <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
+        content="To upload files, login to Conch and get started."
       />
 
       {/* Fullscreen Mindmap Modal */}

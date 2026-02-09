@@ -71,8 +71,8 @@ const BlogHeader = ({ allPosts }: { allPosts: Post[] }) => {
           <Link
             href={
               queryLocale
-                ? `/${queryLocale}/blog/${item.slug}`
-                : `/blog/${item.slug}`
+                ? `/${queryLocale}/blogs/${item.slug}`
+                : `/blogs/${item.slug}`
             }
             className="block w-full cursor-pointer rounded-lg px-3 py-2.5 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
             key={item.slug}

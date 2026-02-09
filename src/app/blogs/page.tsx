@@ -1,8 +1,10 @@
-import { Suspense } from "react";
-import BlogHome from "@/app/components/blogs/BlogHome";
 import { getAllCategories, getPostsByLanguage } from "@/lib/wordpress/service";
+import BlogPageContent from "../components/blogs/BlogPageContent";
 
-// Revalidate every 360 seconds
+// Force static generation at build time
+export const dynamic = 'force-static';
+
+// Revalidate every 360 seconds (ISR)
 export const revalidate = 360;
 
 export default async function BlogPostsPage() {
@@ -10,8 +12,6 @@ export default async function BlogPostsPage() {
   const categories = await getAllCategories();
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <BlogHome incomingPosts={incomingPosts} categories={categories} />
-    </Suspense>
+      <BlogPageContent incomingPosts={incomingPosts} categories={categories} />
   );
 }

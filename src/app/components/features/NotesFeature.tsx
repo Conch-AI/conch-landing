@@ -524,6 +524,7 @@ const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
         <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
+        content="To upload files, login to Conch and get started."
       />
 
       {/* Who Can Use Section */}

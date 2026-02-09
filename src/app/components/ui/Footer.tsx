@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import { CheckerFeature } from "../features/CheckerSidebar";
+import { useRouter } from "next/navigation";
 
 interface FooterProps {
   onFeatureSelect: (feature: CheckerFeature) => void;
 }
 
 const Footer = ({ onFeatureSelect }: FooterProps) => {
+  const router = useRouter();
   return (
     <footer className="px-4 md:px-6 pt-12 md:pt-14 pb-6 md:pb-7 border-t border-border">
       <div className="max-w-5xl mx-auto">
@@ -41,7 +43,7 @@ const Footer = ({ onFeatureSelect }: FooterProps) => {
               <p className="text-[10px] md:text-[11px] text-muted-foreground uppercase tracking-wider mb-2.5 md:mb-3.5 font-medium">About</p>
               <div className="flex flex-col gap-2 md:gap-2.5">
                   <button 
-                    onClick={() => onFeatureSelect("blog")} 
+                    onClick={() => router.push("/blogs")} 
                     className="text-[12px] md:text-[13px] text-foreground hover:text-[#6366f1] transition-colors text-left"
                   >
                     Blog

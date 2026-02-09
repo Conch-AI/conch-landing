@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { CheckerFeature } from "./CheckerSidebar";
 import PricingPlans from "../PricingPlans";
+import { useRouter } from "next/navigation";
 
 interface HomeFeatureProps {
   onFeatureSelect: (feature: CheckerFeature) => void;
@@ -14,6 +15,7 @@ interface HomeFeatureProps {
 
 const HomeFeature = ({ onFeatureSelect }: HomeFeatureProps) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0); // First FAQ open by default
+  const router = useRouter();
 
   return (
     <div className="min-h-full bg-background text-foreground overflow-y-auto">
@@ -399,7 +401,7 @@ const HomeFeature = ({ onFeatureSelect }: HomeFeatureProps) => {
                 <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wider mb-3 md:mb-5">About</p>
                 <div className="flex flex-col gap-2.5 md:gap-4">
                   <button 
-                    onClick={() => onFeatureSelect("blog" as CheckerFeature)} 
+                    onClick={() => router.push("/blogs")} 
                     className="text-[13px] md:text-base text-foreground hover:text-[#6366f1] transition-colors text-left"
                   >
                     Blog

@@ -6,6 +6,7 @@ import { Button } from "@/app/ui/button";
 import Image from "next/image";
 import PricingPlans from "../PricingPlans";
 import { CheckerFeature } from "./CheckerSidebar";
+import { useRouter } from "next/navigation";
 
 interface PricingFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
@@ -13,7 +14,7 @@ interface PricingFeatureProps {
 
 const PricingFeature = ({ onFeatureSelect }: PricingFeatureProps = {}) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
+  const router = useRouter();
   const faqs = [
     {
       question: "Can I switch plans anytime?",
@@ -154,7 +155,7 @@ const PricingFeature = ({ onFeatureSelect }: PricingFeatureProps = {}) => {
                 <div className="flex flex-col gap-2.5 md:gap-4">
                   {onFeatureSelect ? (
                     <button 
-                      onClick={() => onFeatureSelect("blog" as CheckerFeature)} 
+                      onClick={() => router.push("/blogs")} 
                       className="text-[13px] md:text-base text-foreground hover:text-[#6366f1] transition-colors text-left"
                     >
                       Blog
