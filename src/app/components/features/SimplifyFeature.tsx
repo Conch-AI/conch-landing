@@ -24,13 +24,17 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import SignupModal from "../SignupModal";
+import { useAppContext } from "@/context/AppContext";
 
 interface SimplifyFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
 }
 
 const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [query, setQuery] = useState("");
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const [activeTone, setActiveTone] = useState("Informative");
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +68,11 @@ const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
     const textToSimplify = inputQuery || query;
     if (!textToSimplify.trim()) return;
 
+    if (!checkLimit("simplify")) {
+      setShowSignupModal(true);
+      return;
+    }
+
     setIsLoading(true);
     setResponse("");
 
@@ -94,6 +103,7 @@ const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
           setResponse((prev) => prev + text);
         }
       }
+      incrementUsage("simplify");
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -448,6 +458,12 @@ const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
           </Button>
         </div>
       </section>
+
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        content="You've reached your free limit. Sign up for Conch to continue simplifying content."
+      />
 
       <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
     </div>

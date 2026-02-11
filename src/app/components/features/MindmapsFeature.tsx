@@ -119,6 +119,7 @@ import {
 import { useCallback, useMemo, useRef, useState } from "react";
 import { RiStarSFill } from "react-icons/ri";
 import SignupModal from "../SignupModal";
+import { useAppContext } from "@/context/AppContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -216,6 +217,7 @@ interface MindmapsFeatureProps {
 }
 
 const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
@@ -246,6 +248,11 @@ const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
 
   const generateMindmap = async () => {
     if (!inputText.trim()) return;
+
+    if (!checkLimit("mindMaps")) {
+      setShowSignupModal(true);
+      return;
+    }
 
     setIsLoading(true);
 
@@ -297,6 +304,7 @@ const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
         setMindmapNodes(nodes);
         setMindmapEdges(edges);
         setHasGenerated(true);
+        incrementUsage("mindMaps");
       }
     } catch (error) {
       console.error("Error generating mindmap:", error);
@@ -496,7 +504,7 @@ const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
       <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
-        content="To upload files, login to Conch and get started."
+        content="You've reached your free limit. Sign up for Conch to continue generating mindmaps."
       />
 
       {/* Fullscreen Mindmap Modal */}

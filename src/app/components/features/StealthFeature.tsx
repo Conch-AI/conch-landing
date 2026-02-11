@@ -2,6 +2,7 @@
 
 import Footer from "@/app/components/ui/Footer";
 import SignupModal from "@/app/components/SignupModal";
+import { useAppContext } from "@/context/AppContext";
 import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
@@ -45,6 +46,7 @@ interface StealthFeatureProps {
 }
 
 const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -138,6 +140,11 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
     const text = editor?.getText() || "";
     if (!text.trim()) return;
 
+    if (!checkLimit("stealth")) {
+      setShowSignupModal(true);
+      return;
+    }
+
     // Limit text to 5000 characters for guest endpoint
     const textToDetect = text.slice(0, 5000);
     if (text.length > 5000) {
@@ -212,6 +219,7 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
         setScore(Math.floor(Math.random() * 50) + 20);
       }
       setCheckedForAI(true);
+      incrementUsage("stealth");
     } catch (error) {
       console.error("Error detecting AI:", error);
       setScore(Math.floor(Math.random() * 50) + 20);
@@ -230,6 +238,11 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
   const handleHumanize = async () => {
     const text = editor?.getText() || "";
     if (!text.trim()) return;
+
+    if (!checkLimit("stealth")) {
+      setShowSignupModal(true);
+      return;
+    }
 
     // Limit text to 2000 characters for guest endpoint
     const textToHumanize = text.slice(0, 2000);
@@ -289,6 +302,7 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
           
           editor?.commands.setContent(paragraphs || `<p>${finalContent}</p>`);
         }
+        incrementUsage("stealth");
       } else {
         const errorText = await res.text();
         console.error("Error humanizing:", res.status, errorText);
@@ -843,14 +857,7 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
       <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
-        content="To upload files, login to Conch and get started."
-        onSignup={() => {
-          setShowSignupModal(false);
-          // After signup, trigger file upload
-          setTimeout(() => {
-            fileInputRef.current?.click();
-          }, 100);
-        }}
+        content="You've reached your free limit. Sign up for Conch to continue using Stealth Mode."
       />
     </div>
   );

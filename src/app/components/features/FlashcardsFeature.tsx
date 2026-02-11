@@ -34,6 +34,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FaRegStar, FaShapes, FaStar } from "react-icons/fa";
 import { RiRestartLine, RiShuffleLine } from "react-icons/ri";
 import SignupModal from "../SignupModal";
+import { useAppContext } from "@/context/AppContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -166,6 +167,7 @@ interface FlashcardsFeatureProps {
 }
 
 const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
@@ -198,6 +200,11 @@ const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => 
 
   const generateFlashcards = async () => {
     if (!inputText.trim()) return;
+
+    if (!checkLimit("flashcards")) {
+      setShowSignupModal(true);
+      return;
+    }
 
     setIsLoading(true);
     setFlashcards([]);
@@ -233,6 +240,7 @@ const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => 
         setHasGenerated(true);
         setCurrentCardIndex(0);
         setIsFlipped(false);
+        incrementUsage("flashcards");
       }
     } catch (error) {
       console.error("Error generating flashcards:", error);
@@ -677,7 +685,7 @@ const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => 
   <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
-        content="To upload files, login to Conch and get started."
+        content="You've reached your free limit. Sign up for Conch to continue generating flashcards."
       />
           <section className="px-4 md:px-8 pb-10 md:pb-14 flex-1">
             <div className="max-w-5xl mx-auto">

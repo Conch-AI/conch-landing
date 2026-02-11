@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { useRef, useState } from "react";
 import SignupModal from "../SignupModal";
+import { useAppContext } from "@/context/AppContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -44,6 +45,7 @@ interface NotesFeatureProps {
 }
 
 const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasGenerated, setHasGenerated] = useState(false);
@@ -141,6 +143,11 @@ const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
   const generateNotes = async () => {
     if (!inputText.trim()) return;
 
+    if (!checkLimit("condensedNotes")) {
+      setShowSignupModal(true);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -199,6 +206,7 @@ const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
       // Set the notes content in the editor
       editor?.commands.setContent(notesHtml);
       setHasGenerated(true);
+      incrementUsage("condensedNotes");
     } catch (error) {
       console.error("Error generating notes:", error);
     } finally {
@@ -524,7 +532,7 @@ const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
         <SignupModal
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
-        content="To upload files, login to Conch and get started."
+        content="You've reached your free limit. Sign up for Conch to continue generating notes."
       />
 
       {/* Who Can Use Section */}

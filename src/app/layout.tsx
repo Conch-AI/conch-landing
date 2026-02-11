@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../app/styles/globals.css";
+import { ClientProviders } from "./providers";
 
 export const metadata: Metadata = {
   title: "Conch AI - Free AI Tools",
@@ -18,7 +19,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ClientProviders>{children}</ClientProviders>
+      </body>
     </html>
   );
 }
