@@ -144,7 +144,7 @@ const CheckerPage = () => {
         </div>
 
         <div className="flex-1 flex flex-col overflow-hidden">
-          <header className="md:hidden bg-[#f4f3f8] px-3 py-3 flex items-center justify-between shrink-0 border-b border-gray-200/50">
+          <header className="md:hidden bg-[#f4f3f8] px-3 py-3 flex items-center justify-between shrink-0 border-b border-gray-200/50 relative">
             <div
               onClick={() => setActiveFeature("home")}
               className="flex items-center gap-1.5 font-bold text-base text-foreground cursor-pointer hover:opacity-80 transition-opacity"
@@ -163,11 +163,11 @@ const CheckerPage = () => {
               <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span onClick={() => setActiveFeature("pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+            <div className="flex items-center gap-2 relative">
+              <span onClick={() => setActiveFeature("pricing")} className="hidden md:block text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                 Pricing
               </span>
-              <span onClick={() => router.push("/blogs")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+              <span onClick={() => router.push("/blogs")} className="hidden md:block text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
                 Blog
               </span>
               <Button
@@ -178,10 +178,9 @@ const CheckerPage = () => {
               >
                 {mobileMenuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
               </Button>
-            </div>
 
-            {mobileMenuOpen && (
-              <div className="absolute top-full right-4 mt-1 z-50 bg-white rounded-xl border border-border shadow-lg p-3 flex flex-col gap-2 min-w-[200px]">
+              {mobileMenuOpen && (
+                <div className="absolute top-full right-0 mt-1 z-50 bg-white rounded-xl border border-border shadow-lg p-3 flex flex-col gap-2 min-w-[200px]">
                 {session?.isLoggedIn && (
                   <div className="flex flex-col gap-1 pb-2 border-b border-gray-100 mb-1">
                     <div className="flex items-center gap-2 px-2">
@@ -198,26 +197,45 @@ const CheckerPage = () => {
                   </div>
                 )}
 
-                {session?.isLoggedIn ? (
-                  <Button
-                    variant="default"
-                    className="text-[13px] h-9 w-full bg-primary hover:opacity-90 shadow-sm"
-                    onClick={() => router.push(API_BASE_URL)}
+                {/* Menu Items */}
+                <div className="flex flex-col gap-1">
+                  <button
+                    onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}
+                    className="text-left px-3 py-2 text-[13px] text-gray-600 hover:text-[#6366f1] hover:bg-gray-50 rounded-lg transition-colors"
                   >
-                    Go to App
-                  </Button>
-                ) : (
-                  <>
-                    {/* <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
-                      Sign In
-                    </Button> */}
-                    <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
+                    Pricing
+                  </button>
+                  <button
+                    onClick={() => { router.push("/blogs"); setMobileMenuOpen(false); }}
+                    className="text-left px-3 py-2 text-[13px] text-gray-600 hover:text-[#6366f1] hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Blog
+                  </button>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="border-t border-gray-100 pt-2 mt-1">
+                  {session?.isLoggedIn ? (
+                    <Button
+                      variant="default"
+                      className="text-[13px] h-9 w-full bg-primary hover:opacity-90 shadow-sm"
+                      onClick={() => { router.push(API_BASE_URL); setMobileMenuOpen(false); }}
+                    >
+                      Go to App
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="default" 
+                      className="text-[13px] h-9 w-full" 
+                      onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}
+                    >
                       Upgrade Now
                     </Button>
-                  </>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+                </div>
+              )}
+            </div>
           </header>
 
           <header className="hidden md:flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
