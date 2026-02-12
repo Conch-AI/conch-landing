@@ -271,7 +271,7 @@ export default function RootLayout({
             window.mixpanelHelpers = {
               // Standard tracking
               track: function(eventName, eventProperties = {}) {
-                if (typeof mixpanel !== 'undefined') {
+                if (typeof mixpanel !== 'undefined' && typeof mixpanel.track === 'function') {
                   const enhancedProps = {
                     ...eventProperties,
                     page_url: window.location.href,
@@ -279,6 +279,8 @@ export default function RootLayout({
                     timestamp: new Date().toISOString()
                   };
                   return mixpanel.track(eventName, enhancedProps);
+                } else {
+                  console.warn('Mixpanel track function not available yet');
                 }
               },
               

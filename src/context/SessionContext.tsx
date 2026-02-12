@@ -42,11 +42,7 @@ function isSessionData(data: unknown): data is Session {
         typeof data === "object" &&
         data !== null &&
         "isLoggedIn" in data &&
-        typeof (data as Session).isLoggedIn === "boolean" &&
-        // Ensure optional fields are either string or undefined
-        (typeof (data as Session).email === "string" || (data as Session).email === undefined) &&
-        (typeof (data as Session).displayName === "string" || (data as Session).displayName === undefined) &&
-        (typeof (data as Session).photoURL === "string" || (data as Session).photoURL === undefined)
+        typeof (data as Session).isLoggedIn === "boolean"
     );
 }
 
@@ -84,20 +80,7 @@ export const SessionProvider: React.FC<Props> = ({ children }) => {
                 return;
             }
 
-            // Sanitise: treat null, empty strings, and the literal "undefined" as missing
-            const clean = (v: unknown): string | undefined =>
-                typeof v === "string" && v !== "" && v !== "undefined" && v !== "null"
-                    ? v
-                    : undefined;
-
-            const sessionData: Session = {
-                isLoggedIn: e.data.isLoggedIn,
-                email: clean(e.data.email),
-                displayName: clean(e.data.displayName),
-                photoURL: clean(e.data.photoURL),
-            };
-
-            setSession(sessionData);
+            setSession(e.data);
         };
 
         window.addEventListener("message", onMessage);

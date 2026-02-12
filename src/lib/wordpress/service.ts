@@ -11,7 +11,31 @@ export async function getPostSlugs(first = 500) {
     `query GetPostSlugs($first: Int = 500) {
       posts(first: $first) {
         nodes {
+          excerpt
           slug
+          title
+          date
+          author {
+            node {
+              id
+              name
+            }
+          }
+          tags {
+            nodes {
+              id
+              name
+            }
+          }
+          categories {
+            nodes {
+              id
+              name
+            }
+          }
+          localization {
+            language
+          }
         }
       }
     }`,
