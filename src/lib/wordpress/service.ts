@@ -5,6 +5,27 @@ import path from "path";
 import sharp from "sharp";
 import { fetchAPI } from "./base";
 
+// Get post slugs only (lightweight for generateStaticParams)
+export async function getPostSlugs(first = 500) {
+  const data = await fetchAPI(
+    `query GetPostSlugs($first: Int = 500) {
+      posts(first: $first) {
+        nodes {
+          slug
+        }
+      }
+    }`,
+    {
+      variables: { first },
+    }
+  ).catch((error) => {
+    console.error("Error fetching post slugs", error);
+    return { posts: { nodes: [] } };
+  });
+
+  return data?.posts?.nodes ?? [];
+}
+
 // Get all english posts
 export async function getPosts(first = 500) {
   const data = await fetchAPI(

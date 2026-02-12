@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next"
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://getconch.ai'),
   title: "Conch AI - Your Undetectable AI Essay Writing and Research Assistant",
   description: "Access every AI school tool in one to enhance your writing and research, without the busywork. Write, cite, and edit research papers, generate mind maps, notes, and flashcards from anything, or check for and bypass AI detection by humanizing your text.",
   icons: {
@@ -242,11 +243,13 @@ export default function RootLayout({
 
         {/* Facebook Pixel NoScript */}
         <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             height="1"
             width="1"
             style={{ display: "none" }}
             src="https://www.facebook.com/tr?id=719668830191155&ev=PageView&noscript=1"
+            alt=""
           />
         </noscript>
       </head>

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPostsByLanguage } from "@/lib/wordpress/service";
+import { getPostSlugs } from "@/lib/wordpress/service";
 
 const BASE_URL = "https://www.getconch.ai";
 
@@ -33,11 +33,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic blog post routes
   let blogRoutes: MetadataRoute.Sitemap = [];
   try {
-    const posts = await getPostsByLanguage(500);
+    const posts = await getPostSlugs(500);
     blogRoutes = (posts ?? []).map(
-      (post: { slug: string; date?: string }) => ({
+      (post: { slug: string }) => ({
         url: `${BASE_URL}/blogs/${post.slug}`,
-        lastModified: post.date ? new Date(post.date) : new Date(),
+        lastModified: new Date(),
         changeFrequency: "weekly" as const,
         priority: 0.6,
       }),

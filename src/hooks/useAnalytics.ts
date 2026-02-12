@@ -2,17 +2,25 @@ import { useEffect, useCallback } from 'react';
 
 declare global {
   interface Window {
-    mixpanel?: any;
-    gtag?: (...args: any[]) => void;
-    fbq?: (...args: any[]) => void;
-    ttq?: any;
-    twq?: (...args: any[]) => void;
-    rdt?: (...args: any[]) => void;
-    uetq?: any[];
-    trackFirebaseEvent?: (eventName: string, eventData?: any) => void;
+    mixpanel?: {
+      init: (token: string, config?: Record<string, unknown>) => void;
+      track: (eventName: string, properties?: Record<string, unknown>) => void;
+      [key: string]: unknown;
+    };
+    gtag?: (...args: unknown[]) => void;
+    fbq?: (...args: unknown[]) => void;
+    ttq?: {
+      page: () => void;
+      track: (...args: unknown[]) => void;
+      [key: string]: unknown;
+    };
+    twq?: (...args: unknown[]) => void;
+    rdt?: (...args: unknown[]) => void;
+    uetq?: unknown[];
+    trackFirebaseEvent?: (eventName: string, eventData?: Record<string, unknown>) => void;
     mixpanelHelpers?: {
-      track: (eventName: string, eventProperties?: any) => void;
-      trackDelayed: (eventName: string, eventProperties?: any, delay?: number) => Promise<void>;
+      track: (eventName: string, eventProperties?: Record<string, unknown>) => void;
+      trackDelayed: (eventName: string, eventProperties?: Record<string, unknown>, delay?: number) => Promise<void>;
       trackPageView: (pageName?: string) => Promise<void>;
     };
   }
@@ -61,7 +69,7 @@ export const useAnalytics = () => {
   }, []);
 
   // Track custom events
-  const trackEvent = useCallback((eventName: string, eventProperties: any = {}) => {
+  const trackEvent = useCallback((eventName: string, eventProperties: Record<string, unknown> = {}) => {
     // Mixpanel
     if (window.mixpanelHelpers) {
       window.mixpanelHelpers.track(eventName, eventProperties);

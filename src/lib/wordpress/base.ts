@@ -28,7 +28,7 @@ export async function fetchAPI(
         query,
         variables,
       }),
-      cache: "no-store", // Disable caching to avoid 2MB limit error
+      cache: "force-cache",
     });
 
     if (!res.ok) {

@@ -1,4 +1,4 @@
-import { getPostBySlug, getPostsByLanguage } from "@/lib/wordpress/service";
+import { getPostBySlug, getPostSlugs } from "@/lib/wordpress/service";
 import { notFound } from "next/navigation";
 import BlogPostPage from "./BlogPostPage";
 
@@ -11,7 +11,7 @@ export const revalidate = 360;
 // Generate static params for all posts
 export async function generateStaticParams() {
   try {
-    const posts = await getPostsByLanguage(500);
+    const posts = await getPostSlugs(500);
     
     if (!posts || posts.length === 0) {
       return [];

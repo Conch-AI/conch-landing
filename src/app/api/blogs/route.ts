@@ -1,9 +1,6 @@
 import { getAllCategories, getPostsByLanguage } from "@/lib/wordpress/service";
 import { NextResponse } from "next/server";
 
-// Disable caching for this route due to large response size
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function GET() {
   try {
