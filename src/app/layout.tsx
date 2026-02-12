@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../app/styles/globals.css";
 import { ClientProviders } from "./providers";
 import { SessionProvider } from "@/context/SessionContext";
+import { Analytics } from "@vercel/analytics/next"
 
 
 export const metadata: Metadata = {
@@ -44,6 +45,7 @@ export default function RootLayout({
         <ClientProviders>
           <SessionProvider>{children}</SessionProvider>
         </ClientProviders>
+        <Analytics />
       </body>
     </html>
   );
