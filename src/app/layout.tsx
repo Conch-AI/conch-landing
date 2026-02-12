@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../app/styles/globals.css";
 import { ClientProviders } from "./providers";
+import { SessionProvider } from "@/context/SessionContext";
 
 export const metadata: Metadata = {
   title: "Conch AI - Free AI Tools",
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ClientProviders>{children}</ClientProviders>
+        <ClientProviders>
+          <SessionProvider>{children}</SessionProvider>
+        </ClientProviders>
       </body>
     </html>
   );

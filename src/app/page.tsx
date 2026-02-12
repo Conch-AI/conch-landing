@@ -10,32 +10,18 @@ import PricingFeature from "@/app/components/features/PricingFeature";
 import { Button } from "@/app/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  FileText,
-  Layers,
-  Lightbulb,
   Menu,
   Moon,
-  Shield,
   Sun,
-  Wand2,
   X,
   Zap
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useSession } from "@/context/SessionContext";
+import Navbar, { FeatureType, navigation } from "./components/navbar";
 
-type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "blog" | "pricing" | "chat";
-
-const navigation = [
-  { name: "Simplify", feature: "simplify" as FeatureType, icon: Wand2 },
-  { name: "Stealth Mode", feature: "stealth" as FeatureType, icon: Shield },
-  { name: "Mindmaps", feature: "mindmaps" as FeatureType, icon: Lightbulb },
-  { name: "Flashcards", feature: "flashcards" as FeatureType, icon: Layers },
-  { name: "Notes", feature: "notes" as FeatureType, icon: FileText },
-];
-
-// Placeholder components for features not yet implemented
 const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
   <div className="flex h-full flex-col items-center justify-center bg-background text-foreground">
     <div className="text-center">
@@ -52,30 +38,26 @@ const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
 
 const CheckerPage = () => {
   const router = useRouter();
+  const { session } = useSession();
+  console.log("session", session);
   const mainContentRef = useRef<HTMLElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isCollapsed] = useState(false);
   const [activeFeature, setActiveFeature] = useState<FeatureType>("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Initialize theme from localStorage or system preference
   useEffect(() => {
-    // Force light mode - always set to false
     setIsDarkMode(false);
   }, []);
 
-  // Apply theme to document
   useEffect(() => {
-    // Force light mode - always remove dark class
     document.documentElement.classList.remove("dark");
     localStorage.setItem("checker-theme", "light");
   }, [isDarkMode]);
 
   const toggleTheme = () => {
-    // Force light mode - do nothing (keep button for UI but don't change theme)
     setIsDarkMode(false);
   };
 
-  // Scroll to top when feature changes
   useEffect(() => {
     if (mainContentRef.current) {
       mainContentRef.current.scrollTo({ top: 0, behavior: 'auto' });
@@ -115,235 +97,242 @@ const CheckerPage = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-        {/* Main Layout */}
-        <div className="flex flex-1 flex-col md:flex-row overflow-hidden bg-[#f4f3f8]">
-          {/* Sidebar - Desktop only, Mobile shows header at top */}
-          <div
-            className={cn(
-              "hidden md:flex flex-col h-full bg-[#f4f3f8] text-sidebar-foreground transition-all duration-300 rounded-tl-3xl",
-              isCollapsed ? "w-12" : "w-24"
-            )}
-          >
-            <div className="p-4 flex items-center justify-center">
-              <div 
-                onClick={() => setActiveFeature("home")}
-                className="flex items-center gap-1.5 font-bold text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity pl-4 z-50"
-              >
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center">
-                  <Image
-                    alt="Logo"
-                    src={
-                      "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
-                    }
-                    width={28}
-                    height={28}
-                    className="w-7 h-7"
-                  />
-                </div>
-                <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
+      <div className="flex flex-1 flex-col md:flex-row overflow-hidden bg-[#f4f3f8]">
+        <div
+          className={cn(
+            "hidden md:flex flex-col h-full bg-[#f4f3f8] text-sidebar-foreground transition-all duration-300 rounded-tl-3xl",
+            isCollapsed ? "w-12" : "w-24"
+          )}
+        >
+          <div className="p-4 flex items-center justify-center">
+            <div
+              onClick={() => setActiveFeature("home")}
+              className="flex items-center gap-1.5 font-bold text-lg text-foreground cursor-pointer hover:opacity-80 transition-opacity pl-4 z-50"
+            >
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center">
+                <Image
+                  alt="Logo"
+                  src={
+                    "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
+                  }
+                  width={28}
+                  height={28}
+                  className="w-7 h-7"
+                />
               </div>
+              <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
+            </div>
+          </div>
+
+          <Navbar activeFeature={activeFeature} setActiveFeature={setActiveFeature} />
+
+          {isCollapsed && (
+            <div className="p-2 pb-4">
+              <Button
+                onClick={() => router.push("/pricing")}
+                size="icon"
+                className="w-full bg-[#6366f1] hover:bg-[#5558e3] text-white"
+              >
+                <Zap className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <header className="md:hidden bg-[#f4f3f8] px-3 py-3 flex items-center justify-between shrink-0 border-b border-gray-200/50">
+            <div
+              onClick={() => setActiveFeature("home")}
+              className="flex items-center gap-1.5 font-bold text-base text-foreground cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              <div className="w-6 h-6 rounded-lg flex items-center justify-center">
+                <Image
+                  alt="Logo"
+                  src={
+                    "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
+                  }
+                  width={24}
+                  height={24}
+                  className="w-6 h-6"
+                />
+              </div>
+              <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
             </div>
 
-            <div className="flex-1 md:flex-none overflow-y-auto overflow-x-hidden py-2">
-              <nav className="px-1.5 flex flex-col space-y-1">
-                {navigation.map((item) => {
+            <div className="flex items-center gap-2">
+              <span onClick={() => setActiveFeature("pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                Pricing
+              </span>
+              <span onClick={() => router.push("/blogs")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                Blog
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-8 w-8"
+              >
+                {mobileMenuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
+              </Button>
+            </div>
+
+            {mobileMenuOpen && (
+              <div className="absolute top-full right-4 mt-1 z-50 bg-white rounded-xl border border-border shadow-lg p-3 flex flex-col gap-2 min-w-[200px]">
+                {session?.isLoggedIn && (
+                  <div className="flex flex-col gap-1 pb-2 border-b border-gray-100 mb-1">
+                    <div className="flex items-center gap-2 px-2">
+
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-medium text-xs border border-gray-200">
+                        {session.displayName?.charAt(0) || session.email?.charAt(0) || "U"}
+                      </div>
+
+                      <div className="flex flex-col overflow-hidden">
+                        <span className="font-medium text-sm text-gray-900 truncate">{session.displayName}</span>
+                        <span className="text-xs text-gray-500 truncate">{session.email}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleTheme}
+                  className="justify-start text-gray-600 hover:text-gray-900 h-8 text-[12px]"
+                >
+                  {isDarkMode ? <Sun className="h-3.5 w-3.5 mr-2" /> : <Moon className="h-3.5 w-3.5 mr-2" />}
+                  {isDarkMode ? "Light Mode" : "Dark Mode"}
+                </Button>
+
+                {session?.isLoggedIn ? (
+                  <Button
+                    variant="default"
+                    className="text-[13px] h-9 w-full bg-primary hover:opacity-90 shadow-sm"
+                    onClick={() => router.push("https://app.getconch.ai")}
+                  >
+                    Go to App
+                  </Button>
+                ) : (
+                  <>
+                    <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
+                      Sign In
+                    </Button>
+                    <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
+                      Upgrade Now
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
+          </header>
+
+          <header className="hidden md:flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
+            <div className="flex items-center gap-7 pl-5 text-[13.5px]">
+              <span onClick={() => setActiveFeature("pricing")} className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
+                Pricing
+              </span>
+              <span
+                onClick={() => router.push("/blogs")}
+                className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
+              >
+                Blog
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9 w-9"
+              >
+                {isDarkMode ? (
+                  <Sun className="h-4.5 w-4.5" />
+                ) : (
+                  <Moon className="h-4.5 w-4.5" />
+                )}
+              </Button>
+              {session?.isLoggedIn ? (
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 mr-1">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-medium text-xs border border-gray-200">
+                      {session.displayName?.charAt(0) || session.email?.charAt(0) || "U"}
+                    </div>
+                    <div className="hidden lg:flex flex-col text-xs">
+                      <span className="font-medium text-gray-900">{session.displayName}</span>
+                      <span className="text-gray-500 max-w-[150px] truncate">{session.email}</span>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => router.push("https://app.getconch.ai")}
+                    variant="default"
+                    className="text-[13px] px-4 py-1.5 h-9 bg-primary hover:opacity-90 transition-opacity shadow-sm"
+                  >
+                    Go to App
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => router.push("https://app.getconch.ai/sign-up")}
+                    variant="outline"
+                    className="text-[13px] px-4 py-1.5 h-9"
+                  >
+                    Sign In
+                  </Button>
+                  <Button onClick={() => setActiveFeature("pricing")} variant="default" className="text-[13px] px-4 py-1.5 h-9">
+                    Upgrade Now
+                  </Button>
+                </>
+              )}
+            </div>
+          </header>
+
+          <main ref={mainContentRef} className="flex-1 overflow-auto rounded-3xl md:rounded-3xl pb-16 md:pb-0">
+            {renderFeature()}
+          </main>
+
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-border shadow-[0_-4px_16px_rgba(0,0,0,0.08)] z-40">
+            <div className="flex items-center justify-around px-1 pb-safe pt-1">
+              {navigation.map((item) => {
                 const isActive = activeFeature === item.feature;
                 return (
                   <button
                     key={item.name}
                     onClick={() => setActiveFeature(item.feature)}
-                    className="group w-full flex flex-col items-center gap-1 px-2 py-3 text-[11px] rounded-xl transition-all relative"
+                    className="flex flex-col items-center justify-center gap-1 px-2 py-2.5 min-w-0 flex-1 transition-all relative"
                   >
-                      <div className={cn(
-                        "w-11 h-11 rounded-xl flex items-center justify-center transition-all",
-                        isActive
-                          ? "bg-white shadow-sm"
-                          : "bg-transparent group-hover:bg-white/50"
-                      )}>
-                        <item.icon
+                    <div className={cn(
+                      "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                      isActive
+                        ? "bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] shadow-md"
+                        : "bg-transparent"
+                    )}>
+                      <item.icon
                         className={cn(
                           "w-5 h-5 shrink-0 transition-colors",
                           isActive
-                            ? "text-[#6366f1]"
-                            : "text-gray-500 group-hover:text-[#6366f1]"
+                            ? "text-white"
+                            : "text-gray-500"
                         )}
                       />
-                      </div>
-                      <span className={cn(
-                        "transition-colors text-center leading-tight text-gray-900",
-                        isActive
-                          ? "font-medium"
-                          : "font-normal"
-                      )}>
-                        {item.name}
-                      </span>
-                    </button>
-                  );
-                })}
-              </nav>
+                    </div>
+                    <span className={cn(
+                      "text-[10px] transition-colors text-center leading-tight truncate w-full max-w-[60px]",
+                      isActive
+                        ? "font-semibold text-[#6366f1]"
+                        : "font-normal text-gray-500"
+                    )}>
+                      {item.name}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-
-            {isCollapsed && (
-              <div className="p-2 pb-4">
-                <Button
-                  onClick={() => router.push("/pricing")}
-                  size="icon"
-                  className="w-full bg-[#6366f1] hover:bg-[#5558e3] text-white"
-                >
-                  <Zap className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Main Content Area */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Top Header - Mobile only */}
-            <header className="md:hidden bg-[#f4f3f8] px-3 py-3 flex items-center justify-between shrink-0 border-b border-gray-200/50">
-              <div 
-                onClick={() => setActiveFeature("home")}
-                className="flex items-center gap-1.5 font-bold text-base text-foreground cursor-pointer hover:opacity-80 transition-opacity"
-              >
-                <div className="w-6 h-6 rounded-lg flex items-center justify-center">
-                  <Image
-                    alt="Logo"
-                    src={
-                      "https://framerusercontent.com/images/A9DsIoq6hkJgbGBX8cIcdcQcNk.png?scale-down-to=512"
-                    }
-                    width={24}
-                    height={24}
-                    className="w-6 h-6"
-                  />
-                </div>
-                <span className="bg-gradient-to-r from-[#8b5cf6] to-[#6366f1] bg-clip-text text-transparent">Conch</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span onClick={() => setActiveFeature("pricing")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
-                  Pricing
-                </span>
-                <span onClick={() => router.push("/blogs")} className="text-[13px] text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
-                  Blog
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-8 w-8"
-                >
-                  {mobileMenuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
-                </Button>
-              </div>
-
-              {/* Mobile dropdown menu */}
-              {mobileMenuOpen && (
-                <div className="absolute top-full right-4 mt-1 z-50 bg-white rounded-xl border border-border shadow-lg p-3 flex flex-col gap-2 min-w-[180px]">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={toggleTheme}
-                    className="justify-start text-gray-600 hover:text-gray-900 h-8 text-[12px]"
-                  >
-                    {isDarkMode ? <Sun className="h-3.5 w-3.5 mr-2" /> : <Moon className="h-3.5 w-3.5 mr-2" />}
-                    {isDarkMode ? "Light Mode" : "Dark Mode"}
-                  </Button>
-                  <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
-                    Sign In
-                  </Button>
-                  <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
-                    Upgrade Now
-                  </Button>
-                </div>
-              )}
-            </header>
-
-            {/* Top Navigation — desktop only */}
-            <header className="hidden md:flex h-14 items-center justify-between bg-[#f4f3f8] px-7 shrink-0">
-              <div className="flex items-center gap-7 pl-5 text-[13.5px]">
-                <span onClick={() => setActiveFeature("pricing")} className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors">
-                  Pricing
-                </span>
-                <span
-                  onClick={() => router.push("/blogs")}
-                  className=" text-gray-600 hover:text-[#6366f1] cursor-pointer transition-colors"
-                >
-                  Blog
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTheme}
-                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9 w-9"
-                >
-                  {isDarkMode ? (
-                    <Sun className="h-4.5 w-4.5" />
-                  ) : (
-                    <Moon className="h-4.5 w-4.5" />
-                  )}
-                </Button>
-                <Button
-                onClick={() => router.push("https://app.getconch.ai/sign-up")}
-                  variant="outline"
-                  className="text-[13px] px-4 py-1.5 h-9"
-                >
-                  Sign In
-                </Button>
-                <Button onClick={() => setActiveFeature("pricing")} variant="default" className="text-[13px] px-4 py-1.5 h-9">
-                  Upgrade Now
-                </Button>
-              </div>
-            </header>
-
-            {/* Main Content */}
-            <main ref={mainContentRef} className="flex-1 overflow-auto rounded-3xl md:rounded-3xl pb-16 md:pb-0">
-              {renderFeature()}
-            </main>
-
-            {/* Bottom Navigation Bar - Mobile only */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-border shadow-[0_-4px_16px_rgba(0,0,0,0.08)] z-40">
-              <div className="flex items-center justify-around px-1 pb-safe pt-1">
-                {navigation.map((item) => {
-                  const isActive = activeFeature === item.feature;
-                  return (
-                    <button
-                      key={item.name}
-                      onClick={() => setActiveFeature(item.feature)}
-                      className="flex flex-col items-center justify-center gap-1 px-2 py-2.5 min-w-0 flex-1 transition-all relative"
-                    >
-                      <div className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                        isActive
-                          ? "bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] shadow-md"
-                          : "bg-transparent"
-                      )}>
-                        <item.icon
-                          className={cn(
-                            "w-5 h-5 shrink-0 transition-colors",
-                            isActive
-                              ? "text-white"
-                              : "text-gray-500"
-                          )}
-                        />
-                      </div>
-                      <span className={cn(
-                        "text-[10px] transition-colors text-center leading-tight truncate w-full max-w-[60px]",
-                        isActive
-                          ? "font-semibold text-[#6366f1]"
-                          : "font-normal text-gray-500"
-                      )}>
-                        {item.name}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </nav>
-          </div>
+          </nav>
         </div>
       </div>
+    </div>
   );
 };
 
