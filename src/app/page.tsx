@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSession } from "@/context/SessionContext";
 import FeatureNavbar, { FeatureType, navigation } from "./components/FeatureNavbar";
 import { API_BASE_URL } from "@/config";
+import { usePageTracking } from "@/hooks/useAnalytics";
 
 const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
   <div className="flex h-full flex-col items-center justify-center bg-background text-foreground">
@@ -63,6 +64,9 @@ const CheckerPage = () => {
       mainContentRef.current.scrollTo({ top: 0, behavior: 'auto' });
     }
   }, [activeFeature]);
+
+  // Track page view with optimized Next.js analytics
+  usePageTracking("/");
 
   const renderFeature = () => {
     switch (activeFeature) {
