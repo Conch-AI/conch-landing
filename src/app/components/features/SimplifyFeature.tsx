@@ -25,13 +25,16 @@ import {
 import Image from "next/image";
 import { useRef, useState } from "react";
 import SignupModal from "../SignupModal";
-import { useAppContext } from "@/context/AppContext";
+import { useAppContext } from "@/context/AppContext"; 
+import { Session } from "@/context/SessionContext";
 
 interface SimplifyFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session;
+  handleLoggedIn: () => void;
 }
 
-const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
+const SimplifyFeature = ({ onFeatureSelect, session, handleLoggedIn }: SimplifyFeatureProps) => {
   const { checkLimit, incrementUsage } = useAppContext();
   const [query, setQuery] = useState("");
   const [showSignupModal, setShowSignupModal] = useState(false);
@@ -65,6 +68,10 @@ const SimplifyFeature = ({ onFeatureSelect }: SimplifyFeatureProps = {}) => {
   ];
 
   const handleSimplify = async (inputQuery?: string) => {
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
     const textToSimplify = inputQuery || query;
     if (!textToSimplify.trim()) return;
 

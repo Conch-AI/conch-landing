@@ -11,8 +11,6 @@ import { Button } from "@/app/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Menu,
-  Moon,
-  Sun,
   X,
   Zap
 } from "lucide-react";
@@ -41,22 +39,23 @@ const CheckerPage = () => {
   const { session } = useSession();
   console.log("session", session);
   const mainContentRef = useRef<HTMLElement>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode] = useState(false);
   const [isCollapsed] = useState(false);
   const [activeFeature, setActiveFeature] = useState<FeatureType>("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  useEffect(() => {
-    setIsDarkMode(false);
-  }, []);
+
+  function handleLoggedIn() {
+    if (session?.isLoggedIn) {
+      router.push("https://app.getconch.ai");
+    }
+  }
 
   useEffect(() => {
     document.documentElement.classList.remove("dark");
     localStorage.setItem("checker-theme", "light");
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    setIsDarkMode(false);
-  };
+  
 
   useEffect(() => {
     if (mainContentRef.current) {
@@ -73,15 +72,15 @@ const CheckerPage = () => {
           />
         );
       case "simplify":
-        return <SimplifyFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
+        return <SimplifyFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "stealth":
-        return <StealthFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
+        return <StealthFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "mindmaps":
-        return <MindmapsFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
+        return <MindmapsFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "flashcards":
-        return <FlashcardsFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
+        return <FlashcardsFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "notes":
-        return <NotesFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />
+        return <NotesFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />
       case "pricing":
         return <PricingFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "chat":
@@ -194,7 +193,7 @@ const CheckerPage = () => {
                   </div>
                 )}
 
-                <Button
+                {/* <Button
                   variant="ghost"
                   size="sm"
                   onClick={toggleTheme}
@@ -202,7 +201,7 @@ const CheckerPage = () => {
                 >
                   {isDarkMode ? <Sun className="h-3.5 w-3.5 mr-2" /> : <Moon className="h-3.5 w-3.5 mr-2" />}
                   {isDarkMode ? "Light Mode" : "Dark Mode"}
-                </Button>
+                </Button> */}
 
                 {session?.isLoggedIn ? (
                   <Button
@@ -240,7 +239,7 @@ const CheckerPage = () => {
             </div>
 
             <div className="flex items-center gap-2.5">
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
@@ -251,7 +250,7 @@ const CheckerPage = () => {
                 ) : (
                   <Moon className="h-4.5 w-4.5" />
                 )}
-              </Button>
+              </Button> */}
               {session?.isLoggedIn ? (
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 mr-1">

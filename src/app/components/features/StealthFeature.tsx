@@ -31,6 +31,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Session } from "@/context/SessionContext";
 
 // Score constants
 const RED_SCORE_MAX = 25;
@@ -43,9 +44,11 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface StealthFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session;
+  handleLoggedIn: () => void;
 }
 
-const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
+const StealthFeature = ({ onFeatureSelect, session, handleLoggedIn }: StealthFeatureProps) => {
   const { checkLimit, incrementUsage } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isHumanizing, setIsHumanizing] = useState(false);
@@ -139,6 +142,11 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
   const handleDetectAI = async () => {
     const text = editor?.getText() || "";
     if (!text.trim()) return;
+
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
 
     if (!checkLimit("stealth")) {
       setShowSignupModal(true);
@@ -544,7 +552,13 @@ const StealthFeature = ({ onFeatureSelect }: StealthFeatureProps = {}) => {
 
                   <div className="flex items-center gap-1.5 ml-auto">
                     <button
-                      onClick={() => setShowSignupModal(true)}
+                      onClick={() => {
+                        if (session?.isLoggedIn) {
+                          handleLoggedIn();
+                        } else {
+                          setShowSignupModal(true);
+                        }
+                      }}
                       className="hidden md:flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                     >
                       <FileUp className="w-3.5 h-3.5" />

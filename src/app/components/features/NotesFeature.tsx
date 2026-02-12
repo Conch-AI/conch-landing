@@ -37,14 +37,17 @@ import {
 import { useRef, useState } from "react";
 import SignupModal from "../SignupModal";
 import { useAppContext } from "@/context/AppContext";
+import { Session } from "@/context/SessionContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface NotesFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session;
+  handleLoggedIn: () => void;
 }
 
-const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
+const     NotesFeature = ({ onFeatureSelect, session, handleLoggedIn }: NotesFeatureProps) => {
   const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -142,6 +145,11 @@ const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
 
   const generateNotes = async () => {
     if (!inputText.trim()) return;
+
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
 
     if (!checkLimit("condensedNotes")) {
       setShowSignupModal(true);
@@ -379,7 +387,13 @@ const NotesFeature = ({ onFeatureSelect }: NotesFeatureProps = {}) => {
                       Paste text
                     </button>
                     <button
-                      onClick={() => setShowSignupModal(true)}
+                      onClick={() => {
+                        if (session?.isLoggedIn) {
+                          handleLoggedIn();
+                        } else {
+                          setShowSignupModal(true);
+                        }
+                      }}
                       className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                     >
                       <Upload className="w-3.5 h-3.5" />

@@ -42,19 +42,18 @@ function isSessionData(data: unknown): data is Session {
         typeof data === "object" &&
         data !== null &&
         "isLoggedIn" in data &&
-        typeof (data as Session).isLoggedIn === "boolean"
+        typeof (data as Session).isLoggedIn === "boolean" &&
+        // Ensure optional fields are either string or undefined
+        (typeof (data as Session).email === "string" || (data as Session).email === undefined) &&
+        (typeof (data as Session).displayName === "string" || (data as Session).displayName === undefined) &&
+        (typeof (data as Session).photoURL === "string" || (data as Session).photoURL === undefined)
     );
 }
 
 export const SessionProvider: React.FC<Props> = ({ children }) => {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const iframeLoaded = useRef(false);
-    const [session, setSession] = useState<Session | null>({
-        isLoggedIn: true,
-        email: "pradeepkundekar1010@gmail.com",
-        displayName: "Pradeep Kundekar",
-        photoURL: "https://lh3.googleusercontent.com/a/ACg8ocIq8d8888888888888888888888888888888888888888888888888888888=s96-c"
-    });
+    const [session, setSession] = useState<Session | null>(null);
 
     const appOrigin = appOrigins[Config.environment];
     const iframeSrc = `${appOrigin}${SESSION_BRIDGE_PATH}`;
@@ -85,7 +84,20 @@ export const SessionProvider: React.FC<Props> = ({ children }) => {
                 return;
             }
 
-            setSession(e.data);
+            // Sanitise: treat null, empty strings, and the literal "undefined" as missing
+            const clean = (v: unknown): string | undefined =>
+                typeof v === "string" && v !== "" && v !== "undefined" && v !== "null"
+                    ? v
+                    : undefined;
+
+            const sessionData: Session = {
+                isLoggedIn: e.data.isLoggedIn,
+                email: clean(e.data.email),
+                displayName: clean(e.data.displayName),
+                photoURL: clean(e.data.photoURL),
+            };
+
+            setSession(sessionData);
         };
 
         window.addEventListener("message", onMessage);

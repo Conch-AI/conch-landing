@@ -120,6 +120,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { RiStarSFill } from "react-icons/ri";
 import SignupModal from "../SignupModal";
 import { useAppContext } from "@/context/AppContext";
+import { Session } from "@/context/SessionContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -214,9 +215,11 @@ const MindmapCanvas = ({
 
 interface MindmapsFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session;
+  handleLoggedIn: () => void;
 }
 
-const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
+const MindmapsFeature = ({ onFeatureSelect, session, handleLoggedIn }: MindmapsFeatureProps) => {
   const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -248,6 +251,11 @@ const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
 
   const generateMindmap = async () => {
     if (!inputText.trim()) return;
+
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
 
     if (!checkLimit("mindMaps")) {
       setShowSignupModal(true);
@@ -402,7 +410,13 @@ const MindmapsFeature = ({ onFeatureSelect }: MindmapsFeatureProps = {}) => {
                       Paste text
                     </button>
                     <button
-                      onClick={() => setShowSignupModal(true)}
+                      onClick={() => {
+                        if (session?.isLoggedIn) {
+                          handleLoggedIn();
+                        } else {
+                          setShowSignupModal(true);
+                        }
+                      }}
                       className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                     >
                       <Upload className="w-3.5 h-3.5" />

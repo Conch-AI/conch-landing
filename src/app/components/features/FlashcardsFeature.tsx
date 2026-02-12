@@ -35,6 +35,7 @@ import { FaRegStar, FaShapes, FaStar } from "react-icons/fa";
 import { RiRestartLine, RiShuffleLine } from "react-icons/ri";
 import SignupModal from "../SignupModal";
 import { useAppContext } from "@/context/AppContext";
+import { Session } from "@/context/SessionContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -164,9 +165,11 @@ const PracticeIconButton = ({
 
 interface FlashcardsFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session; 
+  handleLoggedIn: () => void;
 }
 
-const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => {
+const FlashcardsFeature = ({ onFeatureSelect, session, handleLoggedIn }: FlashcardsFeatureProps) => {
   const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -200,6 +203,11 @@ const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => 
 
   const generateFlashcards = async () => {
     if (!inputText.trim()) return;
+
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
 
     if (!checkLimit("flashcards")) {
       setShowSignupModal(true);
@@ -724,7 +732,13 @@ const FlashcardsFeature = ({ onFeatureSelect }: FlashcardsFeatureProps = {}) => 
                         Paste text
                       </button>
                       <button
-                        onClick={() => setShowSignupModal(true)}
+                        onClick={() => {
+                          if (session?.isLoggedIn) {
+                            handleLoggedIn();
+                          } else {
+                            setShowSignupModal(true);
+                          }
+                        }}
                         className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                       >
                         <Upload className="w-3.5 h-3.5" />
