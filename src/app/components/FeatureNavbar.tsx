@@ -17,7 +17,7 @@ export const navigation = [
     { name: "Flashcards", feature: "flashcards" as FeatureType, icon: Layers },
     { name: "Notes", feature: "notes" as FeatureType, icon: FileText },
 ];
-const Navbar = ({ activeFeature, setActiveFeature }: { activeFeature: FeatureType, setActiveFeature: (feature: FeatureType) => void }) => {
+const FeatureNavbar = ({ activeFeature, setActiveFeature }: { activeFeature: FeatureType, setActiveFeature: (feature: FeatureType) => void }) => {
 
 
     return (
@@ -62,4 +62,4 @@ const Navbar = ({ activeFeature, setActiveFeature }: { activeFeature: FeatureTyp
     )
 }
 
-export default Navbar
+export default FeatureNavbar;

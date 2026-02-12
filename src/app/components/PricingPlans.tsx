@@ -4,11 +4,13 @@ import { Check } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/app/ui/button";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/config";
 
 interface PricingPlansProps {
   showHeader?: boolean;
   onUpgrade?: (planId: string, price: number) => void;
 }
+
 
 const PricingPlans = ({ showHeader = true, onUpgrade }: PricingPlansProps) => {
   const [selectedPlan, setSelectedPlan] = useState<"yearly" | "quarterly" | "monthly">("yearly");
@@ -60,7 +62,7 @@ const PricingPlans = ({ showHeader = true, onUpgrade }: PricingPlansProps) => {
    
     const plan = billingPlans.find(p => p.id === selectedPlan);
 
-    router.push("http://localhost:3000/pricing?plan=" + plan?.id);
+    router.push(API_BASE_URL + "/pricing?plan=" + plan?.id);
     if (plan && onUpgrade) {
       onUpgrade(plan.id, plan.price);
     }

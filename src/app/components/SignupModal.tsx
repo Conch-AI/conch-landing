@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "@/config";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -20,7 +21,7 @@ const SignupModal = ({ isOpen, onClose, onSignup, content }: SignupModalProps) =
     if (onSignup) {
       onSignup();
     }
-    router.push("https://app.getconch.ai/sign-up");
+    router.push(API_BASE_URL + "/sign-up");
   };
 
   return (

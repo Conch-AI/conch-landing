@@ -18,7 +18,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "@/context/SessionContext";
-import Navbar, { FeatureType, navigation } from "./components/navbar";
+import FeatureNavbar, { FeatureType, navigation } from "./components/FeatureNavbar";
+import { API_BASE_URL } from "@/config";
 
 const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
   <div className="flex h-full flex-col items-center justify-center bg-background text-foreground">
@@ -46,7 +47,7 @@ const CheckerPage = () => {
 
   function handleLoggedIn() {
     if (session?.isLoggedIn) {
-      router.push("https://app.getconch.ai");
+      router.push(API_BASE_URL);
     }
   }
 
@@ -123,7 +124,7 @@ const CheckerPage = () => {
             </div>
           </div>
 
-          <Navbar activeFeature={activeFeature} setActiveFeature={setActiveFeature} />
+          <FeatureNavbar activeFeature={activeFeature} setActiveFeature={setActiveFeature} />
 
           {isCollapsed && (
             <div className="p-2 pb-4">
@@ -193,21 +194,11 @@ const CheckerPage = () => {
                   </div>
                 )}
 
-                {/* <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleTheme}
-                  className="justify-start text-gray-600 hover:text-gray-900 h-8 text-[12px]"
-                >
-                  {isDarkMode ? <Sun className="h-3.5 w-3.5 mr-2" /> : <Moon className="h-3.5 w-3.5 mr-2" />}
-                  {isDarkMode ? "Light Mode" : "Dark Mode"}
-                </Button> */}
-
                 {session?.isLoggedIn ? (
                   <Button
                     variant="default"
                     className="text-[13px] h-9 w-full bg-primary hover:opacity-90 shadow-sm"
-                    onClick={() => router.push("https://app.getconch.ai")}
+                    onClick={() => router.push(API_BASE_URL)}
                   >
                     Go to App
                   </Button>
@@ -239,18 +230,6 @@ const CheckerPage = () => {
             </div>
 
             <div className="flex items-center gap-2.5">
-              {/* <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9 w-9"
-              >
-                {isDarkMode ? (
-                  <Sun className="h-4.5 w-4.5" />
-                ) : (
-                  <Moon className="h-4.5 w-4.5" />
-                )}
-              </Button> */}
               {session?.isLoggedIn ? (
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 mr-1">
@@ -263,7 +242,7 @@ const CheckerPage = () => {
                     </div>
                   </div>
                   <Button
-                    onClick={() => router.push("https://app.getconch.ai")}
+                    onClick={() => router.push(API_BASE_URL)}
                     variant="default"
                     className="text-[13px] px-4 py-1.5 h-9 bg-primary hover:opacity-90 transition-opacity shadow-sm"
                   >
@@ -273,7 +252,7 @@ const CheckerPage = () => {
               ) : (
                 <>
                   <Button
-                    onClick={() => router.push("https://app.getconch.ai/sign-up")}
+                    onClick={() => router.push(API_BASE_URL + "/sign-up")}
                     variant="outline"
                     className="text-[13px] px-4 py-1.5 h-9"
                   >
