@@ -21,6 +21,8 @@ export type CheckerFeature =
   | "mindmaps"
   | "flashcards"
   | "notes"
+  | "blog"
+  | "pricing"
   | "chat";
 
 interface CheckerSidebarProps {

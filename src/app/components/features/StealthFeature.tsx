@@ -1,6 +1,9 @@
 "use client";
 
 import Footer from "@/app/components/ui/Footer";
+import SignupModal from "@/app/components/SignupModal";
+import { useAppContext } from "@/context/AppContext";
+import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import { Detectors, ModeOptions, ModeTooltips, STEALTH_SAMPLE_TEXT } from "@/app/components/stealth/data";
@@ -28,6 +31,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Session } from "@/context/SessionContext";
 
 // Score constants
 const RED_SCORE_MAX = 25;
@@ -38,7 +42,14 @@ const GREEN_HIGHLIGHT_HEX = "#5ED09A";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const StealthFeature = () => {
+interface StealthFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session;
+  handleLoggedIn: () => void;
+}
+
+const StealthFeature = ({ onFeatureSelect, session, handleLoggedIn }: StealthFeatureProps) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -48,6 +59,7 @@ const StealthFeature = () => {
   const [score, setScore] = useState<number | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [hasText, setHasText] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // TipTap editor
@@ -131,6 +143,16 @@ const StealthFeature = () => {
     const text = editor?.getText() || "";
     if (!text.trim()) return;
 
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
+
+    if (!checkLimit("stealth")) {
+      setShowSignupModal(true);
+      return;
+    }
+
     // Limit text to 5000 characters for guest endpoint
     const textToDetect = text.slice(0, 5000);
     if (text.length > 5000) {
@@ -205,6 +227,7 @@ const StealthFeature = () => {
         setScore(Math.floor(Math.random() * 50) + 20);
       }
       setCheckedForAI(true);
+      incrementUsage("stealth");
     } catch (error) {
       console.error("Error detecting AI:", error);
       setScore(Math.floor(Math.random() * 50) + 20);
@@ -223,6 +246,11 @@ const StealthFeature = () => {
   const handleHumanize = async () => {
     const text = editor?.getText() || "";
     if (!text.trim()) return;
+
+    if (!checkLimit("stealth")) {
+      setShowSignupModal(true);
+      return;
+    }
 
     // Limit text to 2000 characters for guest endpoint
     const textToHumanize = text.slice(0, 2000);
@@ -282,6 +310,7 @@ const StealthFeature = () => {
           
           editor?.commands.setContent(paragraphs || `<p>${finalContent}</p>`);
         }
+        incrementUsage("stealth");
       } else {
         const errorText = await res.text();
         console.error("Error humanizing:", res.status, errorText);
@@ -523,7 +552,13 @@ const StealthFeature = () => {
 
                   <div className="flex items-center gap-1.5 ml-auto">
                     <button
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => {
+                        if (session?.isLoggedIn) {
+                          handleLoggedIn();
+                        } else {
+                          setShowSignupModal(true);
+                        }
+                      }}
                       className="hidden md:flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
                     >
                       <FileUp className="w-3.5 h-3.5" />
@@ -661,25 +696,19 @@ const StealthFeature = () => {
               );
             })}
           </div>
-
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
-              Get Started Free
-            </Button>
-          </div>
         </div>
       </section>
 
       {/* Feature Highlights */}
       <section className="py-18 px-6 pt-10">
-        <div className="max-w-5xl mx-auto pl-10">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-18 leading-tight">
             Humanize with confidence
           </h2>
 
           {/* Feature 1 — Bypass detectors */}
           <div className="grid md:grid-cols-2 gap-14 items-center mb-24 pt-10">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7 max-w-[270px] md:max-w-none mx-auto md:mx-0">
               <div className="flex items-center gap-2.5 mb-5">
                 <ShieldCheck className="w-4.5 h-4.5 text-green-500" />
                 <span className="text-[13px] font-medium text-green-600">All detectors bypassed</span>
@@ -693,11 +722,11 @@ const StealthFeature = () => {
                 ))}
               </div>
             </div>
-            <div>
+            <div className="max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 Bypass every AI<br />detector out there
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Our humanization engine rewrites text to pass GPTZero, Turnitin, Originality.ai, and every other major AI detection tool with a 99% success rate.
               </p>
             </div>
@@ -705,15 +734,15 @@ const StealthFeature = () => {
 
           {/* Feature 2 — Writing styles */}
           <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
-            <div className="order-2 md:order-1">
+            <div className="order-2 md:order-1 max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 9 writing styles to<br />match your voice
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Choose from Standard, Fluency, Natural, Formal, Academic, Simple, Creative, Expand, or Shorten. Each style adapts the output to fit your exact needs.
               </p>
             </div>
-            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7">
+            <div className="order-1 md:order-2 rounded-2xl bg-secondary/40 border border-border p-7 max-w-[270px] md:max-w-none mx-auto md:mx-0">
               <div className="flex flex-wrap gap-1.5">
                 {["Standard", "Fluency", "Natural", "Formal", "Academic", "Simple", "Creative", "Expand", "Shorten"].map((s, i) => (
                   <span key={s} className={`px-2.5 py-1 rounded-full text-[13px] font-medium ${i === 0 ? "bg-[#6366f1] text-[#ffffff]" : "bg-muted text-muted-foreground"}`}>
@@ -726,7 +755,7 @@ const StealthFeature = () => {
 
           {/* Feature 3 — Meaning preserved */}
           <div className="grid md:grid-cols-2 gap-14 items-center">
-            <div className="rounded-2xl bg-secondary/40 border border-border p-7">
+            <div className="rounded-2xl bg-secondary/40 border border-border p-7 max-w-[270px] md:max-w-none mx-auto md:mx-0">
               <div className="space-y-3.5">
                 <div>
                   <p className="text-[11px] text-muted-foreground mb-1.5">Original (AI-generated)</p>
@@ -739,11 +768,11 @@ const StealthFeature = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="max-w-[270px] md:max-w-md mx-auto md:mx-0">
               <h3 className="text-2xl md:text-[25px] font-medium text-foreground mb-3.5 leading-snug">
                 100% meaning<br />preserved
               </h3>
-              <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-[14px] text-muted-foreground leading-relaxed">
                 Unlike basic paraphrasers, our AI rewrites content while keeping every key idea, fact, and nuance intact. The meaning stays — only the fingerprint changes.
               </p>
             </div>
@@ -771,12 +800,6 @@ const StealthFeature = () => {
                 <p className="text-[13px] text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             ))}
-          </div>
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => editor?.commands.focus()}>
-              Get Started Free
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-            </Button>
           </div>
         </div>
       </section>
@@ -842,7 +865,14 @@ const StealthFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
+      
+      {/* Signup Modal */}
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        content="You've reached your free limit. Sign up for Conch to continue using Stealth Mode."
+      />
     </div>
   );
 };

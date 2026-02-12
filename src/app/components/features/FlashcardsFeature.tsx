@@ -1,6 +1,7 @@
 "use client";
 
 import Footer from "@/app/components/ui/Footer";
+import { CheckerFeature } from "./CheckerSidebar";
 import { Badge } from "@/app/ui/badge";
 import { Button } from "@/app/ui/button";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -32,6 +33,9 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaRegStar, FaShapes, FaStar } from "react-icons/fa";
 import { RiRestartLine, RiShuffleLine } from "react-icons/ri";
+import SignupModal from "../SignupModal";
+import { useAppContext } from "@/context/AppContext";
+import { Session } from "@/context/SessionContext";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -159,7 +163,14 @@ const PracticeIconButton = ({
   </button>
 );
 
-const FlashcardsFeature = () => {
+interface FlashcardsFeatureProps {
+  onFeatureSelect?: (feature: CheckerFeature) => void;
+  session: Session; 
+  handleLoggedIn: () => void;
+}
+
+const FlashcardsFeature = ({ onFeatureSelect, session, handleLoggedIn }: FlashcardsFeatureProps) => {
+  const { checkLimit, incrementUsage } = useAppContext();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
@@ -172,7 +183,8 @@ const FlashcardsFeature = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
@@ -191,6 +203,16 @@ const FlashcardsFeature = () => {
 
   const generateFlashcards = async () => {
     if (!inputText.trim()) return;
+
+    if (session?.isLoggedIn) {
+      handleLoggedIn();
+      return;
+    }
+
+    if (!checkLimit("flashcards")) {
+      setShowSignupModal(true);
+      return;
+    }
 
     setIsLoading(true);
     setFlashcards([]);
@@ -226,6 +248,7 @@ const FlashcardsFeature = () => {
         setHasGenerated(true);
         setCurrentCardIndex(0);
         setIsFlipped(false);
+        incrementUsage("flashcards");
       }
     } catch (error) {
       console.error("Error generating flashcards:", error);
@@ -666,6 +689,12 @@ const FlashcardsFeature = () => {
             </div>
           </section>
 
+  {/* Signup Modal */}
+  <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        content="You've reached your free limit. Sign up for Conch to continue generating flashcards."
+      />
           <section className="px-4 md:px-8 pb-10 md:pb-14 flex-1">
             <div className="max-w-5xl mx-auto">
               <div className="bg-card rounded-xl md:rounded-2xl border border-border shadow-lg overflow-hidden">
@@ -697,14 +726,20 @@ const FlashcardsFeature = () => {
                     <div className="flex items-center gap-1.5 md:gap-2">
                       <button
                         onClick={handlePaste}
-                        className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                            className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 text-[10px] md:text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                       >
                         <ClipboardIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
                         Paste text
                       </button>
                       <button
-                        onClick={() => fileInputRef.current?.click()}
-                        className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#6366f1] border border-[#6366f1]/30 rounded-full hover:bg-[#6366f1]/5 transition-colors"
+                        onClick={() => {
+                          if (session?.isLoggedIn) {
+                            handleLoggedIn();
+                          } else {
+                            setShowSignupModal(true);
+                          }
+                        }}
+                        className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#8b5cf6] border border-[#8b5cf6]/30 rounded-full hover:bg-[#8b5cf6]/5 transition-colors"
                       >
                         <Upload className="w-3.5 h-3.5" />
                         Upload file
@@ -829,7 +864,7 @@ const FlashcardsFeature = () => {
       )}
 
       {/* Who Can Use Section */}
-      <section className="py-18 px-6 pt-10">
+      <section className="py-18 px-6 lg:pt-10">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-[36px] font-medium text-center text-foreground mb-14 leading-tight">
             Who can use AI Flashcards?
@@ -851,16 +886,10 @@ const FlashcardsFeature = () => {
                     <Icon className="w-4.5 h-4.5 text-[#6366f1]" />
                   </div>
                   <h3 className="text-[14px] font-semibold text-foreground mb-1.5">{item.title}</h3>
-                  <p className="text-[13px] text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md">{item.desc}</p>
                 </div>
               );
             })}
-          </div>
-
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-            </Button>
           </div>
         </div>
       </section>
@@ -873,7 +902,7 @@ const FlashcardsFeature = () => {
           </h2>
 
           {/* Feature 1 — Auto-generated */}
-          <div className="grid md:grid-cols-2 gap-14 items-center mb-24">
+          <div className="grid md:grid-cols-2 gap-14 items-center mb-24 md:pt-10">
             <div className="rounded-2xl bg-secondary/40 border border-border p-7">
               <div className="flex items-center gap-2 text-xs text-muted-foreground mb-5">
                 <Zap className="w-4 h-4 text-[#6366f1]" />
@@ -973,12 +1002,6 @@ const FlashcardsFeature = () => {
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-12">
-            <Button variant="default" className="text-[14px] px-5 py-2" onClick={() => textareaRef.current?.focus()}>
-              Get Started Free
-              <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -1043,7 +1066,7 @@ const FlashcardsFeature = () => {
         </div>
       </section>
 
-      <Footer />
+      <Footer onFeatureSelect={onFeatureSelect as (feature: CheckerFeature) => void} />
     </div>
   );
 };
