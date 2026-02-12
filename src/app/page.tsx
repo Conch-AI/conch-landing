@@ -208,9 +208,9 @@ const CheckerPage = () => {
                   </Button>
                 ) : (
                   <>
-                    <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
+                    {/* <Button variant="outline" className="text-[13px] h-9 w-full" onClick={() => setMobileMenuOpen(false)}>
                       Sign In
-                    </Button>
+                    </Button> */}
                     <Button variant="default" className="text-[13px] h-9 w-full" onClick={() => { setActiveFeature("pricing"); setMobileMenuOpen(false); }}>
                       Upgrade Now
                     </Button>
@@ -255,13 +255,13 @@ const CheckerPage = () => {
                 </div>
               ) : (
                 <>
-                  <Button
+                  {/* <Button
                     onClick={() => router.push(API_BASE_URL + "/sign-up")}
                     variant="outline"
                     className="text-[13px] px-4 py-1.5 h-9"
                   >
                     Sign In
-                  </Button>
+                  </Button> */}
                   <Button onClick={() => setActiveFeature("pricing")} variant="default" className="text-[13px] px-4 py-1.5 h-9">
                     Upgrade Now
                   </Button>
