@@ -3,12 +3,13 @@ import {
     FileText,
     Layers,
     Lightbulb,
+    MessageSquare,
+    Mic,
     Shield,
     Wand2,
-
 } from "lucide-react";
 import { cn } from '@/lib/utils';
-export type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "blog" | "pricing" | "chat";
+export type FeatureType = "home" | "stealth" | "simplify" | "mindmaps" | "flashcards" | "notes" | "blog" | "pricing" | "chat" | "podcast";
 
 export const navigation = [
     { name: "Simplify", feature: "simplify" as FeatureType, icon: Wand2 },
@@ -16,6 +17,8 @@ export const navigation = [
     { name: "Mindmaps", feature: "mindmaps" as FeatureType, icon: Lightbulb },
     { name: "Flashcards", feature: "flashcards" as FeatureType, icon: Layers },
     { name: "Notes", feature: "notes" as FeatureType, icon: FileText },
+    { name: "Chat", feature: "chat" as FeatureType, icon: MessageSquare },
+    { name: "Podcast", feature: "podcast" as FeatureType, icon: Mic },
 ];
 const FeatureNavbar = ({ activeFeature, setActiveFeature }: { activeFeature: FeatureType, setActiveFeature: (feature: FeatureType) => void }) => {
 

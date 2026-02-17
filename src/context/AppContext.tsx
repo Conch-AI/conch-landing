@@ -8,15 +8,19 @@ export type UsageKey =
   | "condensedNotes"
   | "simplify"
   | "stealth"
+  | "chat"
+  | "podcast"
 
 type UsageCounts = Record<UsageKey, number>;
 
 const PLAN_LIMITS: UsageCounts = {
   flashcards: 3,
   mindMaps: 3,
-  condensedNotes: 3,
+  condensedNotes: 30,
   simplify: 3,
   stealth: 5,
+  chat: 3,
+  podcast: 2,
 };
 
 const DEFAULT_USAGE: UsageCounts = {
@@ -25,6 +29,8 @@ const DEFAULT_USAGE: UsageCounts = {
   condensedNotes: 0,
   simplify: 0,
   stealth: 0,
+  chat: 0,
+  podcast: 0,
 };
 
 const GUEST_ID_KEY = "conch_guest_id";

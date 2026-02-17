@@ -6,6 +6,8 @@ import MindmapsFeature from "@/app/components/features/MindmapsFeature";
 import NotesFeature from "@/app/components/features/NotesFeature";
 import SimplifyFeature from "@/app/components/features/SimplifyFeature";
 import StealthFeature from "@/app/components/features/StealthFeature";
+import ChatFeature from "@/app/components/features/ChatFeature";
+import PodcastFeature from "@/app/components/features/PodcastFeature";
 import PricingFeature from "@/app/components/features/PricingFeature";
 import { Button } from "@/app/ui/button";
 import { cn } from "@/lib/utils";
@@ -89,7 +91,9 @@ const CheckerPage = () => {
       case "pricing":
         return <PricingFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "chat":
-        return <ComingSoonFeature featureName="Chat" />;
+        return <ChatFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
+      case "podcast":
+        return <PodcastFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       default:
         return (
           <HomeFeature
