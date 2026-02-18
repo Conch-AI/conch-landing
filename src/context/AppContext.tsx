@@ -14,13 +14,13 @@ export type UsageKey =
 type UsageCounts = Record<UsageKey, number>;
 
 const PLAN_LIMITS: UsageCounts = {
-  flashcards: 3,
-  mindMaps: 3,
-  condensedNotes: 30,
-  simplify: 3,
-  stealth: 5,
+  flashcards: 2,
+  mindMaps: 2,
+  condensedNotes: 2,
+  simplify: 2,
+  stealth: 2,
   chat: 3,
-  podcast: 2,
+  podcast: 1,
 };
 
 const DEFAULT_USAGE: UsageCounts = {

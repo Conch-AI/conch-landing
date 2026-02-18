@@ -24,20 +24,6 @@ import FeatureNavbar, { FeatureType, navigation } from "./components/FeatureNavb
 import { API_BASE_URL } from "@/config";
 import { usePageTracking } from "@/hooks/useAnalytics";
 
-const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
-  <div className="flex h-full flex-col items-center justify-center bg-background text-foreground">
-    <div className="text-center">
-      <span className="mb-4 inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-        COMING SOON
-      </span>
-      <h1 className="mb-4 text-3xl font-bold">{featureName}</h1>
-      <p className="text-base text-muted-foreground">
-        This feature is coming soon. Stay tuned!
-      </p>
-    </div>
-  </div>
-);
-
 const CheckerPage = () => {
   const router = useRouter();
   const { session } = useSession();

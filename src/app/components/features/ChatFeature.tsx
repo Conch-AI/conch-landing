@@ -10,10 +10,7 @@ import {
   ChevronDown,
   FileText,
   GraduationCap,
-  MessageSquare,
-  Search,
   Sparkles,
-  Zap,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import SignupModal from "../SignupModal";
@@ -27,8 +24,8 @@ import ChatInput from "../chat/ChatInput";
 
 interface ChatFeatureProps {
   onFeatureSelect?: (feature: CheckerFeature) => void;
-  session: Session;
-  handleLoggedIn: () => void;
+  session?: Session;
+  handleLoggedIn?: () => void;
 }
 
 interface ChatEntry {
@@ -36,7 +33,7 @@ interface ChatEntry {
   response: string;
 }
 
-const ChatFeature = ({ onFeatureSelect, session, handleLoggedIn }: ChatFeatureProps) => {
+const ChatFeature = ({ onFeatureSelect }: ChatFeatureProps) => {
   const { checkLimit, incrementUsage } = useAppContext();
   const [documentText, setDocumentText] = useState("");
   const [fileName, setFileName] = useState<string | null>(null);

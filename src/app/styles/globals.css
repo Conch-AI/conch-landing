@@ -2923,3 +2923,85 @@ text.tickLabel {
 .rdrDefinedRangesWrapper {
   display: none !important;
 }
+
+/* ── Podcast Waveform Animation ── */
+@keyframes waveform {
+  0%, 100% { height: 3px; }
+  50% { height: 14px; }
+}
+.animate-waveform {
+  animation: waveform 0.6s ease-in-out infinite;
+}
+
+/* ── Podcast Seek Bar Styling ── */
+.podcast-seek {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 9999px;
+  outline: none;
+  transition: opacity 0.15s ease;
+}
+.podcast-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #6366f1;
+  border: 2px solid #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(99,102,241,0.35), 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  margin-top: -4px;
+}
+.podcast-seek::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.45), 0 1px 3px rgba(0,0,0,0.1);
+}
+.podcast-seek::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #6366f1;
+  border: 2px solid #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(99,102,241,0.35), 0 1px 3px rgba(0,0,0,0.1);
+}
+.podcast-seek::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+}
+.podcast-seek::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+}
+
+/* ── Podcast Hero Animations ── */
+@keyframes heroVoiceCardIn {
+  0% { opacity: 0; transform: translateY(12px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.hero-voice-card {
+  animation: heroVoiceCardIn 0.5s ease-out both;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0) rotate(var(--float-rotate, 6deg)); }
+  50% { transform: translateY(-6px) rotate(var(--float-rotate, 6deg)); }
+}
+.hero-float-1 {
+  --float-rotate: 6deg;
+  animation: heroFloat 4s ease-in-out infinite;
+}
+.hero-float-2 {
+  --float-rotate: -6deg;
+  animation: heroFloat 4.5s ease-in-out infinite 0.5s;
+}
+
+@keyframes heroWaveformPulse {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.7); }
+}
+.hero-waveform-bar {
+  animation: heroWaveformPulse 1.5s ease-in-out infinite;
+  transform-origin: bottom;
+}

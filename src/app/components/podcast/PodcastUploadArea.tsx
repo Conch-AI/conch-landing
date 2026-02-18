@@ -19,12 +19,14 @@ const ACCEPTED_TYPES: Record<string, string[]> = {
   "application/pdf": [".pdf"],
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
   "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"],
+  "text/plain": [".txt"],
 };
 
 const fileTypes = [
   { label: "PDF", icon: FileText, color: "#ef4444" },
   { label: "DOCX", icon: FileImage, color: "#3b82f6" },
   { label: "PPTX", icon: Presentation, color: "#f97316" },
+  { label: "TXT", icon: FileText, color: "#6b7280" },
 ];
 
 const MAX_FILES = 3;
@@ -155,14 +157,20 @@ const PodcastUploadArea = ({ onFilesReady, isUploading }: PodcastUploadAreaProps
       {/* Selected files list */}
       {files.length > 0 && (
         <div className="w-full max-w-md mt-5 space-y-2">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[12px] font-medium text-foreground">Selected Files</span>
+            <span className="text-[11px] text-muted-foreground">{files.length}/{MAX_FILES}</span>
+          </div>
           {files.map((file, i) => (
             <div
               key={i}
-              className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-2.5 border border-gray-100"
+              className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl px-4 py-2.5 border border-gray-200 dark:border-gray-700 transition-all hover:border-[#6366f1]/30"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <FileText className="w-4 h-4 text-[#6366f1] shrink-0" />
-                <span className="text-[13px] text-foreground truncate">{file.name}</span>
+                <div className="w-7 h-7 rounded-lg bg-[#6366f1]/8 flex items-center justify-center shrink-0">
+                  <FileText className="w-3.5 h-3.5 text-[#6366f1]" />
+                </div>
+                <span className="text-[13px] text-foreground truncate font-medium">{file.name}</span>
                 <span className="text-[11px] text-muted-foreground shrink-0">
                   {(file.size / 1024 / 1024).toFixed(1)}MB
                 </span>
@@ -172,9 +180,9 @@ const PodcastUploadArea = ({ onFilesReady, isUploading }: PodcastUploadAreaProps
                   e.stopPropagation();
                   removeFile(i);
                 }}
-                className="p-1 rounded-lg hover:bg-gray-200 transition-colors shrink-0"
+                className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shrink-0 group"
               >
-                <X className="w-3.5 h-3.5 text-gray-400" />
+                <X className="w-3.5 h-3.5 text-gray-400 group-hover:text-red-500 transition-colors" />
               </button>
             </div>
           ))}
