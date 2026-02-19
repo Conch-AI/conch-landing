@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
 
     const res = await fetch(`${BACKEND}/guest/podcast/${podcastId}`, {
       headers: { "Content-Type": "application/json" },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -30,10 +31,15 @@ export async function GET(req: NextRequest) {
 
     const data = await res.json();
 
-    // The backend returns { podcast: { ...data, audioUrl, thumbnailUrl } }
-    // Flatten for the frontend
+    // Flatten for the frontend, but preserve top-level companion fields
+    // that some backend variants return alongside `podcast`.
     if (data.podcast) {
-      return NextResponse.json(data.podcast);
+      const merged = {
+        ...data,
+        ...data.podcast,
+      };
+      delete merged.podcast;
+      return NextResponse.json(merged);
     }
 
     return NextResponse.json(data);

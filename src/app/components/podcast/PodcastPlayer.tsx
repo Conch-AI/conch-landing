@@ -10,6 +10,7 @@ import {
   VolumeX,
   Download,
   Settings,
+  Lock,
 } from "lucide-react";
 import { VOICE_PERSONALITIES, VoiceItem } from "./PodcastHostVoices";
 
@@ -45,6 +46,16 @@ export interface PodcastData {
   audioUrl: string;
   thumbnailUrl: string;
   status: string;
+  /**
+   * Limited dialogues array for non-premium users. When present, the audio only covers these
+   * dialogues and the rest should be gated with a signup prompt.
+   */
+  limitedDialogues?: Dialogue[]
+  /**
+   * Dummy duration including extra time for gated content. When present, this should be displayed
+   * instead of the actual duration, marked as "cut".
+   */
+  dummyDuration?: number
 }
 
 interface PodcastPlayerProps {
@@ -361,11 +372,19 @@ const PodcastPlayer = ({
           <div className="flex-1" />
 
           {/* Time */}
-          <span className="font-mono text-sm tabular-nums text-gray-500 dark:text-gray-400">
-            {formatTime(duration * played)}{" "}
-            <span className="text-gray-300 dark:text-gray-600">/</span>{" "}
-            {formatTime(duration)}
-          </span>
+          <div className="flex flex-col items-end gap-0.5">
+            <span className="font-mono text-sm tabular-nums text-gray-500 dark:text-gray-400">
+              {formatTime(duration * played)}{" "}
+              <span className="text-gray-300 dark:text-gray-600">/</span>{" "}
+              {formatTime(duration)}
+            </span>
+            {data.dummyDuration && (
+              <div className="flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-[10px] text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                <Lock className="h-2.5 w-2.5" />
+                <span>Full: {formatTime(data.dummyDuration)}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Progress Bar */}

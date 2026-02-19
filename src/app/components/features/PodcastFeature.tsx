@@ -50,9 +50,11 @@ const formatTime = (s: number) => {
 const PlayingView = ({
   data,
   voices,
+  onShowSignup,
 }: {
   data: PodcastData;
   voices?: VoiceItem[];
+  onShowSignup?: () => void;
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playerApi, setPlayerApi] = useState<{ seekTo: (s: number) => void } | null>(null);
@@ -61,7 +63,22 @@ const PlayingView = ({
   const userScrolledRef = useRef(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Always use full dialogues, but check if content is limited
   const hasDialogues = data.dialogues && data.dialogues.length > 0;
+  const hasLimitedContent = !!(data.limitedDialogues && data.dialogues && data.limitedDialogues.length < data.dialogues.length);
+  const limitedCount = hasLimitedContent ? data.limitedDialogues!.length : data.dialogues.length;
+  
+  // Calculate total duration including dummy time for extra dialogues (10 seconds each)
+  const extraDialoguesCount = hasLimitedContent ? data.dialogues.length - data.limitedDialogues!.length : 0;
+  const totalDurationWithExtras = data.duration + (extraDialoguesCount * 10);
+
+  console.log("totalDurationWithExtras", totalDurationWithExtras,data);
+  
+  // Create modified data object with updated duration for the player
+  const playerData = {
+    ...data,
+    dummyDuration: totalDurationWithExtras
+  };
 
   // Helper to get voice image URL
   const getVoiceImage = (voiceId: string): string | null => {
@@ -116,7 +133,7 @@ const PlayingView = ({
           {/* Left column: Sticky player + chapters */}
           <div className="lg:sticky lg:top-6 lg:self-start">
             <PodcastPlayer
-              data={data}
+              data={playerData}
               onPlayerReady={setPlayerApi}
               onTimeUpdate={setCurrentTime}
               hideTranscript={hasDialogues}
@@ -169,11 +186,33 @@ const PlayingView = ({
               className="rounded-xl border border-gray-200 bg-white overflow-y-auto lg:max-h-[calc(100vh-120px)] dark:border-gray-700 dark:bg-gray-900"
             >
               {/* Transcript header */}
-              <div className="sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800 px-5 py-3 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+              <div className="sticky top-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800 px-5 py-3 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <h3 className="text-sm font-semibold text-foreground">Transcript</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {data.dialogues.length} dialogue segments · Click to jump
                 </p>
+                
+                {/* Full podcast message for limited content */}
+                {hasLimitedContent && (
+                    <div className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors relative z-20"
+                    onClick={() => onShowSignup?.()}
+                  >
+                    <svg 
+                      className="h-4 w-4" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor" 
+                      strokeWidth={2}
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+                      />
+                    </svg>
+                    <span>Hear the full podcast ({formatTime(totalDurationWithExtras)}) - Click here</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-3 p-4 md:p-5">
@@ -185,15 +224,24 @@ const PlayingView = ({
                   const imageUrl = getVoiceImage(voiceId);
                   const side = hostSideMap.get(dialogue.hostId) ?? "left";
                   const isActive = index === activeIdx;
+                  const isLimited = hasLimitedContent && index >= limitedCount;
 
                   return (
                     <div
                       key={index}
                       ref={isActive ? activeRef : undefined}
-                      onClick={() => handleSeekTo(dialogue.startTime)}
-                      className={`flex gap-3 cursor-pointer transition-all duration-300 max-w-[88%] ${
+                      onClick={() => {
+                        if (isLimited) {
+                          onShowSignup?.();
+                        } else {
+                          handleSeekTo(dialogue.startTime);
+                        }
+                      }}
+                      className={`flex gap-3 cursor-pointer transition-all duration-300 max-w-[88%] relative ${
                         side === "right" ? "ml-auto flex-row-reverse" : ""
-                      } ${isActive ? "scale-[1.01]" : "opacity-70 hover:opacity-100"}`}
+                      } ${isActive && !isLimited ? "scale-[1.01]" : ""} ${
+                        !isLimited ? (isActive ? "opacity-100" : "opacity-70 hover:opacity-100") : ""
+                      }`}
                     >
                       {/* Avatar */}
                       <div className="shrink-0 pt-1">
@@ -214,25 +262,47 @@ const PlayingView = ({
                       </div>
 
                       {/* Bubble */}
-                      <div className={`flex flex-col gap-1 ${side === "right" ? "items-end" : ""}`}>
+                      <div className={`flex flex-col gap-1 ${side === "right" ? "items-end" : ""} relative flex-1`}>
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-semibold" style={{ color: personality.hex }}>
                             {hostName}
                           </span>
                           <span className="text-[10px] font-mono text-muted-foreground">
-                            {formatTime(dialogue.startTime)}
+                            {isLimited ? "" : formatTime(dialogue.startTime)}
                           </span>
                         </div>
                         <div
-                          className={`rounded-2xl border px-4 py-2.5 text-sm leading-relaxed transition-all ${
+                          className={`rounded-2xl border px-4 py-2.5 text-sm leading-relaxed transition-all relative ${
                             side === "right" ? "rounded-tr-sm" : "rounded-tl-sm"
                           } ${
-                            isActive
+                            isActive && !isLimited
                               ? "bg-[#6366f1]/5 border-[#6366f1]/20 shadow-sm"
                               : "bg-gray-50 dark:bg-gray-800/40 border-gray-100 dark:border-gray-700/40"
                           }`}
                         >
                           <p className="text-gray-800 dark:text-gray-200">{dialogue.text}</p>
+                          
+                          {/* Blur overlay for limited content */}
+                          {isLimited && (
+                            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-transparent backdrop-blur-[5px] ">
+                              <div className="flex flex-col items-center gap-2 px-4">
+                                {/* <svg 
+                                  className="h-5 w-5 text-[#6366f1]" 
+                                  fill="none" 
+                                  viewBox="0 0 24 24" 
+                                  stroke="currentColor" 
+                                  strokeWidth={2}
+                                >
+                                  <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+                                  />
+                                </svg> */}
+                                {/* <span className="text-xs font-medium text-[#6366f1]">Sign up to view</span> */}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -263,6 +333,25 @@ const PodcastFeature = ({ onFeatureSelect }: PodcastFeatureProps) => {
   const topRef = useRef<HTMLDivElement>(null);
 
   const currentStep = view === "upload" ? 0 : view === "configure" ? 1 : view === "generating" ? 2 : 3;
+
+//testing
+  // useEffect(() => {
+  //   if (!podcastId) return;
+    
+  //   const fetchPodcast = async () => {
+  //     try {
+  //       const res = await fetch(`/api/ai/podcast/get?podcastId=${podcastId}`);
+  //       if (!res.ok) throw new Error("Failed to fetch podcast");
+  //       const data = await res.json();
+  //       console.log("[Podcast] Fetched podcast data:", data);
+  //       setPodcastData(data as PodcastData);
+  //       setView("playing");
+  //     } catch (error) {
+  //       console.error("Error fetching podcast:", error);
+  //     }
+  //   };
+  //   fetchPodcast();
+  // }, [podcastId]);
 
   // Fetch voices from API on mount
   useEffect(() => {
@@ -383,7 +472,11 @@ const PodcastFeature = ({ onFeatureSelect }: PodcastFeatureProps) => {
   if (view === "playing" && podcastData) {
     return (
       <div className="min-h-full bg-background text-foreground overflow-y-auto">
-        <PlayingView data={podcastData} voices={voices} />
+        <PlayingView 
+          data={podcastData} 
+          voices={voices} 
+          onShowSignup={() => setShowSignupModal(true)}
+        />
 
         <PodcastContent
           voices={voices}

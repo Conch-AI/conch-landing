@@ -8,6 +8,7 @@ const BACKEND =
 export async function GET(req: NextRequest) {
   try {
     const podcastId = req.nextUrl.searchParams.get("podcastId");
+    console.log("podcastId", podcastId);
 
     if (!podcastId) {
       return NextResponse.json(
