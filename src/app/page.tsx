@@ -6,6 +6,8 @@ import MindmapsFeature from "@/app/components/features/MindmapsFeature";
 import NotesFeature from "@/app/components/features/NotesFeature";
 import SimplifyFeature from "@/app/components/features/SimplifyFeature";
 import StealthFeature from "@/app/components/features/StealthFeature";
+import ChatFeature from "@/app/components/features/ChatFeature";
+import PodcastFeature from "@/app/components/features/PodcastFeature";
 import PricingFeature from "@/app/components/features/PricingFeature";
 import { Button } from "@/app/ui/button";
 import { cn } from "@/lib/utils";
@@ -21,20 +23,6 @@ import { useSession } from "@/context/SessionContext";
 import FeatureNavbar, { FeatureType, navigation } from "./components/FeatureNavbar";
 import { API_BASE_URL } from "@/config";
 import { usePageTracking } from "@/hooks/useAnalytics";
-
-const ComingSoonFeature = ({ featureName }: { featureName: string }) => (
-  <div className="flex h-full flex-col items-center justify-center bg-background text-foreground">
-    <div className="text-center">
-      <span className="mb-4 inline-block rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-        COMING SOON
-      </span>
-      <h1 className="mb-4 text-3xl font-bold">{featureName}</h1>
-      <p className="text-base text-muted-foreground">
-        This feature is coming soon. Stay tuned!
-      </p>
-    </div>
-  </div>
-);
 
 const CheckerPage = () => {
   const router = useRouter();
@@ -89,7 +77,9 @@ const CheckerPage = () => {
       case "pricing":
         return <PricingFeature onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       case "chat":
-        return <ComingSoonFeature featureName="Chat" />;
+        return <ChatFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
+      case "podcast":
+        return <PodcastFeature session={session!} handleLoggedIn={handleLoggedIn} onFeatureSelect={(feature) => setActiveFeature(feature as FeatureType)} />;
       default:
         return (
           <HomeFeature

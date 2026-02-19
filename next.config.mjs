@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = { 
+const nextConfig = {
   images: {
     remotePatterns: [
       {
@@ -13,6 +13,7 @@ const nextConfig = {
   // Enable faster refresh in development
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    serverComponentsExternalPackages: ['pdf-parse', 'mammoth', 'jszip'],
   },
 };
 
