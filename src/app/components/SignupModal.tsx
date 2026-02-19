@@ -21,7 +21,7 @@ const SignupModal = ({ isOpen, onClose, onSignup, content }: SignupModalProps) =
     if (onSignup) {
       onSignup();
     }
-    router.push(API_BASE_URL + "/sign-up");
+    router.push(API_BASE_URL);
   };
 
   return (
@@ -70,7 +70,7 @@ const SignupModal = ({ isOpen, onClose, onSignup, content }: SignupModalProps) =
             onClick={handleLogin}
             className="w-full bg-[#6366f1] hover:bg-[#5558e3] text-white rounded-xl px-5 md:px-6 py-3 md:py-3.5 flex items-center justify-center gap-3 font-medium transition-all shadow-sm hover:shadow-md mb-6"
           >
-            <span className="text-[13px] md:text-[14px]">Login Now</span>
+            <span className="text-[13px] md:text-[14px]">Get Started</span>
           </button>
 
           {/* Privacy Notice */}
