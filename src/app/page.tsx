@@ -263,13 +263,13 @@ const CheckerPage = () => {
                 </div>
               ) : (
                 <>
-                  {/* <Button
-                    onClick={() => router.push(API_BASE_URL + "/sign-up")}
+                  <Button
+                    onClick={() => router.push(API_BASE_URL)}
                     variant="outline"
                     className="text-[13px] px-4 py-1.5 h-9"
                   >
-                    Sign In
-                  </Button> */}
+                    Get Started
+                  </Button>
                   <Button onClick={() => setActiveFeature("pricing")} variant="default" className="text-[13px] px-4 py-1.5 h-9">
                     Upgrade Now
                   </Button>
