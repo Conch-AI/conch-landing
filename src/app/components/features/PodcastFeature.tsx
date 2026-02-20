@@ -1,5 +1,8 @@
 "use client";
 
+const BACKEND =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://penora-ai.herokuapp.com";
+
 import Footer from "@/app/components/ui/Footer";
 import { CheckerFeature } from "./CheckerSidebar";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -357,7 +360,7 @@ const PodcastFeature = ({ onFeatureSelect }: PodcastFeatureProps) => {
   useEffect(() => {
     const fetchVoices = async () => {
       try {
-        const res = await fetch("/api/ai/podcast/voices?includePreviews=true");
+        const res = await fetch(`${BACKEND}/guest/podcast/voices?includePreviews=true`);
         if (!res.ok) throw new Error("Failed to fetch voices");
         const data = await res.json();
         setVoices(data.voices || []);
@@ -396,7 +399,7 @@ const PodcastFeature = ({ onFeatureSelect }: PodcastFeatureProps) => {
     audio.pause();
     audio.currentTime = 0;
 
-    const src = previewUrl || `/api/ai/podcast/voice-sample?voiceId=${voiceId}`;
+    const src = previewUrl || `${BACKEND}/ai/podcast/voice-sample/${voiceId}`;
     audio.src = src;
     setPreviewVoiceId(voiceId);
     audio.play().catch(() => setPreviewVoiceId(null));

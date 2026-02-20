@@ -1,5 +1,8 @@
 "use client";
 
+const BACKEND =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://penora-ai.herokuapp.com";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Check,
@@ -225,7 +228,7 @@ const PodcastHostVoices = ({
 
     const fetchVoices = async () => {
       try {
-        const res = await fetch("/api/ai/podcast/voices?includePreviews=true");
+        const res = await fetch(`${BACKEND}/guest/podcast/voices?includePreviews=true`);
         if (!res.ok) throw new Error("Failed to fetch voices");
         const data = await res.json();
 
@@ -293,7 +296,7 @@ const PodcastHostVoices = ({
       }
 
       const cachedUrl = VOICE_PREVIEW_CACHE.get(voiceId);
-      const audioSrc = cachedUrl || `/api/ai/podcast/voice-sample?voiceId=${voiceId}`;
+      const audioSrc = cachedUrl || `${BACKEND}/ai/podcast/voice-sample/${voiceId}`;
 
       setPlayingVoiceId(voiceId);
       try {
